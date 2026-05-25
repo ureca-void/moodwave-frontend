@@ -1,0 +1,13 @@
+header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
+main {
+  display: flex;
+}
+.side-bar {
+  justify-content: center;
+  align-items: center;
+}
