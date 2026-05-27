@@ -4,18 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MOOD WAVE</title>
+
     <link rel="stylesheet" href="assets/css/setting/fonts.css" />
     <link rel="stylesheet" href="assets/css/setting/vars.css" />
     <link rel="stylesheet" href="assets/css/setting/reset.css" />
     <link rel="stylesheet" href="assets/css/setting/common.css" />
-    <link rel="stylesheet" href="assets/css/layout.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+
     <script type="module" src="assets/js/main.js"></script>
   </head>
+
   <body>
     <div class="container">
       <!-- 사이드바 -->
       <aside class="sidebar">
-        <h1>Sidebar</h1>
+        <div class="sidebar__header">
+          <div class="sidebar__brand">
+            <h2>Mood Wave</h2>
+          </div>
+
+          <nav
+            id="primaryNav"
+            class="sidebar__nav-primary"
+            aria-label="주요 메뉴"
+          ></nav>
+
+          <nav
+            id="secondaryNav"
+            class="sidebar__nav-secondary"
+            aria-label="플레이리스트 메뉴"
+          ></nav>
+        </div>
+
+        <div class="sidebar__divider" aria-hidden="true"></div>
+
+        <div id="playlistList" class="sidebar__playlist-list"></div>
       </aside>
 
       <!-- 헤더 -->
