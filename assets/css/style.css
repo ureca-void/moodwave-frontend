@@ -1,0 +1,154 @@
+/* 전체 컨테이너 */
+.container {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  grid-template-rows: 80px minmax(0, 1fr) 112px;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main"
+    "footer footer";
+
+  width: 100%;
+  min-width: 0;
+  height: 100vh;
+  background: #121212;
+  overflow: hidden;
+}
+
+/* 사이드바 */
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+.sidebar__header {
+  flex-shrink: 0;
+  padding: 0 30px;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 70px;
+  color: var(--accent);
+}
+
+.sidebar__nav-primary,
+.sidebar__nav-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar__nav-secondary {
+  margin-top: 49px;
+}
+
+.sidebar__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  height: 32px;
+  color: #b3b3b3;
+}
+
+.sidebar__nav-item:hover {
+  color: white;
+}
+
+.sidebar__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.sidebar__label {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 23px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sidebar__divider {
+  flex-shrink: 0;
+  height: 1px;
+  margin: 24px 30px 0;
+  background: #282828;
+}
+
+.sidebar__playlist-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 20px;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px 30px 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  color: #b3b3b3;
+}
+
+.sidebar__playlist-item:hover {
+  color: white;
+}
+
+/* 사이드바 스크롤바 커스터마이징 */
+.sidebar__playlist-list:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+.sidebar__playlist-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar__playlist-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar__playlist-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: transparent;
+}
+
+.sidebar__playlist-list:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.sidebar__playlist-list:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 헤더 */
+.header {
+  grid-area: header;
+  background: #4d79ff;
+  padding: 20px;
+}
+
+/* 메인 */
+.main {
+  grid-area: main;
+  background: #26a65b;
+  padding: 30px;
+}
+
+/* 푸터 */
+.player {
+  grid-area: footer;
+  background: #9b59b6;
+  padding: 20px;
+}
