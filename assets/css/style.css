@@ -62,6 +62,15 @@
 }
 
 /* 사이드바 메뉴 */
+=======
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 70px;
+  color: var(--accent);
+}
+
 .sidebar__nav-primary,
 .sidebar__nav-secondary {
   display: flex;
