@@ -1,8 +1,9 @@
-/* 기본 배경 및 폰트 */
-/* body { background-color: #121212; color: white; font-family: sans-serif; } */
-
-/* 전체 컨테이너 너비 확장 */
-/* .container { width: 90%; max-width: 1000px; margin: 50px auto; } */
+/* 타이틀 영역 패딩 추가 */
+.chart-page__title {
+    padding: 30px 0 30px 20px; /* 타이틀에 여백을 줌 */
+    font-size: 1.8rem;
+    color: #ffffff;
+}
 
 /* 대시보드 Flex 설정: 가로 정렬 */
 .dashboard {
@@ -32,11 +33,17 @@
 /* 도넛 차트 두께 및 크기 조절 */
 .chart-container { width: 200px; height: 200px; }
 
+/* 날씨 차트 영역 확대 및 가로 바 크기 확보 */
+.weather-container { 
+    width: 300px;  /* 가로 영역 확장 */
+    height: 200px; 
+}
+
 /* 표 디자인 */
 .song-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
 .song-table th, .song-table td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
 .song-table th { color: #b3b3b3; font-weight: normal; }
 
-/* 핵심: Hover 효과 */
+/* Hover 효과 */
 .song-row { transition: background-color 0.2s; cursor: pointer; }
-.song-row:hover { background-color: #2a2a2a; color: #1DB954; }
+.song-row:hover { background-color: #2a2a2a; color: #1DB954; } 
