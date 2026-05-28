@@ -36,6 +36,8 @@
    검색 결과 카드
 ========================= */
 .search-page .music-card {
+  position: relative;
+  overflow: hidden;
   padding: 16px;
   border-radius: 8px;
   background-color: #181818;
@@ -75,22 +77,21 @@
 ========================= */
 .search-page .music-card__play {
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-
+  right: 10px;
+  bottom: 90px;
   padding: 0;
-  border: 0;
-  background: none;
   cursor: pointer;
-
   opacity: 0;
   visibility: hidden;
+  transform: translateY(8px);
   transition:
     opacity 0.2s ease,
-    visibility 0.2s ease;
+    visibility 0.2s ease,
+    transform 0.2s ease;
 }
 
 .search-page .music-card:hover .music-card__play {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
 }

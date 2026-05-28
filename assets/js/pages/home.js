@@ -129,7 +129,7 @@ function renderGrid(selector, data) {
 // 인사말 렌더링 함수
 // =========================
 function renderGreeting() {
-  document.querySelector("#greeting").textContent = "Hello Ureca";
+  document.querySelector("#greeting").textContent = "Ureca's Pick";
 }
 
 // =========================

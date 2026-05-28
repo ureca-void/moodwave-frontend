@@ -14,11 +14,20 @@ const SPOTIFY_LOGO_URL =
 export function renderHeader() {
   return `
     <!-- 메뉴 버튼 -->
-    <button class="header__nav-btn" type="button" aria-label="뒤로">
+    <button
+      id="backBtn"
+      class="header__nav-btn"
+      type="button"
+      aria-label="뒤로"
+    >
       <img src="/assets/icon/Back.svg" width="40" height="40" alt="" />
     </button>
-
-    <button class="header__nav-btn" type="button" aria-label="앞으로">
+    <button
+      id="forwardBtn"
+      class="header__nav-btn"
+      type="button"
+      aria-label="앞으로"
+    >
       <img src="/assets/icon/Forward.svg" width="40" height="40" alt="" />
     </button>
 
@@ -220,6 +229,24 @@ function initSearchForm() {
 }
 
 // =========================
+// 뒤로가기 / 앞으로가기 버튼 기능 함수
+// =========================
+function initHistoryButtons() {
+  const backBtn = document.querySelector("#backBtn");
+  const forwardBtn = document.querySelector("#forwardBtn");
+
+  if (!backBtn || !forwardBtn) return;
+
+  backBtn.addEventListener("click", () => {
+    window.history.back();
+  });
+
+  forwardBtn.addEventListener("click", () => {
+    window.history.forward();
+  });
+}
+
+// =========================
 // 헤더 초기 실행 함수
 // =========================
 export function initHeader() {
@@ -236,4 +263,5 @@ export function initHeader() {
   renderUser();
 
   initSearchForm();
+  initHistoryButtons();
 }

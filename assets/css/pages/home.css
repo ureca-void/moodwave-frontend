@@ -190,11 +190,14 @@
   overflow: hidden;
   border-radius: 8px;
   background: #181818;
-  transition: background 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .grid-card:hover {
   background: #282828;
+  transform: translateY(-4px);
 }
 
 .grid-card__art-wrap {
