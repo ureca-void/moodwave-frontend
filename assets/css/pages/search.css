@@ -1,0 +1,96 @@
+/* =========================
+   검색 페이지
+========================= */
+.search-page {
+  width: 100%;
+  padding: 32px;
+}
+
+.search-page__title {
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.search-page__keyword {
+  margin-bottom: 28px;
+  font-size: 16px;
+  color: #b3b3b3;
+}
+
+.search-page__empty {
+  font-size: 16px;
+  color: #b3b3b3;
+}
+
+/* =========================
+   검색 결과 그리드
+========================= */
+.search-page .section__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(182px, 1fr));
+  gap: 24px;
+}
+
+/* =========================
+   검색 결과 카드
+========================= */
+.search-page .music-card {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #181818;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.search-page .music-card:hover {
+  background-color: #282828;
+  transform: translateY(-4px);
+}
+
+.search-page .music-card__image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.search-page .music-card__title {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.search-page .music-card__description {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #b3b3b3;
+}
+
+/* =========================
+   검색 카드 재생 버튼
+========================= */
+.search-page .music-card__play {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.search-page .music-card:hover .music-card__play {
+  opacity: 1;
+  visibility: visible;
+}

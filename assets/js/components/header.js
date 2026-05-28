@@ -15,7 +15,7 @@ export function renderHeader() {
     </button>
 
     <!-- 검색창 -->
-    <form class="header__search">
+    <form class="header__search" role="search">
       <img
         class="header__search-icon"
         src="assets/icon/Search_S.svg"
@@ -101,10 +101,7 @@ function initSearchForm() {
 
     if (!keyword) return;
 
-    console.log("검색어:", keyword);
-
-    // 나중에 검색 페이지 만들면 사용
-    // window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
+    location.hash = `#/search?q=${encodeURIComponent(keyword)}`;
   });
 }
 
