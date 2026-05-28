@@ -9,7 +9,7 @@ export function renderSidebar() {
       <!-- 로고 -->
       <div class="sidebar__brand">
         <a href="index.html" class="sidebar__brand-link">
-          <img src="assets/icon/logo.svg" alt="MOOD WAVE 로고" />
+          <img src="/assets/icon/logo.svg" alt="MOOD WAVE 로고" />
           <span>MOOD WAVE</span>
         </a>
       </div>

@@ -1,9 +1,37 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Weather Vibes</title>
+
+    <link rel="stylesheet" href="/assets/css/setting/fonts.css" />
+    <link rel="stylesheet" href="/assets/css/setting/vars.css" />
+    <link rel="stylesheet" href="/assets/css/setting/reset.css" />
+    <link rel="stylesheet" href="/assets/css/setting/common.css" />
+
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+
+    <link rel="stylesheet" href="/assets/css/components/sidebar.css" />
+    <link rel="stylesheet" href="/assets/css/components/header.css" />
+    <link rel="stylesheet" href="/assets/css/components/footer.css" />
+
+    <link rel="stylesheet" href="/assets/css/pages/weather.css" />
   </head>
-  <body></body>
+
+  <body>
+    <div class="container">
+      <aside id="sidebar" class="sidebar"></aside>
+
+      <header id="header" class="header"></header>
+
+      <main class="main weather-main">
+        <h1>weather-main</h1>
+      </main>
+
+      <footer id="footer" class="player"></footer>
+    </div>
+
+    <script type="module" src="/assets/js/pages/weather.js"></script>
+  </body>
 </html>

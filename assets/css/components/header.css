@@ -23,6 +23,8 @@
   width: 40px;
   height: 40px;
   padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
 }
 
@@ -52,6 +54,9 @@
 .header__search-input {
   flex: 1;
   min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
   font-size: 18px;
   font-weight: 450;
   line-height: 23px;
@@ -67,7 +72,62 @@
   min-width: 0;
 }
 
-/* 프로필 */
+/* =========================
+   로그인 / 프로필 영역
+========================= */
+.header__auth {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Spotify 연동 버튼 */
+.spotify-connect-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  background: #1db954;
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    opacity 0.2s;
+}
+
+.spotify-connect-btn:hover {
+  background: #1ed760;
+}
+
+.spotify-connect-btn:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+.spotify-connect-btn__logo {
+  flex-shrink: 0;
+  width: 84px;
+  height: auto;
+  object-fit: contain;
+}
+
+.spotify-connect-btn strong {
+  color: #000;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* =========================
+   프로필
+========================= */
 .header__profile {
   position: relative;
   display: flex;
@@ -96,39 +156,10 @@
   font-size: 18px;
   font-weight: 700;
   line-height: 23px;
+  color: #fff;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* ------------------------------------------- */
-/* 스포티파이 로그인 버튼 일때 */
-.header__profile.is-logged-out {
-  background-color: #1db954; /* 스포티파이 그린 */
-  color: white;
-  font-weight: bold;
-  /* padding: 12px 24px; */
-  /* display: flex; */
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-.header__profile.is-logged-out:hover {
-  background-color: #1ed760; /* 마우스 올렸을 때 살짝 밝게 */
-}
-.header__profile.is-logged-out #userAvatar {
-  content: url("https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Black.png");
-  width: 100px;
-  object-fit: contain;
-  border-radius: 0;
-}
-
-.header__profile.is-logged-out .header__profile-arrow-btn {
-  display: none;
-}
-
-.header__profile.is-logged-out #userName {
-  padding-top: 5px;
-}
-/* ------------------------------------------- */
 
 /* 드롭다운 버튼 */
 .header__profile-arrow-btn {
@@ -139,6 +170,8 @@
   width: 24px;
   height: 24px;
   padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
 }
 
@@ -151,6 +184,7 @@
   border-right: 5px solid transparent;
 }
 
+/* 드롭다운 */
 .header__dropdown {
   display: none;
   position: absolute;
@@ -170,7 +204,9 @@
 .header__logout-btn {
   width: 100%;
   padding: 8px;
+  border: none;
   border-radius: 6px;
+  background: transparent;
   color: #fff;
   font-size: 14px;
   font-weight: 500;

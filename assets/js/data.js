@@ -1,7 +1,7 @@
 // =========================
 // 더미 데이터
 // =========================
-export const ICON_PATH = "assets/icon/";
+export const ICON_PATH = "/assets/icon/";
 
 // 메뉴 목록
 export const navItems = [
