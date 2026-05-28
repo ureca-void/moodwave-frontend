@@ -1,0 +1,13 @@
+body { background-color: #121212; color: white; font-family: sans-serif; }
+.container { width: 400px; margin: 50px auto; }
+
+/* 차트 컨테이너 */
+.chart-container { width: 200px; height: 200px; margin: 20px auto; }
+
+/* 표 디자인 */
+.song-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.song-table th, .song-table td { padding: 10px; text-align: left; }
+
+/* 핵심: Hover 효과 */
+.song-row { transition: background-color 0.2s; cursor: pointer; }
+.song-row:hover { background-color: #2a2a2a; color: #1DB954; }
