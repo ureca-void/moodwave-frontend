@@ -1,0 +1,22 @@
+export const dummyData = [
+  { title: "Bohemian Rhapsody", artist: "Queen", playCount: 95, genre: "Rock", weather: "Cloudy" },
+  { title: "Shape of You", artist: "Ed Sheeran", playCount: 88, genre: "Pop", weather: "Sunny" },
+  { title: "Blinding Lights", artist: "The Weeknd", playCount: 92, genre: "Synthwave", weather: "Night" },
+  { title: "Dance Monkey", artist: "Tones and I", playCount: 76, genre: "Pop", weather: "Sunny" },
+  { title: "Someone Like You", artist: "Adele", playCount: 65, genre: "Ballad", weather: "Rainy" },
+  { title: "Believer", artist: "Imagine Dragons", playCount: 81, genre: "Rock", weather: "Windy" },
+  { title: "Uptown Funk", artist: "Mark Ronson", playCount: 70, genre: "Funk", weather: "Hot" },
+  { title: "Rolling in the Deep", artist: "Adele", playCount: 55, genre: "Soul", weather: "Cloudy" },
+  { title: "Stay", artist: "The Kid LAROI", playCount: 84, genre: "Pop", weather: "Clear" },
+  { title: "Levitating", artist: "Dua Lipa", playCount: 79, genre: "Disco", weather: "Sunny" },
+  { title: "Bad Guy", artist: "Billie Eilish", playCount: 87, genre: "Electropop", weather: "Foggy" },
+  { title: "Havana", artist: "Camila Cabello", playCount: 68, genre: "Latin", weather: "Hot" },
+  { title: "Perfect", artist: "Ed Sheeran", playCount: 91, genre: "Ballad", weather: "Snowy" },
+  { title: "Closer", artist: "The Chainsmokers", playCount: 73, genre: "EDM", weather: "Sunny" },
+  { title: "Sunflower", artist: "Post Malone", playCount: 94, genre: "Hip-hop", weather: "Clear" },
+  { title: "Halo", artist: "Beyoncé", playCount: 52, genre: "R&B", weather: "Rainy" },
+  { title: "Attention", artist: "Charlie Puth", playCount: 63, genre: "Pop", weather: "Cloudy" },
+  { title: "Wonderwall", artist: "Oasis", playCount: 48, genre: "Rock", weather: "Windy" },
+  { title: "Senorita", artist: "Shawn Mendes", playCount: 89, genre: "Latin", weather: "Hot" },
+  { title: "Memories", artist: "Maroon 5", playCount: 72, genre: "Pop", weather: "Spring" }
+];

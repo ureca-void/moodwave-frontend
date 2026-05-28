@@ -1,20 +1,41 @@
+
+
+import { dummyData } from '../data/mockData.js';
+
+import { renderCommonLayout } from "../layout/commonLayout.js";
+
+// =========================
+// 초기 실행
+// =========================
+renderCommonLayout();
+
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. 데이터 가공: 장르 및 날씨 통계 만들기
+    const genreStats = dummyData.reduce((acc, cur) => {
+        acc[cur.genre] = (acc[cur.genre] || 0) + 1;
+        return acc;
+    }, {});
 
-  // 나중에 API로 받아올 데이터를 담을 변수
-const dashboardData = {
-    genre: {
-        labels: ['Pop', 'Ballad', 'Jazz'],
-        values: [45, 38, 17]
-    },
-    weather: {
-        labels: ['Windy', 'Rainy', 'Sunny', 'Cloudy'],
-        values: [45, 22, 15, 18]
-    }
-};
-    // 1. 도넛 차트 생성
+    const weatherStats = dummyData.reduce((acc, cur) => {
+        acc[cur.weather] = (acc[cur.weather] || 0) + 1;
+        return acc;
+    }, {});
+
+    // 2. 테이블 렌더링
+    const tbody = document.querySelector('.song-table tbody');
+    tbody.innerHTML = dummyData.map((song, index) => `
+        <tr class="song-row">
+            <td>${index + 1}</td>
+            <td>${song.title}</td>
+            <td>${song.artist}</td>
+            <td>${song.playCount}회</td>
+        </tr>
+    `).join('');
+
+    // 3. 도넛 차트 생성
     const genreCtx = document.getElementById('genreChart').getContext('2d');
-
-    // 중앙 텍스트 플러그인 (dashboardData 참조)
+    
     const centerTextPlugin = {
         id: 'centerText',
         afterDraw: (chart) => {
@@ -28,18 +49,17 @@ const dashboardData = {
             ctx.textBaseline = 'middle';
             ctx.font = 'bold 20px sans-serif';
             ctx.fillText(chart.data.labels[maxIdx], width / 2 + left, height / 2 + top - 10);
-            ctx.font = '16px sans-serif';
-            ctx.fillText(data[maxIdx] + '%', width / 2 + left, height / 2 + top + 15);
             ctx.restore();
         }
     };
+
     new Chart(genreCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Pop', 'Ballad', 'Jazz'],
+            labels: Object.keys(genreStats),           // 가공된 장르 라벨
             datasets: [{
-                data: [45, 38, 17],
-                backgroundColor: ['#00d4ff', '#0000ff', '#ffffff'],
+                data: Object.values(genreStats),       // 가공된 장르 데이터 값
+                backgroundColor: ['#00d4ff', '#0000ff', '#ffffff', '#ff9100', '#00e676'],
                 borderWidth: 0
             }]
         },
@@ -50,34 +70,26 @@ const dashboardData = {
         plugins: [centerTextPlugin]
     });
 
-    // 2. 라인 차트 생성 (추가)
+    // 4. 바 차트 생성
     const weatherCtx = document.getElementById('weatherChart').getContext('2d');
     new Chart(weatherCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Windy', 'Rainy', 'Sunny', 'Cloudy'],
-        datasets: [{
-            data: [45, 22, 15, 18],
-            backgroundColor: ['#00e676', '#2979ff', '#ff9100', '#bdbdbd'],
-            borderRadius: 10, // 막대 모서리 둥글게
-            barThickness: 10  // 막대 두께
-        }]
-    },
-    options: {
-        indexAxis: 'y', // 가로 막대 그래프로 설정
-        plugins: {
-            legend: { display: false }
+        type: 'bar',
+        data: {
+            labels: Object.keys(weatherStats),         // 가공된 날씨 라벨
+            datasets: [{
+                data: Object.values(weatherStats),     // 가공된 날씨 데이터 값
+                backgroundColor: ['#00e676', '#2979ff', '#ff9100', '#bdbdbd'],
+                borderRadius: 10,
+                barThickness: 10
+            }]
         },
-        scales: {
-            x: { 
-                display: false, // 상단 수치 축 숨김
-                max: 80
-            },
-            y: { 
-                grid: { display: false }, // 격자 숨김
-                ticks: { color: '#ffffff' } // 텍스트 색상
+        options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { display: false },
+                y: { grid: { display: false }, ticks: { color: '#ffffff' } }
             }
         }
-    }
-});
+    });
 });

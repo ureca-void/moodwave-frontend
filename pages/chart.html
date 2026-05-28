@@ -2,57 +2,89 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="/assets/css/pages/chart.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>내 음악 취향 통계</title>
+
+    <link rel="stylesheet" href="/assets/css/setting/fonts.css" />
+    <link rel="stylesheet" href="/assets/css/setting/vars.css" />
+    <link rel="stylesheet" href="/assets/css/setting/reset.css" />
+    <link rel="stylesheet" href="/assets/css/setting/common.css" />
+
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+
+    <link rel="stylesheet" href="/assets/css/components/sidebar.css" />
+    <link rel="stylesheet" href="/assets/css/components/header.css" />
+    <link rel="stylesheet" href="/assets/css/components/footer.css" />
+
+    <link rel="stylesheet" href="/assets/css/pages/chart.css" />
   </head>
+
   <body>
     <div class="container">
-      <h2>내 음악 취향 통계</h2>
-      <div class="dashboard">
-        <div class="chart-box">
-          <h3>장르별 재생 비율</h3>
-          <div class="chart-container"><canvas id="genreChart"></canvas></div>
-        </div>
+      <aside id="sidebar" class="sidebar"></aside>
 
-        <div class="chart-box">
-          <h3>가장 많이 감상한 날씨 🎧</h3>
-          <div class="chart-container"><canvas id="weatherChart"></canvas></div>
-        </div>
-      </div>
+      <header id="header" class="header"></header>
 
-      <table class="song-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>제목</th>
-            <th>앨범</th>
-            <th>재생시간</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="song-row">
-            <td>1</td>
-            <td>밤편지</td>
-            <td>Palette</td>
-            <td>04:13</td>
-          </tr>
-          <tr class="song-row">
-            <td>2</td>
-            <td>Dynamite</td>
-            <td>Dynamite</td>
-            <td>03:19</td>
-          </tr>
-          <tr class="song-row">
-            <td>3</td>
-            <td>Hype Boy</td>
-            <td>NewJeans 1st EP</td>
-            <td>02:59</td>
-          </tr>
-        </tbody>
-      </table>
+      <main class="main chart-main">
+        <section class="chart-page">
+          <h2 class="chart-page__title">내 음악 취향 통계</h2>
+
+          <div class="dashboard">
+            <div class="chart-box">
+              <h3>장르별 재생 비율</h3>
+              <div class="chart-container">
+                <canvas id="genreChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-box">
+              <h3>가장 많이 감상한 날씨 🎧</h3>
+              <div class="chart-container">
+                <canvas id="weatherChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <table class="song-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>앨범</th>
+                <th>재생시간</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="song-row">
+                <td>1</td>
+                <td>밤편지</td>
+                <td>Palette</td>
+                <td>04:13</td>
+              </tr>
+
+              <tr class="song-row">
+                <td>2</td>
+                <td>Dynamite</td>
+                <td>Dynamite</td>
+                <td>03:19</td>
+              </tr>
+
+              <tr class="song-row">
+                <td>3</td>
+                <td>Hype Boy</td>
+                <td>NewJeans 1st EP</td>
+                <td>02:59</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </main>
+
+      <footer id="footer" class="player"></footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/assets/js/pages/chart.js"></script>
+    <script type="module" src="/assets/js/pages/chart.js"></script>
   </body>
 </html>

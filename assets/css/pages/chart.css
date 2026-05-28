@@ -1,8 +1,8 @@
 /* 기본 배경 및 폰트 */
-body { background-color: #121212; color: white; font-family: sans-serif; }
+/* body { background-color: #121212; color: white; font-family: sans-serif; } */
 
 /* 전체 컨테이너 너비 확장 */
-.container { width: 90%; max-width: 1000px; margin: 50px auto; }
+/* .container { width: 90%; max-width: 1000px; margin: 50px auto; } */
 
 /* 대시보드 Flex 설정: 가로 정렬 */
 .dashboard {
