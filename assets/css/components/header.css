@@ -99,6 +99,36 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/* ------------------------------------------- */
+/* 스포티파이 로그인 버튼 일때 */
+.header__profile.is-logged-out {
+  background-color: #1db954; /* 스포티파이 그린 */
+  color: white;
+  font-weight: bold;
+  /* padding: 12px 24px; */
+  /* display: flex; */
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.header__profile.is-logged-out:hover {
+  background-color: #1ed760; /* 마우스 올렸을 때 살짝 밝게 */
+}
+.header__profile.is-logged-out #userAvatar {
+  content: url("https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Black.png");
+  width: 100px;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.header__profile.is-logged-out .header__profile-arrow-btn {
+  display: none;
+}
+
+.header__profile.is-logged-out #userName {
+  padding-top: 5px;
+}
+/* ------------------------------------------- */
 
 /* 드롭다운 버튼 */
 .header__profile-arrow-btn {
