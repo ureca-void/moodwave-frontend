@@ -1,5 +1,3 @@
-
-
 import { dummyData } from '../data/mockData.js';
 
 import { renderCommonLayout } from "../layout/commonLayout.js";
@@ -10,21 +8,26 @@ import { renderCommonLayout } from "../layout/commonLayout.js";
 renderCommonLayout();
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. 데이터 가공: 장르 및 날씨 통계 만들기
-    const genreStats = dummyData.reduce((acc, cur) => {
-        acc[cur.genre] = (acc[cur.genre] || 0) + 1;
-        return acc;
-    }, {});
 
-    const weatherStats = dummyData.reduce((acc, cur) => {
-        acc[cur.weather] = (acc[cur.weather] || 0) + 1;
-        return acc;
-    }, {});
+  // 1. 유틸리티: 통계 계산 후 내림차순 정렬하여 상위 5개 반환
+    const getSortedTop5 = (dataArray, key) => {
+        const stats = dataArray.reduce((acc, cur) => {
+            acc[cur[key]] = (acc[cur[key]] || 0) + 1;
+            return acc;
+        }, {});
+        
+        return Object.entries(stats)
+            .sort((a, b) => b[1] - a[1]) // 개수 기준 내림차순 정렬
+            .slice(0, 5);                // 상위 5개
+    };
 
-    // 2. 테이블 렌더링
+    const top5Genres = getSortedTop5(dummyData, 'genre');
+    const top5Weather = getSortedTop5(dummyData, 'weather');
+
+  // 2. 테이블 렌더링: 재생횟수(playCount) 기준 내림차순 정렬 상위 5개
+    const sortedSongs = [...dummyData].sort((a, b) => b.playCount - a.playCount);
     const tbody = document.querySelector('.song-table tbody');
-    tbody.innerHTML = dummyData.map((song, index) => `
+    tbody.innerHTML = sortedSongs.slice(0, 5).map((song, index) => `
         <tr class="song-row">
             <td>${index + 1}</td>
             <td>${song.title}</td>
@@ -40,15 +43,30 @@ document.addEventListener('DOMContentLoaded', () => {
         id: 'centerText',
         afterDraw: (chart) => {
             const { ctx, chartArea: { top, left, width, height } } = chart;
-            const data = chart.data.datasets[0].data;
-            const maxIdx = data.indexOf(Math.max(...data));
+            const data = chart.data.datasets[0].data; // 상위 5개 데이터 배열
+            const total = dummyData.length;           // 전체 데이터(20개)
+            
+            // 가장 많이 나온 항목의 정보 추출
+            const maxVal = Math.max(...data);
+            const maxIdx = data.indexOf(maxVal);
+            const label = chart.data.labels[maxIdx];
+            
+            // 퍼센트 계산 (전체 대비 비율)
+            const percentage = ((maxVal / total) * 100).toFixed(0);
             
             ctx.save();
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            
+            // 장르명 표시
             ctx.font = 'bold 20px sans-serif';
-            ctx.fillText(chart.data.labels[maxIdx], width / 2 + left, height / 2 + top - 10);
+            ctx.fillText(label, width / 2 + left, height / 2 + top - 10);
+            
+            // 퍼센트 표시 (추가된 부분)
+            ctx.font = '16px sans-serif';
+            ctx.fillText(`${percentage}%`, width / 2 + left, height / 2 + top + 15);
+            
             ctx.restore();
         }
     };
@@ -56,9 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
     new Chart(genreCtx, {
         type: 'doughnut',
         data: {
-            labels: Object.keys(genreStats),           // 가공된 장르 라벨
+            labels: top5Genres.map(item => item[0]),
             datasets: [{
-                data: Object.values(genreStats),       // 가공된 장르 데이터 값
+                data: top5Genres.map(item => item[1]),       // 정렬된 값
                 backgroundColor: ['#00d4ff', '#0000ff', '#ffffff', '#ff9100', '#00e676'],
                 borderWidth: 0
             }]
@@ -75,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     new Chart(weatherCtx, {
         type: 'bar',
         data: {
-            labels: Object.keys(weatherStats),         // 가공된 날씨 라벨
+            labels: top5Weather.map(item => item[0]),        // 정렬된 라벨
             datasets: [{
-                data: Object.values(weatherStats),     // 가공된 날씨 데이터 값
-                backgroundColor: ['#00e676', '#2979ff', '#ff9100', '#bdbdbd'],
+                data: top5Weather.map(item => item[1]),      // 정렬된 값
+                backgroundColor: ['#00e676', '#2979ff', '#ff9100', '#bdbdbd', '#757575'],
                 borderRadius: 10,
                 barThickness: 10
             }]
