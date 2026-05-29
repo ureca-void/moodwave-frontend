@@ -1,4 +1,5 @@
-import { dummyData } from '../data/mockData.js';
+// 기존 더미데이터 불러오는 로직 삭제
+// import { dummyData } from '../data/mockData.js';
 
 import { renderCommonLayout } from "../layout/commonLayout.js";
 
@@ -7,7 +8,13 @@ import { renderCommonLayout } from "../layout/commonLayout.js";
 // =========================
 renderCommonLayout();
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. API에서 데이터 가져오기
+    // 백엔드 API 주소로 수정하고, 받아온 데이터는 배열 그 자체이므로 data에 그대로 할당합니다.
+    const response = await fetch('http://localhost:8080/api/music');
+    const data = await response.json(); // 백엔드에서 받은 데이터
+    console.log("데이터 확인:", data);
+    // const data = data.allSongs; // 예시 구조
 
   // 1. 유틸리티: 통계 계산 후 내림차순 정렬하여 상위 5개 반환
     const getSortedTop5 = (dataArray, key) => {
@@ -21,11 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .slice(0, 5);                // 상위 5개
     };
 
-    const top5Genres = getSortedTop5(dummyData, 'genre');
-    const top5Weather = getSortedTop5(dummyData, 'weather');
+    const top5Genres = getSortedTop5(data, 'genre');
+    const top5Weather = getSortedTop5(data, 'weather');
 
   // 2. 테이블 렌더링: 재생횟수(playCount) 기준 내림차순 정렬 상위 5개
-    const sortedSongs = [...dummyData].sort((a, b) => b.playCount - a.playCount);
+    const sortedSongs = [...data].sort((a, b) => b.playCount - a.playCount);
     const tbody = document.querySelector('.song-table tbody');
     tbody.innerHTML = sortedSongs.slice(0, 5).map((song, index) => `
         <tr class="song-row">
@@ -44,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         afterDraw: (chart) => {
             const { ctx, chartArea: { top, left, width, height } } = chart;
             const data = chart.data.datasets[0].data; // 상위 5개 데이터 배열
-            const total = dummyData.length;           // 전체 데이터(20개)
+            const total = data.length;           // 전체 데이터(20개)
             
             // 가장 많이 나온 항목의 정보 추출
             const maxVal = Math.max(...data);
