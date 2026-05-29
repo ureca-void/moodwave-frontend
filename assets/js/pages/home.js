@@ -1,9 +1,17 @@
-import {
-  ICON_PATH,
-  midMixes,
-  popularPlaylists,
-  latestPlaylists,
-} from "../data.js";
+import { ICON_PATH } from "../data.js";
+
+// =========================
+// 홈 데이터 요청 함수
+// =========================
+async function getHomeData() {
+  const response = await fetch("http://localhost:8080/api/home");
+
+  if (!response.ok) {
+    throw new Error("홈 데이터 요청 실패");
+  }
+
+  return response.json();
+}
 
 // =========================
 // 홈 HTML 렌더링 함수
@@ -16,7 +24,7 @@ export function renderHome() {
 
     <section class="section">
       <div class="section__header">
-        <h2 class="section__title">Popular</h2>
+        <h2 class="section__title">Popular K-Pop</h2>
         <a href="popular.html" class="section__see-all">SEE ALL</a>
       </div>
 
@@ -65,13 +73,13 @@ function createMidMixCard(item) {
 // =========================
 // 중간 믹스 렌더링 함수
 // =========================
-function renderMidMixes() {
+function renderMidMixes(data) {
   const midMixesElement = document.querySelector("#midMixes");
   const rowSize = 3;
   let html = "";
 
-  for (let i = 0; i < midMixes.length; i += rowSize) {
-    const rowItems = midMixes.slice(i, i + rowSize);
+  for (let i = 0; i < data.length; i += rowSize) {
+    const rowItems = data.slice(i, i + rowSize);
 
     html += `
       <div class="mid-mixes__row">
@@ -135,9 +143,18 @@ function renderGreeting() {
 // =========================
 // 홈 초기 실행 함수
 // =========================
-export function initHome() {
-  renderGreeting();
-  renderMidMixes();
-  renderGrid("#popularGrid", popularPlaylists);
-  renderGrid("#latestGrid", latestPlaylists);
+export async function initHome() {
+  try {
+    renderGreeting();
+
+    const homeData = await getHomeData();
+
+    console.log("백엔드 홈 데이터:", homeData);
+
+    renderMidMixes(homeData.midMixes);
+    renderGrid("#popularGrid", homeData.popular);
+    renderGrid("#latestGrid", homeData.latest);
+  } catch (error) {
+    console.error(error);
+  }
 }

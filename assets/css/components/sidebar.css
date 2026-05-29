@@ -19,6 +19,7 @@
 /* 로고 */
 .sidebar__brand {
   height: 70px;
+  margin-bottom: 20px;
 }
 
 .sidebar__brand-link {
