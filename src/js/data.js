@@ -13,12 +13,12 @@ export const navItems = [
   {
     label: "Weather Vibes",
     icon: "weather.svg",
-    href: "#",
+    href: "/pages/weather.html",
   },
   {
     label: "Your Status",
     icon: "status.svg",
-    href: "pages/chart.html",
+    href: "/pages/chart.html",
   },
 ];
 

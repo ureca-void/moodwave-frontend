@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. API에서 데이터 가져오기
     // 백엔드 API 주소로 수정하고, 받아온 데이터는 배열 그 자체이므로 data에 그대로 할당합니다.
     const response = await fetch('http://localhost:8080/api/music');
-    const data = await response.json(); // 백엔드에서 받은 데이터
+    const result = await response.json(); const data = result.allSongs || result.data || result; // 백엔드 응답 구조에 맞게 수정
+console.log("배열 데이터 확인:", data);
     console.log("데이터 확인:", data);
     // const data = data.allSongs; // 예시 구조
 
@@ -51,15 +52,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         id: 'centerText',
         afterDraw: (chart) => {
             const { ctx, chartArea: { top, left, width, height } } = chart;
-            const data = chart.data.datasets[0].data; // 상위 5개 데이터 배열
-            const total = data.length;           // 전체 데이터(20개)
+            const datasetData = chart.data.datasets[0].data; // 상위 5개 데이터 배열
+            const total = datasetData.reduce((a, b) => a + b, 0);         // 전체 데이터(20개)
+         
             
             // 가장 많이 나온 항목의 정보 추출
-            const maxVal = Math.max(...data);
-            const maxIdx = data.indexOf(maxVal);
+            const maxVal = Math.max(...datasetData);
+            const maxIdx = datasetData.indexOf(maxVal);
             const label = chart.data.labels[maxIdx];
             
-            // 퍼센트 계산 (전체 대비 비율)
+            // 전체 개수를 사용하여 올바른 비율 계산
             const percentage = ((maxVal / total) * 100).toFixed(0);
             
             ctx.save();
@@ -71,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ctx.font = 'bold 20px sans-serif';
             ctx.fillText(label, width / 2 + left, height / 2 + top - 10);
             
-            // 퍼센트 표시 (추가된 부분)
+            // 퍼센트 표시 
             ctx.font = '16px sans-serif';
             ctx.fillText(`${percentage}%`, width / 2 + left, height / 2 + top + 15);
             
@@ -90,6 +92,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             }]
         },
         options: {
+          animation: {
+            onComplete: (animation) => {
+
+            }
+          },
             plugins: { legend: { display: false }, tooltip: { enabled: true } },
             cutout: '70%'
         },
