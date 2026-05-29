@@ -37,17 +37,20 @@
 .chart-container { 
     width: 250px; 
     height: 250px; 
+    padding: 30px clamp(20px, 3vw, 41px) 50px;
 }
 
 /* 날씨 통계 영역 */
 .weather-stats {
     width: 200px;
     padding: 20px;
+    padding: 30px clamp(20px, 3vw, 41px) 50px;
 }
 
 /* 차트 박스 전체 스타일 */
 .chart-box { display: flex; flex-direction: column; align-items: center; }
 .chart-box h3 { font-size: 1rem; color: #b3b3b3; margin-bottom: 10px; }
+
 
 /* 도넛 차트 두께 및 크기 조절 */
 .chart-container { width: 200px; height: 200px; }
