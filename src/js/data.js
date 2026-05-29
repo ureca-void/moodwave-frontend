@@ -18,7 +18,7 @@ export const navItems = [
   {
     label: "Your Status",
     icon: "status.svg",
-    href: "#",
+    href: "pages/chart.html",
   },
 ];
 
