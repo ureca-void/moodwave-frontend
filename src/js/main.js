@@ -3,7 +3,7 @@ import { renderHeader, initHeader } from "./components/header.js";
 import { renderFooter, initFooter } from "./components/footer.js";
 
 import { renderHome, initHome } from "./pages/home.js";
-import { renderSearch } from "./pages/search.js";
+import { renderSearch, initSearch } from "./pages/search.js";
 
 // =========================
 // 페이지 라우터 함수
@@ -12,8 +12,11 @@ function router() {
   const main = document.querySelector("#main");
   const hash = location.hash || "#/home";
 
+  if (!main) return;
+
   if (hash.startsWith("#/search")) {
     main.innerHTML = renderSearch();
+    initSearch();
     return;
   }
 
@@ -28,6 +31,8 @@ function init() {
   const sidebar = document.querySelector("#sidebar");
   const header = document.querySelector("#header");
   const footer = document.querySelector("#footer");
+
+  if (!sidebar || !header || !footer) return;
 
   // HTML 먼저 렌더링
   sidebar.innerHTML = renderSidebar();

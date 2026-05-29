@@ -24,7 +24,7 @@ export function renderHome() {
 
     <section class="section">
       <div class="section__header">
-        <h2 class="section__title">Popular K-Pop</h2>
+        <h2 class="section__title">Popular</h2>
         <a href="popular.html" class="section__see-all">SEE ALL</a>
       </div>
 
@@ -47,10 +47,18 @@ export function renderHome() {
 // =========================
 function createMidMixCard(item) {
   return `
-    <article class="mid-mix">
+    <article
+      class="mid-mix"
+      data-play-track
+      data-id="${item.id || ""}"
+      data-uri="${item.uri || ""}"
+      data-title="${item.title || ""}"
+      data-artist="${item.artist || item.description || ""}"
+      data-cover="${item.cover || item.imageUrl || ""}"
+    >
       <img
         class="mid-mix__cover"
-        src="${item.cover}"
+        src="${item.cover || item.imageUrl || ""}"
         width="82"
         height="82"
         alt=""
@@ -96,11 +104,19 @@ function renderMidMixes(data) {
 // =========================
 function createGridCard(item) {
   return `
-    <article class="grid-card">
+    <article
+      class="grid-card"
+      data-play-track
+      data-id="${item.id || ""}"
+      data-uri="${item.uri || ""}"
+      data-title="${item.title || ""}"
+      data-artist="${item.artist || item.description || ""}"
+      data-cover="${item.cover || item.imageUrl || ""}"
+    >
       <div class="grid-card__art-wrap">
         <img
           class="grid-card__art"
-          src="${item.cover}"
+          src="${item.cover || item.imageUrl || ""}"
           width="182"
           height="182"
           alt=""
@@ -118,7 +134,7 @@ function createGridCard(item) {
 
       <div class="grid-card__info">
         <span class="grid-card__name">${item.title}</span>
-        <span class="grid-card__desc">${item.description}</span>
+        <span class="grid-card__desc">${item.artist || item.description || ""}</span>
       </div>
     </article>
   `;

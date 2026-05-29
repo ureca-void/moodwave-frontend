@@ -3,8 +3,12 @@ import { user } from "../data.js";
 // =========================
 // API 주소
 // =========================
-const API = "http://127.0.0.1:8080/api/user";
-const SPOTIFY_LOGIN_URL = "http://127.0.0.1:8080/oauth2/authorization/spotify";
+const API_BASE_URL = "http://127.0.0.1:8080";
+
+const API = `${API_BASE_URL}/api/user`;
+const SPOTIFY_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/spotify`;
+const LOGOUT_URL = `${API_BASE_URL}/logout`;
+
 const SPOTIFY_LOGO_URL =
   "https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Black.png";
 
@@ -56,6 +60,24 @@ export function renderHeader() {
 }
 
 // =========================
+// Spotify 로그인 URL 생성 함수
+// =========================
+function getSpotifyLoginUrl() {
+  const redirectUrl = window.location.href;
+
+  return `${SPOTIFY_LOGIN_URL}?redirect=${encodeURIComponent(redirectUrl)}`;
+}
+
+// =========================
+// 로그아웃 URL 생성 함수
+// =========================
+function getLogoutUrl() {
+  const redirectUrl = window.location.href;
+
+  return `${LOGOUT_URL}?redirect=${encodeURIComponent(redirectUrl)}`;
+}
+
+// =========================
 // Spotify 연동 버튼 렌더링 함수
 // =========================
 function renderSpotifyConnectButton() {
@@ -74,6 +96,7 @@ function renderSpotifyConnectButton() {
   `;
 
   const spotifyConnectBtn = document.querySelector("#spotifyConnectBtn");
+  if (!spotifyConnectBtn) return;
 
   spotifyConnectBtn.addEventListener("click", () => {
     spotifyConnectBtn.disabled = true;
@@ -87,7 +110,7 @@ function renderSpotifyConnectButton() {
       <strong>연동 중...</strong>
     `;
 
-    window.location.href = SPOTIFY_LOGIN_URL;
+    window.location.href = getSpotifyLoginUrl();
   });
 }
 
@@ -139,14 +162,13 @@ function renderUser() {
   fetch(API, {
     method: "GET",
     credentials: "include",
-    redirect: "manual",
   })
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
 
-      if (response.status === 401 || response.type === "opaqueredirect") {
+      if (response.status === 401) {
         throw new Error("UNAUTHORIZED");
       }
 
@@ -172,13 +194,9 @@ function logout(event) {
   event.preventDefault();
   event.stopPropagation();
 
-  const currentUrl = window.location.href;
-
   alert("로그아웃 되었습니다.");
 
-  window.location.href = `http://127.0.0.1:8080/logout?redirect=${encodeURIComponent(
-    currentUrl,
-  )}`;
+  window.location.href = getLogoutUrl();
 }
 
 // =========================
@@ -217,6 +235,8 @@ function initSearchForm() {
 
   if (!searchForm || !searchInput) return;
 
+  let searchTimer = null;
+
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -224,7 +244,20 @@ function initSearchForm() {
 
     if (!keyword) return;
 
+    clearTimeout(searchTimer);
     location.hash = `#/search?q=${encodeURIComponent(keyword)}`;
+  });
+
+  searchInput.addEventListener("input", (event) => {
+    const keyword = event.target.value.trim();
+
+    clearTimeout(searchTimer);
+
+    searchTimer = setTimeout(() => {
+      if (!keyword) return;
+
+      location.hash = `#/search?q=${encodeURIComponent(keyword)}`;
+    }, 700);
   });
 }
 

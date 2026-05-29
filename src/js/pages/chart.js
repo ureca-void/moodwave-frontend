@@ -1,7 +1,7 @@
 // 기존 더미데이터 불러오는 로직 삭제
 // import { dummyData } from '../data/mockData.js';
 
-import { renderCommonLayout } from "../layout/commonLayout.js";
+import { renderCommonLayout } from "../layout/commonLayout";
 
 // =========================
 // 초기 실행
