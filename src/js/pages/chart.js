@@ -1,7 +1,7 @@
 // 기존 더미데이터 불러오는 로직 삭제
 // import { dummyData } from '../data/mockData.js';
 
-import { renderCommonLayout } from "../layout/commonLayout";
+import { renderCommonLayout } from "../layout/commonLayout.js";
 
 // =========================
 // 초기 실행
@@ -9,6 +9,7 @@ import { renderCommonLayout } from "../layout/commonLayout";
 renderCommonLayout();
 
 document.addEventListener('DOMContentLoaded', async () => {
+
     // 1. API에서 데이터 가져오기
     // 백엔드 API 주소로 수정하고, 받아온 데이터는 배열 그 자체이므로 data에 그대로 할당합니다.
     const response = await fetch('http://localhost:8080/api/music');
