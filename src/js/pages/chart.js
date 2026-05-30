@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 백엔드 API 주소로 수정하고, 받아온 데이터는 배열 그 자체이므로 data에 그대로 할당합니다.
     const response = await fetch('http://localhost:8080/api/music');
     const result = await response.json(); const data = result.allSongs || result.data || result; // 백엔드 응답 구조에 맞게 수정
-console.log("배열 데이터 확인:", data);
-    console.log("데이터 확인:", data);
+
     // const data = data.allSongs; // 예시 구조
 
   // 1. 유틸리티: 통계 계산 후 내림차순 정렬하여 상위 5개 반환
@@ -38,11 +37,11 @@ console.log("배열 데이터 확인:", data);
     const tbody = document.querySelector('.song-table tbody');
     tbody.innerHTML = sortedSongs.slice(0, 5).map((song, index) => `
         <tr class="song-row">
-            <td>${index + 1}</td>
-            <td>${song.title}</td>
-            <td>${song.artist}</td>
-            <td>${song.playCount}회</td>
-        </tr>
+        <td>${index + 1}</td>
+        <td>${song.title ?? "Unknown Title"}</td>
+        <td>${song.description ?? "Unknown Artist"}</td>
+        <td>${song.popularity ?? 0}점</td> 
+    </tr>
     `).join('');
 
     // 3. 도넛 차트 생성
@@ -108,10 +107,10 @@ console.log("배열 데이터 확인:", data);
     new Chart(weatherCtx, {
         type: 'bar',
         data: {
-            labels: top5Weather.map(item => item[0]),        // 정렬된 라벨
+            labels: top5Weather.map(item => item[0]),        // 5가지 날씨 라벨
             datasets: [{
-                data: top5Weather.map(item => item[1]),      // 정렬된 값
-                backgroundColor: ['#00e676', '#2979ff', '#ff9100', '#bdbdbd', '#757575'],
+                data: top5Weather.map(item => item[1]),      // 5단계 날씨별 색상 배열 
+                backgroundColor: ['#FFD700', '#B0C4DE', '#A9A9A9', '#4682B4', '#2F4F4F'],
                 borderRadius: 10,
                 barThickness: 10
             }]
