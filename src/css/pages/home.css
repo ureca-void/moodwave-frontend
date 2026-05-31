@@ -19,24 +19,6 @@
   scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
 }
 
-/* 메인 스크롤바 커스터마이징 */
-.main::-webkit-scrollbar {
-  width: 8px;
-}
-
-.main::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.main::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.main::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
 .main > * {
   width: 100%;
   max-width: 1280px;
@@ -265,4 +247,89 @@
   color: #b3b3b3;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+/* =========================
+   Home Skeleton UI
+========================= */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #2a2a2a;
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  animation: skeleton-loading 1.2s infinite;
+}
+
+@keyframes skeleton-loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Mid Mix Skeleton */
+.mid-mix--skeleton {
+  pointer-events: none;
+}
+
+.mid-mix--skeleton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mid-mix--skeleton .mid-mix__cover {
+  display: block;
+  border-radius: 6px 0 0 6px;
+}
+
+.mid-mix__title-skeleton {
+  display: block;
+  width: 55%;
+  height: 20px;
+  border-radius: 999px;
+}
+
+/* Grid Card Skeleton */
+.grid-card--skeleton {
+  pointer-events: none;
+}
+
+.grid-card--skeleton:hover {
+  background: #181818;
+  transform: none;
+}
+
+.grid-card--skeleton .grid-card__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.grid-card__name-skeleton {
+  display: block;
+  width: 75%;
+  height: 20px;
+  border-radius: 999px;
+}
+
+.grid-card__desc-skeleton {
+  display: block;
+  width: 100%;
+  height: 16px;
+  border-radius: 999px;
+}
+
+.grid-card__desc-skeleton--short {
+  width: 65%;
 }

@@ -16,7 +16,9 @@
   padding: 0 30px;
 }
 
-/* 로고 */
+/* =========================
+   로고
+========================= */
 .sidebar__brand {
   height: 70px;
   margin-bottom: 20px;
@@ -43,7 +45,9 @@
   letter-spacing: -0.5px;
 }
 
-/* 사이드바 메뉴 */
+/* =========================
+   사이드바 메뉴
+========================= */
 .sidebar__nav-primary,
 .sidebar__nav-secondary {
   display: flex;
@@ -91,7 +95,9 @@
   background: #282828;
 }
 
-/* 사이드바 플레이리스트 */
+/* =========================
+   사이드바 플레이리스트
+========================= */
 .sidebar__playlist-list {
   display: flex;
   flex-direction: column;
@@ -108,32 +114,227 @@
   color: #b3b3b3;
 }
 
+.sidebar__playlist-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sidebar__playlist-item {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: #b3b3b3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sidebar__playlist-row:hover .sidebar__playlist-item,
 .sidebar__playlist-item:hover {
   color: white;
 }
 
-/* 사이드바 스크롤바 커스터마이징 */
-.sidebar__playlist-list:hover {
-  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+/* =========================
+   플레이리스트 점 3개 버튼
+========================= */
+.sidebar__playlist-more-wrap {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.sidebar__playlist-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.sidebar__playlist-list::-webkit-scrollbar-track {
+.sidebar__playlist-more-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
   background: transparent;
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.sidebar__playlist-list::-webkit-scrollbar-thumb {
+.sidebar__playlist-row:hover .sidebar__playlist-more-button,
+.sidebar__playlist-more-button:focus,
+.sidebar__playlist-more-button:focus-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.sidebar__playlist-more-button span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* =========================
+   플레이리스트 더보기 메뉴
+========================= */
+.playlist-more-menu {
+  position: fixed;
+  z-index: 2000;
+  display: none;
+  width: 270px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #333;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}
+
+.playlist-more-menu.is-open {
+  display: block;
+}
+
+.playlist-more-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 11px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  line-height: 1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.playlist-more-menu__item:hover {
+  background: #444;
+}
+
+.playlist-more-menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  color: currentColor;
+}
+
+.playlist-more-menu__icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.playlist-more-menu__item--delete {
+  color: #ff4d4d;
+}
+
+/* =========================
+   플레이리스트 모달
+========================= */
+.playlist-modal {
+  display: none;
+}
+
+.playlist-modal.is-open {
+  display: block;
+}
+
+.playlist-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.playlist-modal__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1001;
+  width: 320px;
+  padding: 24px;
+  border-radius: 16px;
+  background: #181818;
+  transform: translate(-50%, -50%);
+}
+
+.playlist-modal__title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.playlist-modal__description {
+  margin-bottom: 20px;
+  color: #b3b3b3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.playlist-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.playlist-modal__input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #242424;
+  font-size: 14px;
+  color: white;
+}
+
+.playlist-modal__input::placeholder {
+  color: #aaa;
+}
+
+.playlist-modal__input:focus {
+  border-color: #1ed760;
+  outline: none;
+}
+
+.playlist-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.playlist-modal__button {
+  padding: 10px 14px;
+  border: 0;
   border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.playlist-modal__button--cancel {
   background: transparent;
+  color: #aaa;
 }
 
-.sidebar__playlist-list:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.35);
+.playlist-modal__button--cancel:hover {
+  color: white;
 }
 
-.sidebar__playlist-list:hover::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+.playlist-modal__button--create {
+  background: #1ed760;
+  color: #000;
+  font-weight: 700;
+}
+
+.playlist-modal__button--delete {
+  background: #e53935;
+  color: #fff;
+  font-weight: 700;
 }

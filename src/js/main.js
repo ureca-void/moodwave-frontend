@@ -4,22 +4,74 @@ import { renderFooter, initFooter } from "./components/footer.js";
 
 import { renderHome, initHome } from "./pages/home.js";
 import { renderSearch, initSearch } from "./pages/search.js";
+import { renderLatestPage, initLatestPage } from "./pages/latest.js";
+import { renderPlaylistPage, initPlaylistPage } from "./pages/playlist.js";
+import { renderPopularPage, initPopularPage } from "./pages/popular.js";
+
+import { isLoggedIn } from "./utils/auth.js";
+import { initToast } from "./utils/toast.js";
+
+// =========================
+// 로그인이 필요한 페이지 목록
+// =========================
+const protectedRoutes = ["#/search", "#/latest", "#/popular", "#/playlist"];
+
+// =========================
+// 보호 페이지 여부 확인 함수
+// =========================
+function isProtectedRoute(hash) {
+  return protectedRoutes.some((route) => hash.startsWith(route));
+}
 
 // =========================
 // 페이지 라우터 함수
 // =========================
-function router() {
+async function router() {
   const main = document.querySelector("#main");
   const hash = location.hash || "#/home";
 
   if (!main) return;
 
+  // 로그인 필요한 페이지 접근 제한
+  if (isProtectedRoute(hash)) {
+    const loggedIn = await isLoggedIn();
+
+    if (!loggedIn) {
+      alert("로그인 후 이용할 수 있습니다.");
+      location.hash = "#/home";
+      return;
+    }
+  }
+
+  // 검색 페이지
   if (hash.startsWith("#/search")) {
     main.innerHTML = renderSearch();
     initSearch();
     return;
   }
 
+  // Latest 페이지
+  if (hash === "#/latest") {
+    main.innerHTML = renderLatestPage();
+    initLatestPage();
+    return;
+  }
+
+  // Popular 페이지
+  if (hash === "#/popular") {
+    main.innerHTML = renderPopularPage();
+    initPopularPage();
+    return;
+  }
+
+  // 플레이리스트 페이지
+  if (hash.startsWith("#/playlist")) {
+    main.innerHTML = renderPlaylistPage();
+    initPlaylistPage();
+    return;
+  }
+
+  // 홈 페이지
   main.innerHTML = renderHome();
   initHome();
 }
@@ -34,21 +86,22 @@ function init() {
 
   if (!sidebar || !header || !footer) return;
 
-  // HTML 먼저 렌더링
+  // 공통 레이아웃 HTML 렌더링
   sidebar.innerHTML = renderSidebar();
   header.innerHTML = renderHeader();
   footer.innerHTML = renderFooter();
 
-  // 기능 실행
+  // 공통 기능 실행
   initSidebar();
   initHeader();
   initFooter();
 
-  // 페이지 렌더링
+  // 현재 페이지 렌더링
   router();
 
-  // hash 변경 시 페이지 변경
+  // hash 변경 시 메인 영역만 변경
   window.addEventListener("hashchange", router);
 }
 
+initToast();
 init();

@@ -57,3 +57,7 @@ textarea {
 strong {
   font-weight: inherit;
 }
+
+[hidden] {
+  display: none !important;
+}

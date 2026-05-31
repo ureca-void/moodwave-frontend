@@ -1,0 +1,154 @@
+/* =========================
+   Playlist 페이지
+========================= */
+.playlist-page {
+  width: 100%;
+  padding-bottom: 120px;
+}
+
+.playlist-page__header {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.playlist-page__back {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+.playlist-page__back:hover {
+  color: #fff;
+}
+
+.playlist-page__title {
+  overflow: hidden;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.playlist-page__desc {
+  margin-top: 8px;
+  color: #b3b3b3;
+  font-size: 15px;
+}
+
+.playlist-page__empty {
+  padding: 80px 20px;
+  border-radius: 18px;
+  background: #181818;
+  text-align: center;
+}
+
+.playlist-page__empty h2 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.playlist-page__empty p {
+  color: #b3b3b3;
+  font-size: 15px;
+}
+
+/* =========================
+   Playlist 카드 목록
+========================= */
+.playlist-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.playlist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #181818;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.playlist-card:hover {
+  background: #282828;
+  transform: translateY(-2px);
+}
+
+.playlist-card__cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1db954, #191414);
+}
+
+.playlist-card__cover img {
+  width: 48px;
+  height: 48px;
+}
+
+.playlist-card__info {
+  min-width: 0;
+}
+
+.playlist-card__title {
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.playlist-card__desc {
+  display: block;
+  margin-top: 6px;
+  color: #b3b3b3;
+  font-size: 13px;
+}
+
+/* =========================
+   플레이리스트 곡 제거 버튼
+========================= */
+.playlist-track-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: #b3b3b3;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.playlist-track-remove-button:hover {
+  background: rgba(255, 77, 77, 0.14);
+  color: #ff4d4d;
+  transform: scale(1.06);
+}
+
+.playlist-track-remove-button svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}

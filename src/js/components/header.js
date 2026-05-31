@@ -1,4 +1,5 @@
 import { user } from "../data.js";
+import { requireLogin } from "../utils/auth.js";
 
 // =========================
 // API 주소

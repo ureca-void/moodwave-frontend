@@ -1,0 +1,276 @@
+/* =========================
+   Latest 페이지 - 테이블형
+========================= */
+.latest-page {
+  width: 100%;
+  padding-bottom: 120px;
+}
+
+/* 타이틀 영역 */
+.latest-page__header {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.latest-page__title {
+  overflow: hidden;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 38px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.latest-page__desc {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #b3b3b3;
+}
+
+/* =========================
+   표 디자인
+========================= */
+.song-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.song-table thead {
+  border-bottom: 1px solid #333;
+}
+
+.song-table th,
+.song-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.song-table th {
+  color: #b3b3b3;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.song-table td {
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+/* =========================
+   곡 row
+========================= */
+.song-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.song-row:hover {
+  background-color: #2a2a2a;
+}
+
+.song-row:hover .song-info__title {
+  color: #1db954;
+}
+
+/* 제목 + 커버 영역 */
+.song-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.song-info__cover {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  object-fit: cover;
+  background-color: #282828;
+}
+
+.song-info__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.song-info__title {
+  max-width: 360px;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.song-info__artist {
+  max-width: 360px;
+  overflow: hidden;
+  font-size: 13px;
+  color: #b3b3b3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* =========================
+   좋아요 / 플레이리스트 버튼
+========================= */
+.song-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+
+  background-color: transparent;
+  cursor: pointer;
+  opacity: 0.75;
+  transition:
+    opacity 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.song-action:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: scale(1.06);
+}
+
+.song-action.is-active {
+  opacity: 1;
+}
+
+.song-action img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+/* =========================
+   무한 스크롤 감지 영역
+========================= */
+.latest-observer {
+  width: 100%;
+  height: 1px;
+}
+
+/* =========================
+   플레이리스트 추가 모달
+========================= */
+.add-playlist-modal {
+  display: none;
+}
+
+.add-playlist-modal.is-open {
+  display: block;
+}
+
+.add-playlist-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.add-playlist-modal__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 3001;
+  width: 360px;
+  max-height: 520px;
+  padding: 24px;
+  border-radius: 18px;
+  background: #181818;
+  color: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.add-playlist-modal__title {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.add-playlist-modal__track {
+  margin-bottom: 18px;
+  overflow: hidden;
+  color: #b3b3b3;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.add-playlist-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.add-playlist-modal__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.add-playlist-modal__item:hover {
+  background: #282828;
+}
+
+.add-playlist-modal__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+
+  background: #333;
+  color: #1ed760;
+}
+
+.add-playlist-modal__empty {
+  padding: 20px 0;
+  color: #b3b3b3;
+  font-size: 14px;
+  text-align: center;
+}
+
+.add-playlist-modal__cancel {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #333;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.add-playlist-modal__cancel:hover {
+  background: #444;
+}

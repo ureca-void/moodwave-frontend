@@ -57,6 +57,9 @@
   color: #b3b3b3;
 }
 
+/* =========================
+   푸터 버튼
+========================= */
 .player__icon {
   display: flex;
   align-items: center;
@@ -65,7 +68,39 @@
   width: 32px;
   height: 32px;
   padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
+  opacity: 0.8;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.player__icon:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.player__icon:active {
+  transform: scale(0.96);
+}
+
+.player__icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.player__icon.is-active {
+  opacity: 1;
+}
+
+.player__icon.is-active img {
+  filter: brightness(0) saturate(100%) invert(57%) sepia(83%) saturate(472%)
+    hue-rotate(88deg) brightness(93%) contrast(87%);
 }
 
 .player__icon--like {
@@ -77,8 +112,12 @@
 .player__icon--play {
   width: 48px;
   height: 48px;
+  opacity: 1;
 }
 
+/* =========================
+   중앙 컨트롤
+========================= */
 .player__controls {
   display: flex;
   flex-direction: column;
@@ -116,6 +155,9 @@
   width: 31px;
 }
 
+/* =========================
+   진행바 / 볼륨바
+========================= */
 .player__bar,
 .player__volume {
   display: flex;
@@ -123,6 +165,7 @@
   height: 5px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
 }
 
 .player__bar {
@@ -132,9 +175,11 @@
 
 .player__bar-fill,
 .player__volume-fill {
+  display: block;
   height: 5px;
   border-radius: 4px;
   background: #fff;
+  transition: width 0.15s ease;
 }
 
 .player__bar-fill {
@@ -150,6 +195,14 @@
   width: 87.39%;
 }
 
+.player__bar:hover .player__bar-fill,
+.player__volume:hover .player__volume-fill {
+  background: #1db954;
+}
+
+/* =========================
+   오른쪽 도구
+========================= */
 .player__extras {
   display: flex;
   align-items: center;
@@ -163,4 +216,209 @@
   display: flex;
   align-items: center;
   gap: 24px;
+}
+
+/* =========================
+   푸터 작은 모달
+========================= */
+.player-popover {
+  position: fixed;
+  z-index: 9999;
+  width: 300px;
+  max-height: 360px;
+  padding: 16px;
+  color: #fff;
+  background: #282828;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  transform: translateY(-100%);
+}
+
+.player-popover::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: #282828;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.player-popover__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.player-popover__title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.player-popover__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  color: #b3b3b3;
+  font-size: 22px;
+  line-height: 1;
+  background: transparent;
+  cursor: pointer;
+}
+
+.player-popover__close:hover {
+  color: #fff;
+}
+
+.player-popover__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 290px;
+  overflow-y: auto;
+}
+
+.player-popover__current,
+.player-popover__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-popover__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1db954;
+}
+
+.player-popover__current strong,
+.player-popover__text strong {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.player-popover__current span:last-child,
+.player-popover__text span {
+  overflow: hidden;
+  font-size: 13px;
+  color: #b3b3b3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.player-popover__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-popover__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.player-popover__index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  color: #b3b3b3;
+}
+
+.player-popover__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.player-popover__empty {
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.player-popover__device-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #777;
+}
+
+.player-popover__device-dot.is-active {
+  background: #1db954;
+}
+
+.player__icon--repeat {
+  position: relative;
+}
+
+.player__repeat-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+  color: #1db954;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.player__repeat-badge.is-visible {
+  display: flex;
+}
+
+/* =========================
+   푸터 빈 상태
+========================= */
+.player--empty .player__cover {
+  padding: 12px;
+  background: #282828;
+  object-fit: contain;
+  opacity: 0.75;
+}
+
+.player--empty .player__title {
+  color: #ffffff;
+}
+
+.player--empty .player__artist {
+  color: #8a8a8a;
+}
+
+.player--empty .player__icon--like {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.player--empty .player__bar-fill {
+  width: 0;
+}
+
+.player__icon:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.player__icon:disabled:hover {
+  transform: none;
 }
