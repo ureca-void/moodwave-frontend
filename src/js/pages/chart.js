@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const stats = dataArray.reduce((acc, item) => {
       const label = normalizeText(item?.[field], "Unknown");
       const value = getValue(item);
-      acc[label] = (acc[label] || 0) + value;
+      acc[label] = (acc[label] || 0) + 1;
       return acc;
     }, {});
 
