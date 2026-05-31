@@ -1,5 +1,5 @@
 import { renderCommonLayout } from "../layout/commonLayout.js";
-import { dummyData } from "../../../assets/js/data/mockData.js";
+// import { dummyData } from "../../../assets/js/data/mockData.js";
 
 renderCommonLayout();
 
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ? result
     : result.allSongs || result.data || [];
   const chartData = data;
+  // 장르 차트용 매핑 
   const genreMap = {
   "D.O.": "K-Pop",
   "CORTIS": "Electronic",
@@ -34,22 +35,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     typeof value === "string" && value.trim() ? value : fallback;
 
   const getValue = (item) => {
-    const raw = Number(item?.playCount ?? item?.popularity ?? 0);
-    return Number.isFinite(raw) ? raw : 0;
-  };
+  const raw = Number(item?.playCount ?? item?.popularity ?? 0);
+  return Number.isFinite(raw) ? raw : 0;
+};
+  
 
-  const getTop5ByField = (dataArray, field) => {
-    const stats = dataArray.reduce((acc, item) => {
-      const label = normalizeText(item?.[field], "Unknown");
-      const value = getValue(item);
-      acc[label] = (acc[label] || 0) + 1;
-      return acc;
-    }, {});
+  // genre가 Unknown이면 artist 이름을 기준으로 genreMap에서 장르를 찾아 반환
+// genreMap에도 없으면 Etc로 분류해서 차트가 Unknown으로만 나오지 않게 처리
+const resolveGenre = (item) => {
+  const apiGenre = normalizeText(item?.genre, "");
 
-    return Object.entries(stats)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-  };
+  if (apiGenre && apiGenre !== "Unknown") {
+    return apiGenre;
+  }
+
+  const artist = normalizeText(item?.artist ?? item?.description, "");
+  return genreMap[artist] || "Etc";
+};
+
+ const getTop5ByField = (dataArray, field) => {
+  const stats = dataArray.reduce((acc, item) => {
+    // genre 차트일 때는 API genre 대신 resolveGenre()로 보정된 장르 사용
+    // weather 차트일 때는 기존처럼 API에서 받은 weather 값 그대로 사용
+    const label =
+      field === "genre"
+        ? resolveGenre(item)
+        : normalizeText(item?.[field], "Unknown");
+
+    // popularity 합산이 아니라 카테고리별 곡 개수를 세기 위해 +1
+    acc[label] = (acc[label] || 0) + 1;
+    return acc;
+  }, {});
+
+  return Object.entries(stats)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+};
 
   const top5Genres = getTop5ByField(chartData, "genre");
   const top5Weather = getTop5ByField(chartData, "weather");
