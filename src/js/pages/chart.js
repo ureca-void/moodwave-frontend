@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const data = Array.isArray(result)
     ? result
     : result.allSongs || result.data || [];
-  const chartData = data.some((item) => item?.genre) ? data : dummyData;
+  const chartData = data;
 
   const normalizeText = (value, fallback) =>
     typeof value === "string" && value.trim() ? value : fallback;
