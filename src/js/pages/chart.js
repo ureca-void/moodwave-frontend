@@ -11,6 +11,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     ? result
     : result.allSongs || result.data || [];
   const chartData = data;
+  const genreMap = {
+  "D.O.": "K-Pop",
+  "CORTIS": "Electronic",
+  "Playboi Carti": "Hip-Hop",
+  "The Weeknd": "Pop",
+  "NCT WISH": "K-Pop",
+  "DaBaby": "Hip-Hop",
+  "HANRORO": "K-Indie",
+  "Omega Sapien": "Hip-Hop",
+  "Yerin Baek": "R&B",
+  "NAYEON": "K-Pop",
+  "Hearts2Hearts": "K-Pop",
+  "ILLIT": "K-Pop",
+  "B小町": "J-Pop",
+  "Ariana Grande": "Pop",
+  "K/DA": "Game Music",
+  "DJ Khaled": "Hip-Hop",
+};
 
   const normalizeText = (value, fallback) =>
     typeof value === "string" && value.trim() ? value : fallback;
