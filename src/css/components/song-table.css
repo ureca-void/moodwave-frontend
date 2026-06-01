@@ -1,4 +1,141 @@
 /* =========================
+   Playlist Detail Page
+========================= */
+.playlist-main {
+  padding: 30px clamp(20px, 3vw, 41px) 50px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: var(--text-primary);
+  background: linear-gradient(180deg, #3333a3 0%, #121212 33%);
+}
+
+/* 플레이리스트 히어로 섹션 */
+.section-label {
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.playlist-hero-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 250px;
+}
+
+.playlist-cover {
+  position: relative;
+  flex-shrink: 0;
+  width: 250px;
+  height: 250px;
+  border-radius: 8px;
+  background: #666;
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow-card);
+}
+
+.playlist-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 48px 48px 0;
+}
+
+.playlist-info .playlist-title {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: clamp(42px, 6vw, 80px);
+  font-weight: 700;
+  line-height: 1.05;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.playlist-info .playlist-desc {
+  margin-top: 16px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.playlist-info .playlist-genre {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* 플레이리스트 콘텐츠 영역 */
+.playlist-content-container {
+  width: 100%;
+  margin-top: 30px;
+  overflow-x: auto;
+  color: #dedede;
+}
+
+.playlist-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 30px;
+  margin-bottom: 20px;
+}
+
+.playlist-actions-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.play-btn,
+.liked-btn,
+.download-btn,
+.playlist-sort {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.play-btn img {
+  width: 90px;
+  height: 90px;
+}
+
+.liked-btn img,
+.download-btn img {
+  width: 40px;
+  height: 40px;
+}
+
+.playlist-sort {
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.playlist-sort .sort-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.playlist-section {
+  width: 100%;
+}
+
+.playlist-section .song-table {
+  margin-top: 0;
+}
+
+.empty-state {
+  padding: 40px 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+  text-align: center;
+}
+
+/* =========================
    음악 테이블 공통 UI
 ========================= */
 .song-table-page {
@@ -288,6 +425,27 @@
    반응형
 ========================= */
 
+/* Playlist Detail 반응형 */
+@media (max-width: 1024px) {
+  .playlist-hero-container {
+    min-height: 220px;
+  }
+
+  .playlist-cover {
+    width: 220px;
+    height: 220px;
+  }
+
+  .playlist-info {
+    padding: 36px 36px 0;
+  }
+
+  .play-btn img {
+    width: 76px;
+    height: 76px;
+  }
+}
+
 /* 중간 화면: 사이드바 때문에 메인 영역이 좁아지는 구간 */
 @media (max-width: 1180px) {
   .song-table {
@@ -336,6 +494,53 @@
 
 /* 태블릿 */
 @media (max-width: 768px) {
+  .playlist-main {
+    padding: 24px 20px 140px;
+  }
+
+  .playlist-hero-container {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .playlist-cover {
+    width: 180px;
+    height: 180px;
+  }
+
+  .playlist-info {
+    padding: 24px 0 0;
+  }
+
+  .playlist-info .playlist-title {
+    white-space: normal;
+  }
+
+  .playlist-info .playlist-desc,
+  .playlist-info .playlist-genre {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .playlist-actions {
+    padding-top: 20px;
+  }
+
+  .play-btn img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .liked-btn img,
+  .download-btn img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .playlist-sort {
+    font-size: 13px;
+  }
+
   .song-table-page {
     padding-bottom: 140px;
   }
@@ -358,13 +563,13 @@
     margin-top: 16px;
   }
 
-  .song-table th,
-  .song-table td {
-    padding: 14px 10px;
+  .playlist-section .song-table {
+    margin-top: 0;
   }
 
   .song-table th,
   .song-table td {
+    padding: 14px 10px;
     font-size: 13px;
   }
 
@@ -408,6 +613,35 @@
 
 /* 모바일: 540px 이하에서 재생시간도 숨김 */
 @media (max-width: 540px) {
+  .playlist-main {
+    padding: 20px 16px 150px;
+  }
+
+  .section-label {
+    font-size: 16px;
+  }
+
+  .playlist-cover {
+    width: 150px;
+    height: 150px;
+  }
+
+  .playlist-actions {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .play-btn img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .liked-btn img,
+  .download-btn img {
+    width: 30px;
+    height: 30px;
+  }
+
   .song-table-page {
     padding-bottom: 150px;
   }

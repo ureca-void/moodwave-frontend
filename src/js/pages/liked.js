@@ -1,4 +1,4 @@
-import { getSpotifyAccessToken } from "../components/footer.js";
+import { getSpotifyAccessToken, isLiked } from "../components/footer.js";
 import { renderSongTable } from "../components/songTable.js";
 
 const API_BASE_URL = "http://127.0.0.1:8080";
@@ -30,6 +30,7 @@ async function loadLikedTracks() {
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/like`, {
+      method: "GET",
       credentials: "include",
     });
 
@@ -37,34 +38,12 @@ async function loadLikedTracks() {
       throw new Error("좋아요 목록 요청 실패");
     }
 
-    const likedItems = await response.json();
+    const tracks = await response.json();
+    console.log(tracks);
 
-    if (!likedItems.length) {
+    if (!tracks || tracks.length === 0) {
       container.innerHTML = "<p>좋아요한 곡이 없습니다.</p>";
       return;
-    }
-
-    const token = await getSpotifyAccessToken();
-    const tracks = [];
-
-    for (const item of likedItems) {
-      const id = item.musicId?.trim();
-
-      if (!id) continue;
-
-      const res = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        console.error(await res.text());
-        continue;
-      }
-
-      const track = await res.json();
-      tracks.push(track);
     }
 
     container.innerHTML = renderSongTable(tracks, {
@@ -82,19 +61,16 @@ async function loadLikedTracks() {
 // 좋아요 취소
 // =========================
 async function removeLike(musicId) {
-  const response = await fetch(`${API_BASE_URL}/api/like`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      musicId,
-    }),
+  console.log("musicId:", musicId);
+  const response = await fetch(`${API_BASE_URL}/api/like/${musicId}`, {
+    method: "DELETE",
     credentials: "include",
   });
 
   if (!response.ok) {
     throw new Error("좋아요 삭제 실패");
+  } else {
+    isLiked();
   }
 }
 
@@ -128,12 +104,5 @@ export function initLikedPage() {
       alert("좋아요 삭제에 실패했습니다.");
     }
   });
-
-  const likeButton = document.querySelector("#likeButton");
-  likeButton.addEventListener("click", async (e) => {
-    if (!likeButton) return;
-
-    console.log("푸터좋아요 반영해서 재로드");
-    loadLikedTracks();
-  });
+  window.addEventListener("likeChanged", loadLikedTracks);
 }

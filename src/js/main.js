@@ -9,6 +9,11 @@ import { renderPlaylistPage, initPlaylistPage } from "./pages/playlist.js";
 import { renderPopularPage, initPopularPage } from "./pages/popular.js";
 import { renderEmotion, initEmotion } from "./pages/emotion.js";
 import { renderLikedPage, initLikedPage } from "./pages/liked.js";
+import { renderWeatherPage, initWeatherPage } from "./pages/weather.js";
+import {
+  renderWeatherPlaylistPage,
+  initWeatherPlaylistPage,
+} from "./pages/weather-playlist.js";
 
 import { isLoggedIn } from "./utils/auth.js";
 import { initToast } from "./utils/toast.js";
@@ -53,6 +58,20 @@ const routes = [
     render: renderLikedPage,
     init: initLikedPage,
   },
+  {
+    path: "#/weather-playlist",
+    protected: true,
+    render: renderWeatherPlaylistPage,
+    init: initWeatherPlaylistPage,
+    pageClass: "playlist-main",
+  },
+  {
+    path: "#/weather",
+    protected: true,
+    render: renderWeatherPage,
+    init: initWeatherPage,
+    pageClass: "weather-main",
+  },
 ];
 
 // =========================
@@ -65,9 +84,15 @@ function findRoute(hash) {
 // =========================
 // 페이지 렌더링 함수
 // =========================
-function renderPage(main, render, init) {
-  main.innerHTML = render();
-  init();
+function renderPage(main, route) {
+  main.className = "main";
+
+  if (route.pageClass) {
+    main.classList.add(route.pageClass);
+  }
+
+  main.innerHTML = route.render();
+  route.init();
 }
 
 // =========================
@@ -92,11 +117,14 @@ async function router() {
   }
 
   if (route) {
-    renderPage(main, route.render, route.init);
+    renderPage(main, route);
     return;
   }
 
-  renderPage(main, renderHome, initHome);
+  renderPage(main, {
+    render: renderHome,
+    init: initHome,
+  });
 }
 
 // =========================

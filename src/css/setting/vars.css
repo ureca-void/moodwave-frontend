@@ -16,4 +16,9 @@
   --text-secondary: #b3b3b3;
 
   --accent: #20e830;
+
+  /* Shadow */
+  --shadow-card:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 10px 30px rgba(0, 0, 0, 0.25);
+  --shadow-btn: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.7));
 }

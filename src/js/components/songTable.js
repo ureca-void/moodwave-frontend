@@ -100,15 +100,25 @@ function normalizeTrack(item) {
     item.cover ||
     item.imageUrl ||
     item.albumCover ||
+    item.albumImage ||
     item.album?.images?.[0]?.url ||
     "";
 
-  const durationMs = item.durationMs || item.duration_ms || 0;
+  const durationMs = item.durationMs || item.duration_ms || item.duration || 0;
 
   const releaseDate =
-    item.releaseDate || item.release_date || item.album?.release_date || "-";
+    item.releaseDate ||
+    item.release_date ||
+    item.album?.release_date ||
+    item.savedAt || //좋아요 테이블 용
+    "-";
 
-  const id = item.id || item.trackId || item.spotifyId || `${title}-${artist}`;
+  const id =
+    item.musicId ||
+    item.id ||
+    item.trackId ||
+    item.spotifyId ||
+    `${title}-${artist}`;
   const uri = item.uri || (id ? `spotify:track:${id}` : "");
 
   return {
@@ -594,4 +604,13 @@ export function initSongTablePage({
   if (observerTarget) {
     activeObserver.observe(observerTarget);
   }
+}
+
+// =========================
+// 일반 테이블 이벤트 초기화 함수
+// renderSongTable()만 사용하는 페이지에서 사용
+// =========================
+export function initSongTable() {
+  renderAddPlaylistModal();
+  initSongTableEvents();
 }
