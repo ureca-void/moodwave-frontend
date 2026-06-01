@@ -23,33 +23,41 @@ function renderTopButton(buttonId) {
 }
 
 // =========================
+// 기존 스크롤 이벤트 제거
+// =========================
+function removeActiveScrollEvent() {
+  if (!activeScrollTarget || !activeScrollHandler) return;
+
+  activeScrollTarget.removeEventListener("scroll", activeScrollHandler);
+
+  activeScrollTarget = null;
+  activeScrollHandler = null;
+}
+
+// =========================
 // 스크롤 위치 가져오기
 // =========================
 function getScrollTop(scrollTarget) {
-  if (scrollTarget === window) {
-    return window.scrollY;
-  }
-
-  return scrollTarget.scrollTop;
+  return scrollTarget === window ? window.scrollY : scrollTarget.scrollTop;
 }
 
 // =========================
 // 맨 위로 이동
 // =========================
 function scrollToTop(scrollTarget) {
-  if (scrollTarget === window) {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-
-    return;
-  }
-
   scrollTarget.scrollTo({
     top: 0,
     behavior: "smooth",
   });
+}
+
+// =========================
+// Top 버튼 표시 상태 업데이트
+// =========================
+function updateTopButtonVisibility(button, scrollTarget, showAfter) {
+  const scrollTop = getScrollTop(scrollTarget);
+
+  button.classList.toggle("is-visible", scrollTop > showAfter);
 }
 
 // =========================
@@ -67,23 +75,21 @@ export function initTopButton({
 
   if (!button) return;
 
-  if (activeScrollTarget && activeScrollHandler) {
-    activeScrollTarget.removeEventListener("scroll", activeScrollHandler);
-  }
+  removeActiveScrollEvent();
 
   activeScrollTarget = scrollTarget;
 
   activeScrollHandler = () => {
-    const scrollTop = getScrollTop(scrollTarget);
-
-    button.classList.toggle("is-visible", scrollTop > showAfter);
+    updateTopButtonVisibility(button, scrollTarget, showAfter);
   };
 
   button.onclick = () => {
     scrollToTop(scrollTarget);
   };
 
-  scrollTarget.addEventListener("scroll", activeScrollHandler);
+  scrollTarget.addEventListener("scroll", activeScrollHandler, {
+    passive: true,
+  });
 
   activeScrollHandler();
 }

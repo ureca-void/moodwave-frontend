@@ -1,7 +1,9 @@
 import {
   renderSongTablePage,
   initSongTablePage,
-} from "/src/js/components/songTable";
+} from "../components/songTable.js";
+
+import { API_ENDPOINTS } from "../config/api.js";
 
 // =========================
 // Latest 페이지 HTML 렌더링 함수
@@ -21,7 +23,7 @@ export function renderLatestPage() {
 // =========================
 export function initLatestPage() {
   initSongTablePage({
-    apiUrl: "http://localhost:8080/api/latest",
+    apiUrl: API_ENDPOINTS.latest,
     tableBodyId: "latestTableBody",
     loadingId: "latestLoading",
     observerId: "latestObserver",

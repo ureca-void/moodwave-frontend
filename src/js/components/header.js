@@ -1,14 +1,6 @@
 import { user } from "../data.js";
-import { requireLogin } from "../utils/auth.js";
-
-// =========================
-// API 주소
-// =========================
-const API_BASE_URL = "http://127.0.0.1:8080";
-
-const API = `${API_BASE_URL}/api/user`;
-const SPOTIFY_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/spotify`;
-const LOGOUT_URL = `${API_BASE_URL}/logout`;
+import { API_ENDPOINTS } from "../config/api.js";
+import { escapeHTML } from "../utils/escapeHTML.js";
 
 const SPOTIFY_LOGO_URL =
   "https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Black.png";
@@ -40,6 +32,7 @@ export function renderHeader() {
     >
       <img src="/assets/icon/Back.svg" width="40" height="40" alt="" />
     </button>
+
     <button
       id="forwardBtn"
       class="header__nav-btn"
@@ -79,7 +72,9 @@ export function renderHeader() {
 function getSpotifyLoginUrl() {
   const redirectUrl = window.location.href;
 
-  return `${SPOTIFY_LOGIN_URL}?redirect=${encodeURIComponent(redirectUrl)}`;
+  return `${API_ENDPOINTS.spotifyLogin}?redirect=${encodeURIComponent(
+    redirectUrl,
+  )}`;
 }
 
 // =========================
@@ -88,7 +83,7 @@ function getSpotifyLoginUrl() {
 function getLogoutUrl() {
   const redirectUrl = window.location.href;
 
-  return `${LOGOUT_URL}?redirect=${encodeURIComponent(redirectUrl)}`;
+  return `${API_ENDPOINTS.logout}?redirect=${encodeURIComponent(redirectUrl)}`;
 }
 
 // =========================
@@ -143,13 +138,15 @@ function renderSpotifyProfile(data) {
       <img
         id="userAvatar"
         class="header__user-avatar"
-        src="${avatar}"
+        src="${escapeHTML(avatar)}"
         width="34"
         height="34"
         alt=""
       />
 
-      <span id="userName" class="header__user-name">${name}</span>
+      <span id="userName" class="header__user-name">
+        ${escapeHTML(name)}
+      </span>
 
       <button
         class="header__profile-arrow-btn"
@@ -170,35 +167,41 @@ function renderSpotifyProfile(data) {
 }
 
 // =========================
-// 유저 렌더링 함수
+// 유저 정보 요청 함수
 // =========================
-function renderUser() {
-  fetch(API, {
+async function fetchUser() {
+  const response = await fetch(API_ENDPOINTS.user, {
     method: "GET",
     credentials: "include",
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
+  });
 
-      if (response.status === 401) {
-        throw new Error("UNAUTHORIZED");
-      }
+  if (response.ok) {
+    return response.json();
+  }
 
-      throw new Error("NETWORK_ERROR");
-    })
-    .then((data) => {
-      if (data && data.isLoggedIn) {
-        renderSpotifyProfile(data);
-      } else {
-        renderSpotifyConnectButton();
-      }
-    })
-    .catch((error) => {
-      console.error("인증 정보를 가져오는 데 실패했습니다:", error);
+  if (response.status === 401) {
+    throw new Error("UNAUTHORIZED");
+  }
+
+  throw new Error("NETWORK_ERROR");
+}
+
+// =========================
+// 유저 렌더링 함수
+// =========================
+async function renderUser() {
+  try {
+    const data = await fetchUser();
+
+    if (data && data.isLoggedIn) {
+      renderSpotifyProfile(data);
+    } else {
       renderSpotifyConnectButton();
-    });
+    }
+  } catch (error) {
+    console.error("인증 정보를 가져오는 데 실패했습니다:", error);
+    renderSpotifyConnectButton();
+  }
 }
 
 // =========================
@@ -333,13 +336,18 @@ function initMobileSidebar() {
   };
 
   mobileMenuBtn.addEventListener("click", toggleSidebar);
-  sidebarOverlay.addEventListener("click", closeSidebar);
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 1024) {
-      closeSidebar();
-    }
-  });
+  if (sidebarOverlay.dataset.bound !== "true") {
+    sidebarOverlay.dataset.bound = "true";
+
+    sidebarOverlay.addEventListener("click", closeSidebar);
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1024) {
+        closeSidebar();
+      }
+    });
+  }
 }
 
 // =========================
@@ -352,10 +360,7 @@ export function initHeader() {
     headerContainer.innerHTML = renderHeader();
   }
 
-  // 기본값: Spotify 연동 버튼
   renderSpotifyConnectButton();
-
-  // 로그인 상태 확인 후, 로그인 상태면 프로필로 변경
   renderUser();
 
   initSearchForm();

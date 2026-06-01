@@ -1,9 +1,10 @@
-import { renderLoading, setLoading } from "./loading.js";
-import { initTopButton } from "./topButton.js";
+import { ICON_PATH, navItems, playlistMenuItems } from "../data.js";
+import { isLoggedIn, requireLogin } from "../utils/auth.js";
 import {
-  addTrackToPlaylist,
-  loadPlaylistNames,
+  deletePlaylistTracks,
+  renamePlaylistTracks,
 } from "../utils/playlistStorage.js";
+import { escapeHTML } from "../utils/escapeHTML.js";
 
 let currentPage = 0;
 const DEFAULT_LIMIT = 10;
@@ -33,20 +34,15 @@ function formatDuration(durationMs) {
 }
 
 // =========================
-// HTML 특수문자 변환 함수
+// 트랙 데이터 파싱 함수
 // =========================
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, (char) => {
-    const escapeMap = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-
-    return escapeMap[char];
-  });
+function parseTrackData(value) {
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.error("트랙 데이터 파싱 실패:", error);
+    return null;
+  }
 }
 
 // =========================
@@ -112,9 +108,12 @@ function normalizeTrack(item) {
   const releaseDate =
     item.releaseDate || item.release_date || item.album?.release_date || "-";
 
+  const id = item.id || item.trackId || item.spotifyId || `${title}-${artist}`;
+  const uri = item.uri || (id ? `spotify:track:${id}` : "");
+
   return {
-    id: item.id || item.trackId || item.spotifyId || `${title}-${artist}`,
-    uri: item.uri || "",
+    id,
+    uri,
     title,
     artist,
     releaseDate,
@@ -127,7 +126,12 @@ function normalizeTrack(item) {
 // 데이터 요청 함수
 // =========================
 async function getTracks(apiUrl, page, limit) {
-  const response = await fetch(`${apiUrl}?page=${page}&limit=${limit}`);
+  const url = new URL(apiUrl, window.location.origin);
+
+  url.searchParams.set("page", page);
+  url.searchParams.set("limit", limit);
+
+  const response = await fetch(url.toString());
 
   if (!response.ok) {
     throw new Error("곡 데이터 요청 실패");
@@ -408,7 +412,9 @@ function initSongTableEvents() {
         event.preventDefault();
         event.stopPropagation();
 
-        const track = JSON.parse(playlistButton.dataset.track);
+        const track = parseTrackData(playlistButton.dataset.track);
+
+        if (!track) return;
 
         openAddPlaylistModal(track);
         return;
@@ -484,7 +490,7 @@ async function renderMoreSongs({
       observerTarget?.remove();
     }
   } catch (error) {
-    console.error(error);
+    console.error("곡 데이터 로딩 실패:", error);
     hasMore = false;
     observerTarget?.remove();
   } finally {
@@ -570,6 +576,7 @@ export function initSongTablePage({
   renderMoreSongs(options);
 
   const observerTarget = document.querySelector(`#${observerId}`);
+  const scrollRoot = document.querySelector("#main");
 
   activeObserver = new IntersectionObserver(
     (entries) => {
@@ -578,7 +585,7 @@ export function initSongTablePage({
       }
     },
     {
-      root: document.querySelector("#main"),
+      root: scrollRoot,
       rootMargin: "200px",
       threshold: 0,
     },

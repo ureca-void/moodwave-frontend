@@ -1,25 +1,5 @@
-// =========================
-// API 설정
-// =========================
-const API_BASE_URL = "http://127.0.0.1:8080";
-
-// =========================
-// HTML 특수문자 변환
-// 화면에 출력되는 값이 HTML 태그로 해석되지 않도록 처리
-// =========================
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, (char) => {
-    const escapeMap = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-
-    return escapeMap[char];
-  });
-}
+import { API_ENDPOINTS } from "../config/api.js";
+import { escapeHTML } from "../utils/escapeHTML.js";
 
 // =========================
 // Emotion 페이지 화면 렌더링
@@ -56,8 +36,26 @@ export function renderEmotion() {
 }
 
 // =========================
+// 감정 추천 API 요청
+// =========================
+async function requestEmotionRecommend(text) {
+  const response = await fetch(API_ENDPOINTS.emotionRecommend, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!response.ok) {
+    throw new Error("감정 추천 API 요청 실패");
+  }
+
+  return response.json();
+}
+
+// =========================
 // Emotion 페이지 초기화
-// 버튼 클릭 시 감정 추천 API 요청
 // =========================
 export function initEmotion() {
   const input = document.querySelector("#emotionInput");
@@ -69,6 +67,9 @@ export function initEmotion() {
     return;
   }
 
+  if (button.dataset.bound === "true") return;
+  button.dataset.bound = "true";
+
   button.addEventListener("click", async () => {
     const text = input.value.trim();
 
@@ -79,30 +80,22 @@ export function initEmotion() {
 
     button.disabled = true;
     button.textContent = "추천 중...";
-    result.innerHTML = `<p class="emotion-result__loading">감정을 분석하고 있어요...</p>`;
+    result.innerHTML = `
+      <p class="emotion-result__loading">
+        감정을 분석하고 있어요...
+      </p>
+    `;
     trackGrid.innerHTML = "";
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/emotion/recommend`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      if (!response.ok) {
-        throw new Error("감정 추천 API 요청 실패");
-      }
-
-      const data = await response.json();
+      const data = await requestEmotionRecommend(text);
 
       console.log("감정 추천 결과:", data);
 
       renderEmotionResult(data);
       renderEmotionTracks(data.tracks || []);
     } catch (error) {
-      console.error(error);
+      console.error("감정 추천 실패:", error);
 
       result.innerHTML = `
         <p class="emotion-result__error">

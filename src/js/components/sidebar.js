@@ -4,6 +4,7 @@ import {
   deletePlaylistTracks,
   renamePlaylistTracks,
 } from "../utils/playlistStorage.js";
+import { escapeHTML } from "../utils/escapeHTML.js";
 
 const PLAYLIST_STORAGE_KEY = "moodwave_playlists";
 const PLAYLIST_MENU_WIDTH = 270;
@@ -21,6 +22,11 @@ let menuPosition = {
 
 // 로그인 상태 저장
 let isLoginUser = false;
+
+// 이벤트 중복 등록 방지
+let isSidebarEventBound = false;
+let isDocumentEventBound = false;
+let isSidebarSubmitEventBound = false;
 
 // =========================
 // 사이드바 HTML 렌더링 함수
@@ -193,7 +199,7 @@ function createNavItem(item) {
         height="32"
         alt=""
       />
-      <span class="sidebar__label">${item.label}</span>
+      <span class="sidebar__label">${escapeHTML(item.label)}</span>
     </a>
   `;
 }
@@ -224,15 +230,6 @@ function closeSidebar() {
 }
 
 // =========================
-// 사이드바 닫기 이벤트 등록 함수
-// =========================
-function bindSidebarCloseEvents() {
-  const closeButton = document.querySelector("[data-close-sidebar]");
-
-  closeButton?.addEventListener("click", closeSidebar);
-}
-
-// =========================
 // 플레이리스트 목록 표시 상태 설정 함수
 // =========================
 function setPlaylistListVisible(isVisible) {
@@ -251,7 +248,6 @@ function renderPlaylists() {
 
   if (!playlistList) return;
 
-  // 비로그인 상태에서는 플레이리스트를 렌더링하지 않음
   if (!isLoginUser) {
     playlistList.innerHTML = "";
     playlistList.hidden = true;
@@ -349,6 +345,11 @@ function createPlaylist(title) {
 
   if (!newPlaylist) {
     alert("플레이리스트 제목을 입력해주세요.");
+    return;
+  }
+
+  if (playlistState.includes(newPlaylist)) {
+    alert("이미 같은 이름의 플레이리스트가 있습니다.");
     return;
   }
 
@@ -459,7 +460,7 @@ async function sharePlaylist(index) {
   if (!playlistName) return;
 
   const shareText = `MOOD WAVE 플레이리스트: ${playlistName}`;
-  const shareUrl = `${window.location.origin}${window.location.pathname}#playlist=${encodeURIComponent(
+  const shareUrl = `${window.location.origin}${window.location.pathname}#/playlist?name=${encodeURIComponent(
     playlistName,
   )}`;
 
@@ -531,6 +532,16 @@ function renamePlaylist(title) {
 
   const prevTitle = playlistState[renameTargetIndex];
 
+  if (prevTitle === newTitle) {
+    closeRenamePlaylistModal();
+    return;
+  }
+
+  if (playlistState.includes(newTitle)) {
+    alert("이미 같은 이름의 플레이리스트가 있습니다.");
+    return;
+  }
+
   playlistState[renameTargetIndex] = newTitle;
   renamePlaylistTracks(prevTitle, newTitle);
 
@@ -592,16 +603,36 @@ function deletePlaylist() {
 }
 
 // =========================
-// 플레이리스트 생성 모달 이벤트 등록 함수
+// 사이드바 내부 클릭 이벤트 등록 함수
 // =========================
-function bindPlaylistModalEvents() {
-  const createPlaylistButton = document.querySelector("[data-create-playlist]");
-  const closeButtons = document.querySelectorAll("[data-close-playlist-modal]");
-  const playlistForm = document.querySelector("#playlistForm");
-  const playlistInput = document.querySelector("#playlistInput");
+function bindSidebarClickEvents() {
+  const sidebar = document.querySelector("#sidebar");
 
-  if (createPlaylistButton) {
-    createPlaylistButton.addEventListener("click", async (event) => {
+  if (!sidebar || isSidebarEventBound) return;
+
+  isSidebarEventBound = true;
+
+  sidebar.addEventListener("click", async (event) => {
+    const closeSidebarButton = event.target.closest("[data-close-sidebar]");
+    const createPlaylistButton = event.target.closest("[data-create-playlist]");
+    const closePlaylistButton = event.target.closest(
+      "[data-close-playlist-modal]",
+    );
+    const closeRenameButton = event.target.closest("[data-close-rename-modal]");
+    const closeDeleteButton = event.target.closest("[data-close-delete-modal]");
+    const playlistLink = event.target.closest(".sidebar__playlist-item");
+    const menuButton = event.target.closest("[data-playlist-menu-button]");
+    const confirmDeleteButton = event.target.closest(
+      "#confirmDeletePlaylistButton",
+    );
+
+    if (closeSidebarButton) {
+      event.preventDefault();
+      closeSidebar();
+      return;
+    }
+
+    if (createPlaylistButton) {
       event.preventDefault();
 
       const canUse = await requireLogin(
@@ -611,32 +642,26 @@ function bindPlaylistModalEvents() {
       if (!canUse) return;
 
       openPlaylistModal();
-    });
-  }
+      return;
+    }
 
-  closeButtons.forEach((button) => {
-    button.addEventListener("click", closePlaylistModal);
-  });
-
-  if (playlistForm && playlistInput) {
-    playlistForm.addEventListener("submit", (event) => {
+    if (closePlaylistButton) {
       event.preventDefault();
-      createPlaylist(playlistInput.value);
-    });
-  }
-}
+      closePlaylistModal();
+      return;
+    }
 
-// =========================
-// 플레이리스트 더보기 메뉴 이벤트 등록 함수
-// =========================
-function bindPlaylistMoreMenuEvents() {
-  const playlistList = document.querySelector("#playlistList");
+    if (closeRenameButton) {
+      event.preventDefault();
+      closeRenamePlaylistModal();
+      return;
+    }
 
-  if (!playlistList) return;
-
-  playlistList.addEventListener("click", async (event) => {
-    const playlistLink = event.target.closest(".sidebar__playlist-item");
-    const menuButton = event.target.closest("[data-playlist-menu-button]");
+    if (closeDeleteButton) {
+      event.preventDefault();
+      closeDeletePlaylistModal();
+      return;
+    }
 
     if (playlistLink) {
       const canUse = await requireLogin(
@@ -645,8 +670,9 @@ function bindPlaylistMoreMenuEvents() {
 
       if (!canUse) {
         event.preventDefault();
-        return;
       }
+
+      return;
     }
 
     if (menuButton) {
@@ -654,9 +680,58 @@ function bindPlaylistMoreMenuEvents() {
       event.stopPropagation();
 
       const index = Number(menuButton.dataset.playlistMenuButton);
+
+      if (Number.isNaN(index)) return;
+
       togglePlaylistMoreMenu(index, menuButton);
+      return;
+    }
+
+    if (confirmDeleteButton) {
+      event.preventDefault();
+      deletePlaylist();
     }
   });
+}
+
+// =========================
+// 사이드바 내부 form 이벤트 등록 함수
+// =========================
+function bindSidebarSubmitEvents() {
+  const sidebar = document.querySelector("#sidebar");
+
+  if (!sidebar || isSidebarSubmitEventBound) return;
+
+  isSidebarSubmitEventBound = true;
+
+  sidebar.addEventListener("submit", (event) => {
+    const playlistForm = event.target.closest("#playlistForm");
+    const renameForm = event.target.closest("#renamePlaylistForm");
+
+    if (playlistForm) {
+      event.preventDefault();
+
+      const playlistInput = document.querySelector("#playlistInput");
+      createPlaylist(playlistInput?.value || "");
+      return;
+    }
+
+    if (renameForm) {
+      event.preventDefault();
+
+      const renameInput = document.querySelector("#renamePlaylistInput");
+      renamePlaylist(renameInput?.value || "");
+    }
+  });
+}
+
+// =========================
+// 문서 전체 이벤트 등록 함수
+// =========================
+function bindDocumentEvents() {
+  if (isDocumentEventBound) return;
+
+  isDocumentEventBound = true;
 
   document.addEventListener("click", (event) => {
     const menuButton = event.target.closest("[data-playlist-menu-button]");
@@ -669,6 +744,9 @@ function bindPlaylistMoreMenuEvents() {
       event.preventDefault();
 
       const index = Number(shareButton.dataset.sharePlaylistIndex);
+
+      if (Number.isNaN(index)) return;
+
       sharePlaylist(index);
       return;
     }
@@ -677,6 +755,9 @@ function bindPlaylistMoreMenuEvents() {
       event.preventDefault();
 
       const index = Number(renameButton.dataset.renamePlaylistIndex);
+
+      if (Number.isNaN(index)) return;
+
       openRenamePlaylistModal(index);
       return;
     }
@@ -685,6 +766,9 @@ function bindPlaylistMoreMenuEvents() {
       event.preventDefault();
 
       const index = Number(deleteButton.dataset.deletePlaylistIndex);
+
+      if (Number.isNaN(index)) return;
+
       openDeletePlaylistModal(index);
       return;
     }
@@ -693,50 +777,7 @@ function bindPlaylistMoreMenuEvents() {
 
     closePlaylistMoreMenu();
   });
-}
 
-// =========================
-// 플레이리스트 이름 변경 이벤트 등록 함수
-// =========================
-function bindPlaylistRenameEvents() {
-  const closeButtons = document.querySelectorAll("[data-close-rename-modal]");
-  const renameForm = document.querySelector("#renamePlaylistForm");
-  const renameInput = document.querySelector("#renamePlaylistInput");
-
-  closeButtons.forEach((button) => {
-    button.addEventListener("click", closeRenamePlaylistModal);
-  });
-
-  if (renameForm && renameInput) {
-    renameForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      renamePlaylist(renameInput.value);
-    });
-  }
-}
-
-// =========================
-// 플레이리스트 삭제 이벤트 등록 함수
-// =========================
-function bindPlaylistDeleteEvents() {
-  const closeButtons = document.querySelectorAll("[data-close-delete-modal]");
-  const confirmDeleteButton = document.querySelector(
-    "#confirmDeletePlaylistButton",
-  );
-
-  closeButtons.forEach((button) => {
-    button.addEventListener("click", closeDeletePlaylistModal);
-  });
-
-  if (confirmDeleteButton) {
-    confirmDeleteButton.addEventListener("click", deletePlaylist);
-  }
-}
-
-// =========================
-// 공통 키보드 이벤트 등록 함수
-// =========================
-function bindKeyboardEvents() {
   window.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
 
@@ -832,23 +873,12 @@ function trashIcon() {
 }
 
 // =========================
-// HTML 특수문자 변환 함수
-// =========================
-function escapeHTML(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-// =========================
 // 사이드바 초기 실행 함수
 // =========================
 export async function initSidebar() {
   renderNav();
 
+  playlistState = loadPlaylists();
   isLoginUser = await isLoggedIn();
 
   if (isLoginUser) {
@@ -858,10 +888,7 @@ export async function initSidebar() {
     setPlaylistListVisible(false);
   }
 
-  bindSidebarCloseEvents();
-  bindPlaylistModalEvents();
-  bindPlaylistMoreMenuEvents();
-  bindPlaylistRenameEvents();
-  bindPlaylistDeleteEvents();
-  bindKeyboardEvents();
+  bindSidebarClickEvents();
+  bindSidebarSubmitEvents();
+  bindDocumentEvents();
 }

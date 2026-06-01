@@ -1,4 +1,5 @@
 import { ICON_PATH } from "../data.js";
+import { API_ENDPOINTS } from "../config/api.js";
 
 const URECA_PICK_LIMIT = 6;
 const HOME_SECTION_LIMIT = 5;
@@ -7,7 +8,7 @@ const HOME_SECTION_LIMIT = 5;
 // 홈 데이터 요청 함수
 // =========================
 async function getHomeData() {
-  const response = await fetch("http://localhost:8080/api/home");
+  const response = await fetch(API_ENDPOINTS.home);
 
   if (!response.ok) {
     throw new Error("홈 데이터 요청 실패");
@@ -53,6 +54,9 @@ export function renderHome() {
 // 중간 믹스 카드 생성 함수
 // =========================
 function createMidMixCard(item) {
+  const cover = item.cover || item.imageUrl || "";
+  const artist = item.artist || item.description || "";
+
   return `
     <article
       class="mid-mix"
@@ -60,18 +64,18 @@ function createMidMixCard(item) {
       data-id="${item.id || ""}"
       data-uri="${item.uri || ""}"
       data-title="${item.title || ""}"
-      data-artist="${item.artist || item.description || ""}"
-      data-cover="${item.cover || item.imageUrl || ""}"
+      data-artist="${artist}"
+      data-cover="${cover}"
     >
       <img
         class="mid-mix__cover"
-        src="${item.cover || item.imageUrl || ""}"
+        src="${cover}"
         width="82"
         height="82"
         alt=""
       />
 
-      <span class="mid-mix__title">${item.title}</span>
+      <span class="mid-mix__title">${item.title || ""}</span>
 
       <button class="mid-mix__play" type="button" aria-label="재생">
         <img
@@ -103,6 +107,9 @@ function renderMidMixes(data) {
 // 그리드 카드 생성 함수
 // =========================
 function createGridCard(item) {
+  const cover = item.cover || item.imageUrl || "";
+  const artist = item.artist || item.description || "";
+
   return `
     <article
       class="grid-card"
@@ -110,13 +117,13 @@ function createGridCard(item) {
       data-id="${item.id || ""}"
       data-uri="${item.uri || ""}"
       data-title="${item.title || ""}"
-      data-artist="${item.artist || item.description || ""}"
-      data-cover="${item.cover || item.imageUrl || ""}"
+      data-artist="${artist}"
+      data-cover="${cover}"
     >
       <div class="grid-card__art-wrap">
         <img
           class="grid-card__art"
-          src="${item.cover || item.imageUrl || ""}"
+          src="${cover}"
           width="182"
           height="182"
           alt=""
@@ -133,10 +140,8 @@ function createGridCard(item) {
       </div>
 
       <div class="grid-card__info">
-        <span class="grid-card__name">${item.title}</span>
-        <span class="grid-card__desc">
-          ${item.artist || item.description || ""}
-        </span>
+        <span class="grid-card__name">${item.title || ""}</span>
+        <span class="grid-card__desc">${artist}</span>
       </div>
     </article>
   `;
@@ -260,15 +265,17 @@ export async function initHome() {
     console.log("백엔드 홈 데이터:", homeData);
 
     renderMidMixes(homeData.midMixes || []);
+
     renderGrid(
       "#popularGrid",
       (homeData.popular || []).slice(0, HOME_SECTION_LIMIT),
     );
+
     renderGrid(
       "#latestGrid",
       (homeData.latest || []).slice(0, HOME_SECTION_LIMIT),
     );
   } catch (error) {
-    console.error(error);
+    console.error("홈 데이터 로딩 실패:", error);
   }
 }

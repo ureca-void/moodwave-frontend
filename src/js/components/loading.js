@@ -1,11 +1,16 @@
 // =========================
+// 공통 유틸
+// =========================
+import { escapeHTML } from "../utils/escapeHTML.js";
+
+// =========================
 // 공통 로딩 UI 렌더링 함수
 // =========================
 export function renderLoading(id = "pageLoading", text = "Loading...") {
   return `
-    <div id="${id}" class="loading" hidden>
+    <div id="${escapeHTML(id)}" class="loading" hidden>
       <div class="loading__spinner"></div>
-      <span>${text}</span>
+      <span>${escapeHTML(text)}</span>
     </div>
   `;
 }
@@ -14,7 +19,7 @@ export function renderLoading(id = "pageLoading", text = "Loading...") {
 // 공통 로딩 UI 표시/숨김 함수
 // =========================
 export function setLoading(id, isVisible) {
-  const loading = document.querySelector(`#${id}`);
+  const loading = document.getElementById(id);
 
   if (!loading) return;
 
@@ -25,7 +30,7 @@ export function setLoading(id, isVisible) {
 // 콘텐츠 표시/숨김 함수
 // =========================
 export function setContentVisible(id, isVisible) {
-  const content = document.querySelector(`#${id}`);
+  const content = document.getElementById(id);
 
   if (!content) return;
 
