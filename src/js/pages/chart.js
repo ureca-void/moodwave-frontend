@@ -29,7 +29,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   "Ariana Grande": "Pop",
   "K/DA": "Game Music",
   "DJ Khaled": "Hip-Hop",
+    "OsamaSon": "Hip-Hop",
+  "AKMU": "K-Pop",
+  "BTS": "K-Pop",
+  "NOWIMYOUNG": "K-Hip-Hop",
+  "Gen Hoshino": "J-Pop",
+  "Pop Smoke": "Hip-Hop",
+  "MIKA": "Pop",
+  "BewhY": "K-Hip-Hop",
+  "N'John": "R&B",
+  "Kenshi Yonezu": "J-Pop",
+  "BLASÉ": "K-Hip-Hop",
+  "NMIXX": "K-Pop",
+  "Jin": "K-Pop",
+  "KiiiKiii": "K-Pop",
+  "HAON": "K-Hip-Hop",
+  "LamazeP": "Vocaloid",
+  "STAYC": "K-Pop",
+  "YENA": "K-Pop",
+  "Epik High": "K-Hip-Hop",
+  "Dragon Pony": "K-Rock",
+  "Riversmelt": "Indie",
+  "kinoshita": "Vocaloid"
 };
+
 
   const normalizeText = (value, fallback) =>
     typeof value === "string" && value.trim() ? value : fallback;
