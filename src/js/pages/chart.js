@@ -93,7 +93,10 @@ const tbody = document.querySelector(".song-table tbody");
             <td>${index + 1}</td>
             <td>${normalizeText(song?.title, "Unknown Title")}</td>
             <td>${normalizeText(song?.description ?? song?.artist, "Unknown Artist")}</td>
-            <td>${normalizeText(song?.weather, "Unknown")}</td>
+            <td>
+  ${Math.floor((song?.durationMs || 0) / 60000)}:
+  ${String(Math.floor(((song?.durationMs || 0) % 60000) / 1000)).padStart(2, "0")}
+</td>
           </tr>
         `
       )
