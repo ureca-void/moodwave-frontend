@@ -75,19 +75,25 @@ const resolveGenre = (item) => {
   const top5Genres = getTop5ByField(chartData, "genre");
   const top5Weather = getTop5ByField(chartData, "weather");
 
-  const sortedSongs = [...data].sort((a, b) => getValue(b) - getValue(a));
-  const tbody = document.querySelector(".song-table tbody");
+  // topWeather의 곡 5개 추천하는 로직 추가
+  const topWeather = top5Weather[0]?.[0];
+
+const recommendedSongs = data
+  .filter((song) => normalizeText(song?.weather, "Unknown") === topWeather)
+  .sort((a, b) => getValue(b) - getValue(a))
+  .slice(0, 5);
+
+const tbody = document.querySelector(".song-table tbody");
 
   if (tbody) {
-    tbody.innerHTML = sortedSongs
-      .slice(0, 5)
+    tbody.innerHTML = recommendedSongs
       .map(
         (song, index) => `
           <tr class="song-row">
             <td>${index + 1}</td>
             <td>${normalizeText(song?.title, "Unknown Title")}</td>
             <td>${normalizeText(song?.description ?? song?.artist, "Unknown Artist")}</td>
-            <td>${getValue(song)}</td>
+            <td>${normalizeText(song?.weather, "Unknown")}</td>
           </tr>
         `
       )
