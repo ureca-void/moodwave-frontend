@@ -69,7 +69,7 @@ const resolveGenre = (item) => {
 
   return Object.entries(stats)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
+    .slice(0, 6);
 };
 
   const top5Genres = getTop5ByField(chartData, "genre");
