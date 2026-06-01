@@ -2,7 +2,6 @@
   width: 100%;
   min-height: 100%;
   padding: 32px;
-  color: #fff;
 }
 
 .emotion-page__header {
@@ -11,25 +10,23 @@
 
 .emotion-page__eyebrow {
   margin-bottom: 8px;
-  color: #1ed760;
+  color: var(--accent);
   font-size: 14px;
-  font-weight: 700;
 }
 
 .emotion-page__title {
   margin-bottom: 12px;
   font-size: 36px;
-  font-weight: 800;
 }
 
 .emotion-page__desc {
   max-width: 640px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 /* =========================
-   Emotion Input Box
+   감정 입력 박스
 ========================= */
 
 .emotion-box {
@@ -46,11 +43,9 @@
   border: 1px solid #333;
   border-radius: 16px;
   background: #181818;
-  color: #fff;
-  font-size: 16px;
+  color: var(--text-primary);
   line-height: 1.6;
   resize: none;
-  outline: none;
 }
 
 .emotion-box__textarea::placeholder {
@@ -58,7 +53,7 @@
 }
 
 .emotion-box__textarea:focus {
-  border-color: #1ed760;
+  border-color: var(--accent);
 }
 
 .emotion-box__button {
@@ -67,12 +62,10 @@
   bottom: 18px;
   z-index: 2;
   padding: 14px 24px;
-  border: none;
   border-radius: 999px;
-  background: #1ed760;
-  color: #000;
+  background: var(--accent);
   font-size: 15px;
-  font-weight: 800;
+  font-weight: var(--font-bold);
   cursor: pointer;
 }
 
@@ -82,7 +75,7 @@
 }
 
 /* =========================
-   Emotion Result
+   감정 분석 결과
 ========================= */
 
 .emotion-result {
@@ -99,14 +92,13 @@
 
 .emotion-result__label {
   margin-bottom: 4px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
 .emotion-result__mood {
   margin-bottom: 12px;
   font-size: 28px;
-  font-weight: 800;
 }
 
 .emotion-result__reason {
@@ -125,13 +117,13 @@
   padding: 7px 12px;
   border-radius: 999px;
   background: #2a2a2a;
-  color: #1ed760;
+  color: var(--accent);
   font-size: 13px;
 }
 
 .emotion-result__loading,
 .emotion-track-grid__empty {
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 .emotion-result__error {
@@ -139,7 +131,7 @@
 }
 
 /* =========================
-   Emotion Track Grid
+   음악 카드
 ========================= */
 
 .emotion-track-grid {
@@ -175,16 +167,15 @@
 .emotion-track-card__title {
   margin-bottom: 6px;
   font-size: 15px;
-  font-weight: 700;
 }
 
 .emotion-track-card__artist {
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 /* =========================
-   Footer Space Fix
+   푸터와 여백 추가
 ========================= */
 
 .emotion-page::after {
@@ -194,7 +185,7 @@
 }
 
 /* =========================
-   Emotion Responsive
+   반응형
 ========================= */
 
 @media (max-width: 1200px) {
@@ -343,7 +334,6 @@
   }
 
   .emotion-track-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 

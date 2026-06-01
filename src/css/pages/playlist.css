@@ -1,5 +1,5 @@
 /* =========================
-   Playlist 페이지
+   플레이리스트
 ========================= */
 .playlist-page {
   width: 100%;
@@ -11,54 +11,22 @@
   margin-bottom: 28px;
 }
 
-.playlist-page__back {
-  display: inline-block;
-  margin-bottom: 16px;
-  color: #b3b3b3;
-  font-size: 14px;
-}
-
-.playlist-page__back:hover {
-  color: #fff;
-}
-
 .playlist-page__title {
   overflow: hidden;
   font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
   line-height: 1.2;
-  color: #fff;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .playlist-page__desc {
   margin-top: 8px;
-  color: #b3b3b3;
-  font-size: 15px;
-}
-
-.playlist-page__empty {
-  padding: 80px 20px;
-  border-radius: 18px;
-  background: #181818;
-  text-align: center;
-}
-
-.playlist-page__empty h2 {
-  margin-bottom: 10px;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 800;
-}
-
-.playlist-page__empty p {
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 15px;
 }
 
 /* =========================
-   Playlist 카드 목록
+   카드 목록
 ========================= */
 .playlist-card-grid {
   display: grid;
@@ -70,9 +38,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+
   padding: 16px;
   border-radius: 14px;
   background: #181818;
+
   transition:
     background-color 0.2s ease,
     transform 0.2s ease;
@@ -87,6 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   background: linear-gradient(135deg, #1db954, #191414);
@@ -104,18 +75,8 @@
 .playlist-card__title {
   display: block;
   overflow: hidden;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.playlist-card__desc {
-  display: block;
-  margin-top: 6px;
-  color: #b3b3b3;
-  font-size: 13px;
 }
 
 /* =========================
@@ -132,8 +93,9 @@
   border-radius: 50%;
 
   background: transparent;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   cursor: pointer;
+
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -154,19 +116,17 @@
 }
 
 /* =========================
-   Playlist 상세: 540px 이하에서 발매일 / 재생시간 숨김
+   반응형
+   540px 이하에서 발매일 / 재생시간 숨김
 ========================= */
 @media (max-width: 540px) {
-  /* 발매일 컬럼 숨김 */
   .playlist-page table th:nth-child(3),
   .playlist-page table td:nth-child(3),
-  /* 재생시간 컬럼 숨김 */
   .playlist-page table th:nth-child(4),
   .playlist-page table td:nth-child(4) {
     display: none;
   }
 
-  /* 번호 컬럼 */
   .playlist-page table th:nth-child(1),
   .playlist-page table td:nth-child(1) {
     width: 32px;
@@ -174,13 +134,11 @@
     padding-right: 8px;
   }
 
-  /* 제목 컬럼 */
   .playlist-page table th:nth-child(2),
   .playlist-page table td:nth-child(2) {
     width: auto;
   }
 
-  /* 제거 컬럼 */
   .playlist-page table th:nth-child(5),
   .playlist-page table td:nth-child(5) {
     width: 42px;

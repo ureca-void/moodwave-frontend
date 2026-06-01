@@ -314,18 +314,14 @@ function initMobileSidebar() {
     sidebar.classList.add("is-open");
     sidebarOverlay.classList.add("is-open");
     document.body.classList.add("is-sidebar-open");
-    mobileMenuBtn.classList.add("is-open");
     mobileMenuBtn.setAttribute("aria-expanded", "true");
-    mobileMenuBtn.setAttribute("aria-label", "사이드바 닫기");
   };
 
   const closeSidebar = () => {
     sidebar.classList.remove("is-open");
     sidebarOverlay.classList.remove("is-open");
     document.body.classList.remove("is-sidebar-open");
-    mobileMenuBtn.classList.remove("is-open");
     mobileMenuBtn.setAttribute("aria-expanded", "false");
-    mobileMenuBtn.setAttribute("aria-label", "사이드바 열기");
   };
 
   const toggleSidebar = () => {

@@ -54,11 +54,11 @@
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.8px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 /* =========================
-   푸터 버튼
+   버튼
 ========================= */
 .player__icon {
   display: flex;
@@ -85,6 +85,15 @@
 
 .player__icon:active {
   transform: scale(0.96);
+}
+
+.player__icon:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.player__icon:disabled:hover {
+  transform: none;
 }
 
 .player__icon img {
@@ -115,8 +124,32 @@
   opacity: 1;
 }
 
+.player__icon--repeat {
+  position: relative;
+}
+
+.player__repeat-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.player__repeat-badge.is-visible {
+  display: flex;
+}
+
 /* =========================
-   중앙 컨트롤
+   컨트롤
 ========================= */
 .player__controls {
   display: flex;
@@ -178,7 +211,7 @@
   display: block;
   height: 5px;
   border-radius: 4px;
-  background: #fff;
+  background: var(--text-primary);
   transition: width 0.15s ease;
 }
 
@@ -197,7 +230,7 @@
 
 .player__bar:hover .player__bar-fill,
 .player__volume:hover .player__volume-fill {
-  background: #1db954;
+  background: var(--accent);
 }
 
 /* =========================
@@ -219,7 +252,7 @@
 }
 
 /* =========================
-   푸터 작은 모달
+   오른쪽 도구 모달
 ========================= */
 .player-popover {
   position: fixed;
@@ -227,7 +260,6 @@
   width: 300px;
   max-height: 360px;
   padding: 16px;
-  color: #fff;
   background: #282828;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
@@ -256,7 +288,7 @@
 
 .player-popover__title {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: var(--font-bold);
 }
 
 .player-popover__close {
@@ -265,16 +297,14 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  border: 0;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 22px;
   line-height: 1;
-  background: transparent;
   cursor: pointer;
 }
 
 .player-popover__close:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .player-popover__body {
@@ -294,15 +324,15 @@
 
 .player-popover__label {
   font-size: 12px;
-  font-weight: 700;
-  color: #1db954;
+  font-weight: var(--font-bold);
+  color: var(--accent);
 }
 
 .player-popover__current strong,
 .player-popover__text strong {
   overflow: hidden;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -311,7 +341,7 @@
 .player-popover__text span {
   overflow: hidden;
   font-size: 13px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -337,7 +367,7 @@
   width: 22px;
   height: 22px;
   font-size: 12px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 .player-popover__text {
@@ -348,7 +378,7 @@
 
 .player-popover__empty {
   font-size: 14px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 .player-popover__device-dot {
@@ -360,31 +390,7 @@
 }
 
 .player-popover__device-dot.is-active {
-  background: #1db954;
-}
-
-.player__icon--repeat {
-  position: relative;
-}
-
-.player__repeat-badge {
-  position: absolute;
-  right: 4px;
-  bottom: 2px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 11px;
-  height: 11px;
-  color: #1db954;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1;
-  border-radius: 50%;
-}
-
-.player__repeat-badge.is-visible {
-  display: flex;
+  background: var(--accent);
 }
 
 /* =========================
@@ -395,10 +401,6 @@
   background: #282828;
   object-fit: contain;
   opacity: 0.75;
-}
-
-.player--empty .player__title {
-  color: #ffffff;
 }
 
 .player--empty .player__artist {
@@ -414,20 +416,11 @@
   width: 0;
 }
 
-.player__icon:disabled {
-  cursor: default;
-  opacity: 0.35;
-}
-
-.player__icon:disabled:hover {
-  transform: none;
-}
-
 /* =========================
-   Player Responsive
+   반응형
 ========================= */
 
-/* 중간 화면: 전체 간격 먼저 줄이기 */
+/* 중간 화면 */
 @media (max-width: 1280px) {
   .player {
     gap: 14px;
@@ -447,11 +440,6 @@
   .player__artist {
     font-size: 14px;
     line-height: 19px;
-  }
-
-  .player__controls {
-    flex: 1 1 auto;
-    min-width: 0;
   }
 
   .player__buttons {
@@ -475,7 +463,7 @@
   }
 }
 
-/* 좁은 데스크탑 / 태블릿: 컨트롤 중앙 정렬 + 오른쪽 도구 숨김 + 하트 오른쪽 이동 */
+/* 좁은 데스크탑 / 태블릿 */
 @media (max-width: 1100px) {
   .player {
     position: relative;
@@ -489,7 +477,6 @@
     grid-column: 1;
     flex: none;
     width: 100%;
-    min-width: 0;
   }
 
   .player__controls {
@@ -497,7 +484,6 @@
     justify-self: center;
     flex: none;
     width: min(360px, 100%);
-    min-width: 0;
   }
 
   .player__extras {
@@ -517,9 +503,17 @@
     margin-left: 0;
     transform: translateY(-50%);
   }
+
+  .player__icon--like:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .player__icon--like:active {
+    transform: translateY(-50%) scale(0.96);
+  }
 }
 
-/* 900px 이하: 기존처럼 버튼 아래에 게이지바 유지 */
+/* 900px 이하 */
 @media (max-width: 900px) {
   .player {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -531,16 +525,11 @@
   .player__track {
     grid-column: 1;
     gap: 12px;
-    min-width: 0;
   }
 
   .player__cover {
     width: 48px;
     height: 48px;
-  }
-
-  .player__meta {
-    min-width: 0;
   }
 
   .player__title {
@@ -558,7 +547,6 @@
     justify-self: center;
     width: min(260px, 100%);
     gap: 8px;
-    min-width: 0;
   }
 
   .player__buttons {
@@ -566,12 +554,8 @@
   }
 
   .player__progress {
-    position: static;
-    display: flex;
     width: 100%;
-    height: 20px;
     gap: 8px;
-    transform: none;
   }
 
   .player__time {
@@ -579,11 +563,6 @@
     width: 28px;
     font-size: 13px;
     line-height: 18px;
-  }
-
-  .player__bar {
-    flex: 1;
-    min-width: 0;
   }
 
   .player__icon {
@@ -597,16 +576,13 @@
   }
 
   .player__icon--like {
-    top: 50%;
     right: 16px;
     width: 24px;
     height: 24px;
-    margin-left: 0;
-    transform: translateY(-50%);
   }
 }
 
-/* 모바일: 크기만 축소, 게이지바 위치는 그대로 유지 */
+/* 모바일 */
 @media (max-width: 640px) {
   .player {
     height: 88px;
@@ -614,13 +590,13 @@
     padding: 0 12px;
   }
 
+  .player__track {
+    gap: 10px;
+  }
+
   .player__cover {
     width: 44px;
     height: 44px;
-  }
-
-  .player__track {
-    gap: 10px;
   }
 
   .player__title {
@@ -643,7 +619,6 @@
   }
 
   .player__progress {
-    width: 100%;
     gap: 7px;
   }
 
@@ -670,7 +645,7 @@
   }
 }
 
-/* 아주 좁은 화면: 핵심 컨트롤 버튼은 모두 유지하고 오른쪽 하트도 유지 */
+/* 아주 좁은 화면 */
 @media (max-width: 420px) {
   .player {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -680,7 +655,6 @@
 
   .player__track {
     grid-column: 1;
-    min-width: 0;
     gap: 8px;
   }
 
@@ -722,7 +696,6 @@
   }
 
   .player__progress {
-    width: 100%;
     gap: 5px;
   }
 
@@ -733,13 +706,8 @@
   }
 
   .player__icon--like {
-    display: flex;
-    position: absolute;
-    top: 50%;
     right: 10px;
     width: 22px;
     height: 22px;
-    margin-left: 0;
-    transform: translateY(-50%);
   }
 }

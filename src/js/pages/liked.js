@@ -128,4 +128,12 @@ export function initLikedPage() {
       alert("좋아요 삭제에 실패했습니다.");
     }
   });
+
+  const likeButton = document.querySelector("#likeButton");
+  likeButton.addEventListener("click", async (e) => {
+    if (!likeButton) return;
+
+    console.log("푸터좋아요 반영해서 재로드");
+    loadLikedTracks();
+  });
 }

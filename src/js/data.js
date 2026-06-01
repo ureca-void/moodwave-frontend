@@ -1,48 +1,7 @@
 // =========================
-// 공통 데이터
+// 공통 경로
 // =========================
 export const ICON_PATH = "/assets/icon/";
-
-// =========================
-// 메뉴 목록
-// =========================
-export const navItems = [
-  {
-    label: "Home",
-    icon: "Home_Fill_S.svg",
-    href: "#/home",
-  },
-  {
-    label: "Weather Vibes",
-    icon: "weather.svg",
-    href: "/pages/weather.html",
-  },
-  {
-    label: "Your Status",
-    icon: "status.svg",
-    href: "/pages/chart.html",
-  },
-  {
-    label: "Emotion",
-    icon: "Library_Fill_S.svg",
-    href: "#/emotion",
-  },
-];
-
-// =========================
-// 플레이리스트 메뉴 목록
-// =========================
-export const playlistMenuItems = [
-  {
-    label: "Create Playlist",
-    icon: "+Library_S.svg",
-  },
-  {
-    label: "Liked Songs",
-    icon: "Liked Songs_S.svg",
-    href: "#/liked",
-  },
-];
 
 // =========================
 // 기본 이미지
@@ -59,7 +18,48 @@ export const placeholder = {
 };
 
 // =========================
-// 프로필
+// 사이드바 메인 메뉴
+// =========================
+export const navItems = [
+  {
+    label: "Home",
+    icon: "Home_Fill_S.svg",
+    href: "#/home",
+  },
+  {
+    label: "Weather Vibes",
+    icon: "weather.svg",
+    href: "#/weather",
+  },
+  {
+    label: "Your Status",
+    icon: "status.svg",
+    href: "#/chart",
+  },
+  {
+    label: "Emotion",
+    icon: "Library_Fill_S.svg",
+    href: "#/emotion",
+  },
+];
+
+// =========================
+// 플레이리스트 메뉴
+// =========================
+export const playlistMenuItems = [
+  {
+    label: "Create Playlist",
+    icon: "+Library_S.svg",
+  },
+  {
+    label: "Liked Songs",
+    icon: "Liked Songs_S.svg",
+    href: "#/liked",
+  },
+];
+
+// =========================
+// 기본 사용자 정보
 // =========================
 export const user = {
   name: "HAEJUNPARK",

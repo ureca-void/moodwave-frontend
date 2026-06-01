@@ -1071,6 +1071,7 @@ function createSpotifyPlayer() {
 
     currentTrackId = state.track_window.current_track.id;
 
+    isLiked();
     isPlaying = !state.paused;
     updatePlayButtonIcon();
 
@@ -1331,6 +1332,23 @@ export function renderFooter() {
   `;
 }
 
+async function isLiked() {
+  const likeButton = document.querySelector("#likeButton img");
+  console.log("isliked 트랙 아이디", currentTrackId);
+  const res = await fetch(`${API_BASE_URL}/api/islike`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ musicId: currentTrackId }),
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (data.result === "ok") {
+    likeButton.src = "/assets/icon/Heart_Fill_XS.svg";
+  } else {
+    likeButton.src = "/assets/icon/Heart_XS.svg";
+  }
+}
+
 // =========================
 // 푸터 버튼 이벤트 등록
 // =========================
@@ -1368,6 +1386,7 @@ function initFooterEvents() {
         if (response.ok) {
           alert("좋아요가 반영되었습니다.");
           // 필요시 버튼 아이콘을 Heart_Fill에서 Heart_Outline 등으로 교체하는 로직 추가
+          isLiked();
         } else {
           alert("좋아요 처리에 실패했습니다.");
         }

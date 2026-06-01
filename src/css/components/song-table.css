@@ -1,5 +1,5 @@
 /* =========================
-   Song Table Page 공통
+   음악 테이블 공통 UI
 ========================= */
 .song-table-page {
   width: 100%;
@@ -16,17 +16,16 @@
   font-size: clamp(28px, 4vw, 48px);
   font-weight: 700;
   line-height: 1.2;
-  color: #ffffff;
 }
 
 .song-table-page__desc {
   margin-top: 8px;
   font-size: 15px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 /* =========================
-   표 디자인
+   테이블 디자인
 ========================= */
 .song-table {
   width: 100%;
@@ -46,13 +45,13 @@
 }
 
 .song-table th {
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: normal;
 }
 
 .song-table td {
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
@@ -69,7 +68,7 @@
 }
 
 .song-row:hover .song-info__title {
-  color: #1db954;
+  color: var(--accent);
 }
 
 /* 제목 + 커버 영역 */
@@ -96,23 +95,23 @@
   min-width: 0;
 }
 
-.song-info__title {
+.song-info__title,
+.song-info__artist {
   max-width: 360px;
   overflow: hidden;
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
+.song-info__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 .song-info__artist {
-  max-width: 360px;
-  overflow: hidden;
   font-size: 13px;
-  color: #b3b3b3;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  color: var(--text-secondary);
 }
 
 /* =========================
@@ -124,37 +123,51 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 0;
-  border-radius: 50%;
-  background-color: transparent;
-  color: #b3b3b3;
-  font-size: 22px;
-  font-weight: 700;
   cursor: pointer;
   opacity: 0.75;
   transition:
     opacity 0.2s ease,
     background-color 0.2s ease,
-    transform 0.2s ease,
-    color 0.2s ease;
+    transform 0.2s ease;
 }
 
 .song-action:hover {
   opacity: 1;
   background-color: rgba(255, 255, 255, 0.08);
-  color: #1ed760;
   transform: scale(1.06);
 }
 
-.song-action.is-active {
-  opacity: 1;
-  color: #1ed760;
+.playlist-track-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.song-action img {
+/* 플레이리스트 제거 버튼 */
+.playlist-track-remove-button:hover {
+  background: rgba(255, 77, 77, 0.14);
+  color: #ff4d4d;
+  transform: scale(1.06);
+}
+
+.playlist-track-remove-button svg {
   display: block;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   pointer-events: none;
 }
 
@@ -194,7 +207,6 @@
   padding: 24px;
   border-radius: 18px;
   background: #181818;
-  color: #fff;
   transform: translate(-50%, -50%);
 }
 
@@ -207,7 +219,7 @@
 .add-playlist-modal__track {
   margin-bottom: 18px;
   overflow: hidden;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -227,10 +239,8 @@
   gap: 12px;
   width: 100%;
   padding: 12px;
-  border: 0;
   border-radius: 10px;
-  background: transparent;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 15px;
   text-align: left;
   cursor: pointer;
@@ -249,12 +259,12 @@
   height: 32px;
   border-radius: 8px;
   background: #333;
-  color: #1ed760;
+  color: var(--accent);
 }
 
 .add-playlist-modal__empty {
   padding: 20px 0;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: center;
 }
@@ -263,11 +273,10 @@
   width: 100%;
   margin-top: 18px;
   padding: 12px 14px;
-  border: 0;
   border-radius: 999px;
   background: #333;
-  color: #fff;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
   cursor: pointer;
 }
 
@@ -276,7 +285,7 @@
 }
 
 /* =========================
-   Song Table Page 반응형
+   반응형
 ========================= */
 
 /* 중간 화면: 사이드바 때문에 메인 영역이 좁아지는 구간 */
@@ -354,10 +363,7 @@
     padding: 14px 10px;
   }
 
-  .song-table th {
-    font-size: 13px;
-  }
-
+  .song-table th,
   .song-table td {
     font-size: 13px;
   }
@@ -370,7 +376,6 @@
   .song-table th:last-child,
   .song-table td:last-child {
     width: 48px;
-    text-align: center;
   }
 
   .song-info {
@@ -434,12 +439,6 @@
     padding-right: 6px;
   }
 
-  /* 제목 컬럼 */
-  .song-table th:nth-child(2),
-  .song-table td:nth-child(2) {
-    width: auto;
-  }
-
   /* 추가 버튼 컬럼 */
   .song-table th:last-child,
   .song-table td:last-child {
@@ -447,7 +446,6 @@
     padding-left: 6px;
     padding-right: 0;
     text-align: right;
-    white-space: nowrap;
   }
 
   .song-info {
@@ -457,11 +455,6 @@
   .song-info__cover {
     width: 42px;
     height: 42px;
-    border-radius: 6px;
-  }
-
-  .song-info__text {
-    min-width: 0;
   }
 
   .song-info__title {

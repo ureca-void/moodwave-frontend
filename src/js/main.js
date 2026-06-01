@@ -14,22 +14,60 @@ import { isLoggedIn } from "./utils/auth.js";
 import { initToast } from "./utils/toast.js";
 
 // =========================
-// 로그인이 필요한 페이지 목록
+// 페이지 라우트 목록
 // =========================
-const protectedRoutes = [
-  "#/search",
-  "#/latest",
-  "#/popular",
-  "#/playlist",
-  "#/emotion",
-  "#/liked",
+const routes = [
+  {
+    path: "#/search",
+    protected: true,
+    render: renderSearch,
+    init: initSearch,
+  },
+  {
+    path: "#/latest",
+    protected: true,
+    render: renderLatestPage,
+    init: initLatestPage,
+  },
+  {
+    path: "#/popular",
+    protected: true,
+    render: renderPopularPage,
+    init: initPopularPage,
+  },
+  {
+    path: "#/playlist",
+    protected: true,
+    render: renderPlaylistPage,
+    init: initPlaylistPage,
+  },
+  {
+    path: "#/emotion",
+    protected: true,
+    render: renderEmotion,
+    init: initEmotion,
+  },
+  {
+    path: "#/liked",
+    protected: true,
+    render: renderLikedPage,
+    init: initLikedPage,
+  },
 ];
 
 // =========================
-// 보호 페이지 여부 확인 함수
+// 현재 hash에 맞는 라우트 찾기
 // =========================
-function isProtectedRoute(hash) {
-  return protectedRoutes.some((route) => hash.startsWith(route));
+function findRoute(hash) {
+  return routes.find((route) => hash.startsWith(route.path));
+}
+
+// =========================
+// 페이지 렌더링 함수
+// =========================
+function renderPage(main, render, init) {
+  main.innerHTML = render();
+  init();
 }
 
 // =========================
@@ -41,8 +79,9 @@ async function router() {
 
   if (!main) return;
 
-  // 로그인 필요한 페이지 접근 제한
-  if (isProtectedRoute(hash)) {
+  const route = findRoute(hash);
+
+  if (route?.protected) {
     const loggedIn = await isLoggedIn();
 
     if (!loggedIn) {
@@ -52,51 +91,12 @@ async function router() {
     }
   }
 
-  // 검색 페이지
-  if (hash.startsWith("#/search")) {
-    main.innerHTML = renderSearch();
-    initSearch();
+  if (route) {
+    renderPage(main, route.render, route.init);
     return;
   }
 
-  // Latest 페이지
-  if (hash === "#/latest") {
-    main.innerHTML = renderLatestPage();
-    initLatestPage();
-    return;
-  }
-
-  // Popular 페이지
-  if (hash === "#/popular") {
-    main.innerHTML = renderPopularPage();
-    initPopularPage();
-    return;
-  }
-
-  // 플레이리스트 페이지
-  if (hash.startsWith("#/playlist")) {
-    main.innerHTML = renderPlaylistPage();
-    initPlaylistPage();
-    return;
-  }
-
-  // 감정 추천 페이지
-  if (hash.startsWith("#/emotion")) {
-    main.innerHTML = renderEmotion();
-    initEmotion();
-    return;
-  }
-
-  // 좋아요 페이지
-  if (hash.startsWith("#/liked")) {
-    main.innerHTML = renderLikedPage();
-    initLikedPage();
-    return;
-  }
-
-  // 홈 페이지
-  main.innerHTML = renderHome();
-  initHome();
+  renderPage(main, renderHome, initHome);
 }
 
 // =========================
@@ -109,20 +109,16 @@ function init() {
 
   if (!sidebar || !header || !footer) return;
 
-  // 공통 레이아웃 HTML 렌더링
   sidebar.innerHTML = renderSidebar();
   header.innerHTML = renderHeader();
   footer.innerHTML = renderFooter();
 
-  // 공통 기능 실행
   initSidebar();
   initHeader();
   initFooter();
 
-  // 현재 페이지 렌더링
   router();
 
-  // hash 변경 시 메인 영역만 변경
   window.addEventListener("hashchange", router);
 }
 

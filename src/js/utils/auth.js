@@ -1,4 +1,19 @@
-const API_BASE_URL = "http://127.0.0.1:8080";
+import { API_BASE_URL } from "../config/api.js";
+
+// =========================
+// 유효한 로그인 사용자 여부 확인 함수
+// =========================
+function isValidUser(user) {
+  if (!user) return false;
+
+  if (user === "anonymousUser") return false;
+
+  if (typeof user !== "object") return false;
+
+  return Boolean(
+    user.id || user.email || user.spotifyId || user.displayName || user.name,
+  );
+}
 
 // =========================
 // 로그인 여부 확인 함수
@@ -16,35 +31,7 @@ export async function isLoggedIn() {
 
     const user = await response.json();
 
-    console.log("로그인 확인 결과:", user);
-
-    // user가 없으면 비로그인
-    if (!user) {
-      return false;
-    }
-
-    // Spring Security에서 비로그인인데 anonymousUser가 올 경우 방지
-    if (user === "anonymousUser") {
-      return false;
-    }
-
-    // 객체가 아닌 이상한 값이면 비로그인 처리
-    if (typeof user !== "object") {
-      return false;
-    }
-
-    // 실제 로그인 사용자 정보가 없으면 비로그인 처리
-    if (
-      !user.id &&
-      !user.email &&
-      !user.spotifyId &&
-      !user.displayName &&
-      !user.name
-    ) {
-      return false;
-    }
-
-    return true;
+    return isValidUser(user);
   } catch (error) {
     console.error("로그인 확인 실패:", error);
     return false;

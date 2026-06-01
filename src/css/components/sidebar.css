@@ -65,11 +65,11 @@
   gap: 20px;
   min-width: 0;
   height: 32px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 .sidebar__nav-item:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 .sidebar__icon {
@@ -82,7 +82,7 @@
   min-width: 0;
   overflow: hidden;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   line-height: 23px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -96,7 +96,7 @@
 }
 
 /* =========================
-   사이드바 플레이리스트
+   플레이리스트
 ========================= */
 .sidebar__playlist-list {
   display: flex;
@@ -111,7 +111,7 @@
 
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
-  color: #b3b3b3;
+  color: var(--text-secondary);
 }
 
 .sidebar__playlist-row {
@@ -127,14 +127,14 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .sidebar__playlist-row:hover .sidebar__playlist-item,
 .sidebar__playlist-item:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 /* =========================
@@ -152,11 +152,7 @@
   gap: 3px;
   width: 30px;
   height: 30px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
   cursor: pointer;
-
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -175,15 +171,15 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: white;
+  background: var(--text-primary);
 }
 
 /* =========================
-   플레이리스트 더보기 메뉴
+   더보기 메뉴
 ========================= */
 .playlist-more-menu {
   position: fixed;
-  z-index: 2000;
+  z-index: 5000;
   display: none;
   width: 270px;
   padding: 12px;
@@ -202,12 +198,9 @@
   gap: 14px;
   width: 100%;
   padding: 11px 10px;
-  border: 0;
   border-radius: 8px;
   background: transparent;
-  color: white;
-  font-size: 16px;
-  line-height: 1;
+  color: var(--text-primary);
   text-align: left;
   cursor: pointer;
 }
@@ -224,12 +217,6 @@
   width: 22px;
   height: 22px;
   color: currentColor;
-}
-
-.playlist-more-menu__icon svg {
-  display: block;
-  width: 22px;
-  height: 22px;
 }
 
 .playlist-more-menu__item--delete {
@@ -269,12 +256,11 @@
 .playlist-modal__title {
   margin-bottom: 20px;
   font-size: 20px;
-  font-weight: 700;
 }
 
 .playlist-modal__description {
   margin-bottom: 20px;
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -291,8 +277,8 @@
   border: 1px solid #333;
   border-radius: 8px;
   background: #242424;
+  color: var(--text-primary);
   font-size: 14px;
-  color: white;
 }
 
 .playlist-modal__input::placeholder {
@@ -300,8 +286,7 @@
 }
 
 .playlist-modal__input:focus {
-  border-color: #1ed760;
-  outline: none;
+  border-color: var(--accent);
 }
 
 .playlist-modal__buttons {
@@ -312,39 +297,52 @@
 
 .playlist-modal__button {
   padding: 10px 14px;
-  border: 0;
   border-radius: 999px;
   font-size: 14px;
   cursor: pointer;
 }
 
 .playlist-modal__button--cancel {
-  background: transparent;
   color: #aaa;
 }
 
 .playlist-modal__button--cancel:hover {
-  color: white;
+  color: var(--text-primary);
+}
+
+.playlist-modal__button--create,
+.playlist-modal__button--delete {
+  font-weight: var(--font-bold);
 }
 
 .playlist-modal__button--create {
-  background: #1ed760;
-  color: #000;
-  font-weight: 700;
+  background: var(--accent);
 }
 
 .playlist-modal__button--delete {
   background: #e53935;
-  color: #fff;
-  font-weight: 700;
+  color: var(--text-primary);
 }
 
 /* =========================
-   Sidebar Responsive
+   태블릿 / 모바일 사이드바
 ========================= */
-
-/* 태블릿 */
 @media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    z-index: 1000;
+    width: 280px;
+    max-width: 80vw;
+    height: 100dvh;
+    transition: left 0.25s ease;
+  }
+
+  .sidebar.is-open {
+    left: 0;
+  }
+
   .sidebar__header {
     padding: 0 22px;
   }
@@ -409,39 +407,48 @@
 }
 
 /* =========================
-   Mobile Sidebar Drawer
+   사이드바 닫기 버튼
 ========================= */
-
-@media (max-width: 1024px) {
-  .sidebar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    width: 280px;
-    max-width: 80vw;
-    height: 100dvh;
-    overflow: hidden;
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-  }
-
-  .sidebar.is-open {
-    transform: translateX(0);
-  }
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    display: flex;
+.sidebar__close-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+
+  color: var(--text-secondary);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar__close-button:hover {
+  background: #282828;
+  color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  .sidebar__close-button {
+    display: inline-flex;
   }
 }
 
 /* =========================
-   Playlist Modal Responsive
+   플레이리스트 모달 반응형
 ========================= */
-
 @media (max-width: 480px) {
   .playlist-modal__content {
     width: calc(100% - 32px);

@@ -33,8 +33,6 @@
   grid-area: main;
   min-width: 0;
   overflow-y: auto;
-
-  /* 마지막 카드가 footer에 붙지 않도록 아래 여백 추가 */
   padding-bottom: 140px;
 }
 
@@ -45,7 +43,6 @@
 
 /* =========================
    태블릿 / 모바일 공통
-   1024px 이하부터 사이드바 공간 제거
 ========================= */
 @media (max-width: 1024px) {
   .container {
@@ -57,17 +54,8 @@
       "footer";
   }
 
-  .header {
-    grid-area: header;
-  }
-
   .main {
-    grid-area: main;
     padding-bottom: 128px;
-  }
-
-  .footer {
-    grid-area: footer;
   }
 
   /*
@@ -91,27 +79,14 @@
   .main {
     padding-bottom: 124px;
   }
-
-  /*
-    여기서 sidebar display: none 하면 안 됨.
-    햄버거 메뉴로 열어야 해서 block 유지.
-  */
-  .sidebar {
-    display: block;
-  }
 }
 
 /* =========================
    좁은 모바일
-   header.css의 560px 이하 header 높이와 맞춤
 ========================= */
 @media (max-width: 560px) {
   .container {
     grid-template-rows: 64px minmax(0, 1fr) 96px;
-  }
-
-  .main {
-    padding-bottom: 124px;
   }
 }
 

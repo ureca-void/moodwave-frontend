@@ -34,6 +34,15 @@ export function renderSidebar() {
           <img src="/assets/icon/logo.svg" alt="MOOD WAVE 로고" />
           <span>MOOD WAVE</span>
         </a>
+
+        <button
+          type="button"
+          class="sidebar__close-button"
+          data-close-sidebar
+          aria-label="사이드바 닫기"
+        >
+          ×
+        </button>
       </div>
 
       <!-- 주요 메뉴 -->
@@ -203,6 +212,27 @@ function renderNav() {
 }
 
 // =========================
+// 사이드바 닫기 함수
+// =========================
+function closeSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  const overlay = document.querySelector(".sidebar-overlay");
+
+  sidebar?.classList.remove("is-open");
+  overlay?.classList.remove("is-open");
+  document.body.classList.remove("is-sidebar-open");
+}
+
+// =========================
+// 사이드바 닫기 이벤트 등록 함수
+// =========================
+function bindSidebarCloseEvents() {
+  const closeButton = document.querySelector("[data-close-sidebar]");
+
+  closeButton?.addEventListener("click", closeSidebar);
+}
+
+// =========================
 // 플레이리스트 목록 표시 상태 설정 함수
 // =========================
 function setPlaylistListVisible(isVisible) {
@@ -232,8 +262,6 @@ function renderPlaylists() {
 
   playlistList.innerHTML = playlistState
     .map((playlist, index) => {
-      const isMenuOpen = openedMenuIndex === index;
-
       return `
         <div class="sidebar__playlist-row">
           <a
@@ -254,49 +282,6 @@ function renderPlaylists() {
               <span></span>
               <span></span>
             </button>
-
-            <div
-              class="playlist-more-menu ${isMenuOpen ? "is-open" : ""}"
-              data-playlist-menu="${index}"
-              style="${
-                isMenuOpen
-                  ? `top: ${menuPosition.top}px; left: ${menuPosition.left}px;`
-                  : ""
-              }"
-            >
-              <button
-                type="button"
-                class="playlist-more-menu__item"
-                data-share-playlist-index="${index}"
-              >
-                <span class="playlist-more-menu__icon">
-                  ${shareIcon()}
-                </span>
-                <span>플레이리스트 공유</span>
-              </button>
-
-              <button
-                type="button"
-                class="playlist-more-menu__item"
-                data-rename-playlist-index="${index}"
-              >
-                <span class="playlist-more-menu__icon">
-                  ${editIcon()}
-                </span>
-                <span>플레이리스트 이름 바꾸기</span>
-              </button>
-
-              <button
-                type="button"
-                class="playlist-more-menu__item playlist-more-menu__item--delete"
-                data-delete-playlist-index="${index}"
-              >
-                <span class="playlist-more-menu__icon">
-                  ${trashIcon()}
-                </span>
-                <span>플레이리스트 삭제</span>
-              </button>
-            </div>
           </div>
         </div>
       `;
@@ -374,16 +359,75 @@ function createPlaylist(title) {
 }
 
 // =========================
+// 플레이리스트 더보기 메뉴 생성 / 삭제 함수
+// =========================
+function removeFloatingPlaylistMenu() {
+  const menus = document.querySelectorAll(".playlist-more-menu");
+
+  menus.forEach((menu) => {
+    menu.remove();
+  });
+}
+
+function createFloatingPlaylistMenu(index) {
+  const menu = document.createElement("div");
+
+  menu.className = "playlist-more-menu is-open";
+  menu.dataset.playlistMenu = index;
+
+  menu.innerHTML = `
+    <button
+      type="button"
+      class="playlist-more-menu__item"
+      data-share-playlist-index="${index}"
+    >
+      <span class="playlist-more-menu__icon">
+        ${shareIcon()}
+      </span>
+      <span>플레이리스트 공유</span>
+    </button>
+
+    <button
+      type="button"
+      class="playlist-more-menu__item"
+      data-rename-playlist-index="${index}"
+    >
+      <span class="playlist-more-menu__icon">
+        ${editIcon()}
+      </span>
+      <span>플레이리스트 이름 바꾸기</span>
+    </button>
+
+    <button
+      type="button"
+      class="playlist-more-menu__item playlist-more-menu__item--delete"
+      data-delete-playlist-index="${index}"
+    >
+      <span class="playlist-more-menu__icon">
+        ${trashIcon()}
+      </span>
+      <span>플레이리스트 삭제</span>
+    </button>
+  `;
+
+  document.body.appendChild(menu);
+
+  return menu;
+}
+
+// =========================
 // 플레이리스트 더보기 메뉴 열기/닫기 함수
 // =========================
 function togglePlaylistMoreMenu(index, button) {
   if (openedMenuIndex === index) {
-    openedMenuIndex = null;
-    renderPlaylists();
+    closePlaylistMoreMenu();
     return;
   }
 
+  removeFloatingPlaylistMenu();
+
   const rect = button.getBoundingClientRect();
+  const menu = createFloatingPlaylistMenu(index);
 
   const nextLeft = rect.right + 8;
   const maxLeft = window.innerWidth - PLAYLIST_MENU_WIDTH - 12;
@@ -393,15 +437,17 @@ function togglePlaylistMoreMenu(index, button) {
     left: Math.min(nextLeft, maxLeft),
   };
 
+  menu.style.top = `${menuPosition.top}px`;
+  menu.style.left = `${menuPosition.left}px`;
+
   openedMenuIndex = index;
-  renderPlaylists();
 }
 
 function closePlaylistMoreMenu() {
   if (openedMenuIndex === null) return;
 
   openedMenuIndex = null;
-  renderPlaylists();
+  removeFloatingPlaylistMenu();
 }
 
 // =========================
@@ -591,9 +637,6 @@ function bindPlaylistMoreMenuEvents() {
   playlistList.addEventListener("click", async (event) => {
     const playlistLink = event.target.closest(".sidebar__playlist-item");
     const menuButton = event.target.closest("[data-playlist-menu-button]");
-    const shareButton = event.target.closest("[data-share-playlist-index]");
-    const renameButton = event.target.closest("[data-rename-playlist-index]");
-    const deleteButton = event.target.closest("[data-delete-playlist-index]");
 
     if (playlistLink) {
       const canUse = await requireLogin(
@@ -612,8 +655,15 @@ function bindPlaylistMoreMenuEvents() {
 
       const index = Number(menuButton.dataset.playlistMenuButton);
       togglePlaylistMoreMenu(index, menuButton);
-      return;
     }
+  });
+
+  document.addEventListener("click", (event) => {
+    const menuButton = event.target.closest("[data-playlist-menu-button]");
+    const moreMenu = event.target.closest(".playlist-more-menu");
+    const shareButton = event.target.closest("[data-share-playlist-index]");
+    const renameButton = event.target.closest("[data-rename-playlist-index]");
+    const deleteButton = event.target.closest("[data-delete-playlist-index]");
 
     if (shareButton) {
       event.preventDefault();
@@ -636,13 +686,10 @@ function bindPlaylistMoreMenuEvents() {
 
       const index = Number(deleteButton.dataset.deletePlaylistIndex);
       openDeletePlaylistModal(index);
+      return;
     }
-  });
 
-  document.addEventListener("click", (event) => {
-    const isInsideMenu = event.target.closest(".sidebar__playlist-more-wrap");
-
-    if (isInsideMenu) return;
+    if (menuButton || moreMenu) return;
 
     closePlaylistMoreMenu();
   });
@@ -693,6 +740,7 @@ function bindKeyboardEvents() {
   window.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
 
+    closeSidebar();
     closePlaylistMoreMenu();
     closePlaylistModal();
     closeRenamePlaylistModal();
@@ -810,6 +858,7 @@ export async function initSidebar() {
     setPlaylistListVisible(false);
   }
 
+  bindSidebarCloseEvents();
   bindPlaylistModalEvents();
   bindPlaylistMoreMenuEvents();
   bindPlaylistRenameEvents();

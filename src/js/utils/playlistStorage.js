@@ -2,49 +2,70 @@ const PLAYLIST_STORAGE_KEY = "moodwave_playlists";
 const PLAYLIST_TRACKS_STORAGE_KEY = "moodwave_playlist_tracks";
 
 // =========================
+// localStorage JSON 불러오기
+// =========================
+function loadJSON(key, defaultValue) {
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || "null");
+
+    return data ?? defaultValue;
+  } catch {
+    return defaultValue;
+  }
+}
+
+// =========================
+// localStorage JSON 저장하기
+// =========================
+function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+// =========================
 // 플레이리스트 이름 목록 불러오기
 // =========================
 export function loadPlaylistNames() {
-  try {
-    const playlists = JSON.parse(
-      localStorage.getItem(PLAYLIST_STORAGE_KEY) || "[]",
-    );
+  const playlists = loadJSON(PLAYLIST_STORAGE_KEY, []);
 
-    if (!Array.isArray(playlists)) return [];
+  if (!Array.isArray(playlists)) return [];
 
-    return playlists.filter((playlist) => typeof playlist === "string");
-  } catch {
-    return [];
-  }
+  return playlists.filter((playlist) => typeof playlist === "string");
 }
 
 // =========================
 // 플레이리스트별 곡 목록 불러오기
 // =========================
 export function loadPlaylistTrackMap() {
-  try {
-    const playlistTrackMap = JSON.parse(
-      localStorage.getItem(PLAYLIST_TRACKS_STORAGE_KEY) || "{}",
-    );
+  const playlistTrackMap = loadJSON(PLAYLIST_TRACKS_STORAGE_KEY, {});
 
-    if (!playlistTrackMap || typeof playlistTrackMap !== "object") {
-      return {};
-    }
-
-    return playlistTrackMap;
-  } catch {
+  if (
+    !playlistTrackMap ||
+    typeof playlistTrackMap !== "object" ||
+    Array.isArray(playlistTrackMap)
+  ) {
     return {};
   }
+
+  return playlistTrackMap;
 }
 
 // =========================
 // 플레이리스트별 곡 목록 저장하기
 // =========================
 function savePlaylistTrackMap(playlistTrackMap) {
-  localStorage.setItem(
-    PLAYLIST_TRACKS_STORAGE_KEY,
-    JSON.stringify(playlistTrackMap),
-  );
+  saveJSON(PLAYLIST_TRACKS_STORAGE_KEY, playlistTrackMap);
+}
+
+// =========================
+// 중복 곡 여부 확인
+// =========================
+function isDuplicatedTrack(currentTracks, track) {
+  return currentTracks.some((savedTrack) => {
+    return (
+      String(savedTrack.id) === String(track.id) ||
+      (savedTrack.title === track.title && savedTrack.artist === track.artist)
+    );
+  });
 }
 
 // =========================
@@ -54,14 +75,7 @@ export function addTrackToPlaylist(playlistName, track) {
   const playlistTrackMap = loadPlaylistTrackMap();
   const currentTracks = playlistTrackMap[playlistName] || [];
 
-  const isDuplicated = currentTracks.some((savedTrack) => {
-    return (
-      savedTrack.id === track.id ||
-      (savedTrack.title === track.title && savedTrack.artist === track.artist)
-    );
-  });
-
-  if (isDuplicated) {
+  if (isDuplicatedTrack(currentTracks, track)) {
     return {
       success: false,
       message: "이미 이 플레이리스트에 추가된 곡입니다.",
@@ -84,11 +98,10 @@ export function removeTrackFromPlaylist(playlistName, trackId) {
   const playlistTrackMap = loadPlaylistTrackMap();
   const currentTracks = playlistTrackMap[playlistName] || [];
 
-  const nextTracks = currentTracks.filter((track) => {
+  playlistTrackMap[playlistName] = currentTracks.filter((track) => {
     return String(track.id) !== String(trackId);
   });
 
-  playlistTrackMap[playlistName] = nextTracks;
   savePlaylistTrackMap(playlistTrackMap);
 
   return {

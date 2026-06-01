@@ -7,7 +7,7 @@ body {
 }
 
 /* =========================
-   공통 스크롤바
+   공통 스크롤바 UI
 ========================= */
 .custom-scrollbar {
   scrollbar-width: thin;
@@ -32,7 +32,6 @@ body {
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* hover 했을 때만 스크롤바 보이게 */
 .custom-scrollbar--hover {
   scrollbar-color: transparent transparent;
 }
@@ -54,7 +53,7 @@ body {
 }
 
 /* =========================
-   Top Button
+   공통 Top 버튼 UI
 ========================= */
 .top-button {
   position: fixed;
@@ -68,13 +67,11 @@ body {
 
   width: 46px;
   height: 46px;
-  border: 0;
   border-radius: 50%;
 
-  background: #1ed760;
-  color: #000;
+  background: var(--accent);
   font-size: 22px;
-  font-weight: 800;
+  font-weight: var(--font-bold);
   cursor: pointer;
 
   opacity: 0;
@@ -99,16 +96,18 @@ body {
 }
 
 /* =========================
-   Toast
+   공통 토스트 UI
 ========================= */
 .toast-container {
   position: fixed;
   top: 24px;
   right: 24px;
   z-index: 99999;
+
   display: flex;
   flex-direction: column;
   gap: 12px;
+
   pointer-events: none;
   text-align: center;
 }
@@ -119,13 +118,14 @@ body {
   padding: 14px 18px;
   border-radius: 12px;
   background: #282828;
-  color: #fff;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--font-bold);
   line-height: 1.4;
+
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   opacity: 0;
   transform: translateY(-10px);
+
   transition:
     opacity 0.25s ease,
     transform 0.25s ease;
@@ -137,18 +137,21 @@ body {
 }
 
 /* =========================
-   Confirm Modal
+   공통 확인 모달 UI
 ========================= */
 .confirm-modal {
   position: fixed;
   inset: 0;
   z-index: 100000;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 24px;
   opacity: 0;
   pointer-events: none;
+
   transition: opacity 0.18s ease;
 }
 
@@ -166,13 +169,15 @@ body {
 .confirm-modal__content {
   position: relative;
   z-index: 1;
+
   width: 100%;
   max-width: 380px;
   padding: 28px;
   border-radius: 18px;
+
   background: #282828;
-  color: #fff;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+
   transform: translateY(12px) scale(0.96);
   transition: transform 0.18s ease;
 }
@@ -184,7 +189,6 @@ body {
 .confirm-modal__title {
   margin-bottom: 12px;
   font-size: 22px;
-  font-weight: 800;
 }
 
 .confirm-modal__message {
@@ -203,16 +207,16 @@ body {
 .confirm-modal__button {
   min-width: 76px;
   height: 40px;
-  border: none;
   border-radius: 999px;
+
   font-size: 14px;
-  font-weight: 800;
+  font-weight: var(--font-bold);
   cursor: pointer;
 }
 
 .confirm-modal__button--cancel {
   background: #3e3e3e;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .confirm-modal__button--cancel:hover {
@@ -221,7 +225,7 @@ body {
 
 .confirm-modal__button--confirm {
   background: #ff4d4f;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .confirm-modal__button--confirm:hover {

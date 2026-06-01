@@ -1,7 +1,11 @@
+// =========================
+// API 설정
+// =========================
 const API_BASE_URL = "http://127.0.0.1:8080";
 
 // =========================
-// HTML 특수문자 변환 함수
+// HTML 특수문자 변환
+// 화면에 출력되는 값이 HTML 태그로 해석되지 않도록 처리
 // =========================
 function escapeHTML(value = "") {
   return String(value).replace(/[&<>"']/g, (char) => {
@@ -17,12 +21,17 @@ function escapeHTML(value = "") {
   });
 }
 
+// =========================
+// Emotion 페이지 화면 렌더링
+// =========================
 export function renderEmotion() {
   return `
     <section class="emotion-page">
       <div class="emotion-page__header">
         <p class="emotion-page__eyebrow">AI Mood Recommendation</p>
+
         <h1 class="emotion-page__title">오늘의 감정에 맞는 음악 추천</h1>
+
         <p class="emotion-page__desc">
           지금 기분을 문장으로 입력하면 AI가 감정을 분석하고 어울리는 음악을 추천해줘요.
         </p>
@@ -46,6 +55,10 @@ export function renderEmotion() {
   `;
 }
 
+// =========================
+// Emotion 페이지 초기화
+// 버튼 클릭 시 감정 추천 API 요청
+// =========================
 export function initEmotion() {
   const input = document.querySelector("#emotionInput");
   const button = document.querySelector("#emotionRecommendBtn");
@@ -103,6 +116,9 @@ export function initEmotion() {
   });
 }
 
+// =========================
+// 감정 분석 결과 렌더링
+// =========================
 function renderEmotionResult(data) {
   const result = document.querySelector("#emotionResult");
 
@@ -115,7 +131,9 @@ function renderEmotionResult(data) {
   result.innerHTML = `
     <div class="emotion-result__card">
       <p class="emotion-result__label">분석된 감정</p>
+
       <h2 class="emotion-result__mood">${escapeHTML(moodLabel)}</h2>
+
       <p class="emotion-result__reason">${escapeHTML(reason)}</p>
 
       <div class="emotion-result__keywords">
@@ -127,6 +145,9 @@ function renderEmotionResult(data) {
   `;
 }
 
+// =========================
+// 추천 곡 목록 렌더링
+// =========================
 function renderEmotionTracks(tracks) {
   const trackGrid = document.querySelector("#emotionTrackGrid");
 

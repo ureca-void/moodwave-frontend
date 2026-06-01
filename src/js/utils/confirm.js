@@ -51,13 +51,25 @@ export function showConfirm(message, options = {}) {
     const confirmButton = modal.querySelector("[data-confirm-ok]");
     const overlay = modal.querySelector(".confirm-modal__overlay");
 
+    let isClosed = false;
+
     title.textContent = options.title || "확인";
     messageElement.textContent = message;
     cancelButton.textContent = options.cancelText || "취소";
     confirmButton.textContent = options.confirmText || "확인";
 
+    function handleKeydown(event) {
+      if (event.key === "Escape") {
+        close(false);
+      }
+    }
+
     function close(result) {
+      if (isClosed) return;
+
+      isClosed = true;
       modal.classList.remove("is-open");
+      window.removeEventListener("keydown", handleKeydown);
 
       setTimeout(() => {
         modal.remove();
@@ -68,16 +80,7 @@ export function showConfirm(message, options = {}) {
     cancelButton.addEventListener("click", () => close(false));
     confirmButton.addEventListener("click", () => close(true));
     overlay.addEventListener("click", () => close(false));
-
-    window.addEventListener(
-      "keydown",
-      (event) => {
-        if (event.key === "Escape") {
-          close(false);
-        }
-      },
-      { once: true },
-    );
+    window.addEventListener("keydown", handleKeydown);
 
     requestAnimationFrame(() => {
       modal.classList.add("is-open");

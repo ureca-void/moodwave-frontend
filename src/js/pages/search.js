@@ -1,26 +1,6 @@
 import { ICON_PATH } from "../data.js";
-
-// =========================
-// API 주소
-// =========================
-const API = "http://127.0.0.1:8080/api/home";
-
-// =========================
-// HTML 특수문자 변환 함수
-// =========================
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, (char) => {
-    const escapeMap = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-
-    return escapeMap[char];
-  });
-}
+import { HOME_API_URL } from "../config/api.js";
+import { escapeHTML } from "../utils/escapeHTML.js";
 
 // =========================
 // 검색어 가져오기
@@ -31,7 +11,21 @@ function getSearchKeyword() {
   if (!queryString) return "";
 
   const params = new URLSearchParams(queryString);
+
   return params.get("q") || "";
+}
+
+// =========================
+// 검색 상태 메시지 렌더링 함수
+// =========================
+function renderSearchMessage(message, className = "search-page__empty") {
+  const searchResult = document.querySelector("#searchResult");
+
+  if (!searchResult) return;
+
+  searchResult.innerHTML = `
+    <p class="${className}">${escapeHTML(message)}</p>
+  `;
 }
 
 // =========================
@@ -62,7 +56,7 @@ export function renderSearch() {
 // =========================
 async function fetchSearchTracks(keyword) {
   const response = await fetch(
-    `${API}/search?keyword=${encodeURIComponent(keyword)}`,
+    `${HOME_API_URL}/search?keyword=${encodeURIComponent(keyword)}`,
   );
 
   if (!response.ok) {
@@ -124,9 +118,7 @@ function renderSearchResult(items) {
   if (!searchResult) return;
 
   if (!items || items.length === 0) {
-    searchResult.innerHTML = `
-      <p class="search-page__empty">검색 결과가 없습니다.</p>
-    `;
+    renderSearchMessage("검색 결과가 없습니다.");
     return;
   }
 
@@ -138,32 +130,21 @@ function renderSearchResult(items) {
 // =========================
 export async function initSearch() {
   const keyword = getSearchKeyword();
-  const searchResult = document.querySelector("#searchResult");
 
   if (!keyword) {
     renderSearchResult([]);
     return;
   }
 
-  if (searchResult) {
-    searchResult.innerHTML = `
-      <p class="search-page__loading">검색 중...</p>
-    `;
-  }
+  renderSearchMessage("검색 중...", "search-page__loading");
 
   try {
     const tracks = await fetchSearchTracks(keyword);
-
-    console.log("검색 결과:", tracks);
 
     renderSearchResult(tracks);
   } catch (error) {
     console.error("검색 데이터 조회 실패:", error);
 
-    if (searchResult) {
-      searchResult.innerHTML = `
-        <p class="search-page__empty">검색 결과를 불러오지 못했습니다.</p>
-      `;
-    }
+    renderSearchMessage("검색 결과를 불러오지 못했습니다.");
   }
 }

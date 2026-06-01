@@ -1,39 +1,7 @@
 /* =========================
-   공통 Loading UI
+   로딩 공통 UI
 ========================= */
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-
-  width: 100%;
-  min-height: 120px;
-
-  color: #b3b3b3;
-  font-size: 14px;
-}
-
-.loading[hidden] {
-  display: none;
-}
-
-.loading__spinner {
-  width: 22px;
-  height: 22px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top-color: #1db954;
-  border-radius: 50%;
-  animation: loadingSpin 0.8s linear infinite;
-}
-
-@keyframes loadingSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Latest 로딩 UI */
+.loading,
 .latest-loading {
   display: flex;
   align-items: center;
@@ -41,26 +9,46 @@
   gap: 12px;
 
   width: 100%;
-  padding: 28px 0 12px;
 
-  color: #b3b3b3;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
+.loading[hidden],
 .latest-loading[hidden] {
   display: none;
+}
+
+.loading {
+  min-height: 120px;
+}
+
+.latest-loading {
+  padding: 28px 0 12px;
+}
+
+/* =========================
+   로딩 스피너
+========================= */
+.loading__spinner,
+.latest-loading__spinner {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: loadingSpin 0.8s linear infinite;
+}
+
+.loading__spinner {
+  width: 22px;
+  height: 22px;
 }
 
 .latest-loading__spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top-color: #1db954;
-  border-radius: 50%;
-  animation: latestSpin 0.8s linear infinite;
 }
 
-@keyframes latestSpin {
+@keyframes loadingSpin {
   to {
     transform: rotate(360deg);
   }
