@@ -69,7 +69,7 @@ async function loadLikedTracks() {
 
     container.innerHTML = renderSongTable(tracks, {
       actionType: "like-remove",
-      actionHeader: "",
+      actionHeader: "Like",
       emptyMessage: "좋아요한 곡이 없습니다.",
     });
   } catch (err) {

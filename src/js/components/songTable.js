@@ -50,6 +50,44 @@ function escapeHTML(value = "") {
 }
 
 // =========================
+// 휴지통 아이콘 함수
+// =========================
+function trashIcon() {
+  return `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M4 7H20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <path
+        d="M10 11V17M14 11V17"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <path
+        d="M6 7L7 20H17L18 7"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M9 7V4H15V7"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+    </svg>
+  `;
+}
+
+// =========================
 // 곡 데이터 정리 함수
 // =========================
 function normalizeTrack(item) {
@@ -102,6 +140,22 @@ async function getTracks(apiUrl, page, limit) {
 // 액션 버튼 생성 함수
 // =========================
 function createActionButton(track, actionType) {
+  if (actionType === "playlist-remove") {
+    return `
+      <button
+        type="button"
+        class="playlist-track-remove-button"
+        data-no-play
+        data-remove-playlist-track
+        data-track-id="${escapeHTML(track.id)}"
+        aria-label="플레이리스트에서 제거"
+        title="제거"
+      >
+        ${trashIcon()}
+      </button>
+    `;
+  }
+
   if (actionType === "like-remove") {
     return `
       <button

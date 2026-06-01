@@ -5,6 +5,7 @@ import {
 } from "../utils/playlistStorage.js";
 
 import { showConfirm } from "../utils/confirm.js";
+import { renderSongTable } from "../components/songTable.js";
 
 // =========================
 // 현재 hash에서 플레이리스트 이름 가져오기
@@ -15,19 +16,6 @@ function getPlaylistNameFromHash() {
   const params = new URLSearchParams(queryString);
 
   return params.get("name") || "";
-}
-
-// =========================
-// 재생시간 포맷 함수
-// =========================
-function formatDuration(durationMs) {
-  if (!durationMs) return "-";
-
-  const totalSeconds = Math.floor(durationMs / 1000);
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 // =========================
@@ -45,44 +33,6 @@ function escapeHTML(value = "") {
 
     return escapeMap[char];
   });
-}
-
-// =========================
-// 휴지통 아이콘 함수
-// =========================
-function trashIcon() {
-  return `
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M4 7H20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <path
-        d="M10 11V17M14 11V17"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-      />
-      <path
-        d="M6 7L7 20H17L18 7"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M9 7V4H15V7"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linejoin="round"
-      />
-    </svg>
-  `;
 }
 
 // =========================
@@ -105,63 +55,6 @@ function createPlaylistCard(playlistName) {
         <span class="playlist-card__desc">Playlist</span>
       </div>
     </a>
-  `;
-}
-
-// =========================
-// 플레이리스트 곡 row 생성 함수
-// =========================
-function createPlaylistTrackRow(track, index) {
-  const rowNumber = index + 1;
-
-  return `
-    <tr
-      class="song-row"
-      data-play-track
-      data-id="${escapeHTML(track.id)}"
-      data-uri="${escapeHTML(track.uri || "")}"
-      data-title="${escapeHTML(track.title)}"
-      data-artist="${escapeHTML(track.artist)}"
-      data-cover="${escapeHTML(track.cover || "")}"
-    >
-      <td>${rowNumber}</td>
-
-      <td>
-        <div class="song-info">
-          <img
-            class="song-info__cover"
-            src="${escapeHTML(track.cover || "")}"
-            alt=""
-          />
-
-          <div class="song-info__text">
-            <span class="song-info__title">
-              ${escapeHTML(track.title)}
-            </span>
-            <span class="song-info__artist">
-              ${escapeHTML(track.artist)}
-            </span>
-          </div>
-        </div>
-      </td>
-
-      <td>${escapeHTML(track.releaseDate || "-")}</td>
-      <td>${formatDuration(track.durationMs || track.duration_ms)}</td>
-
-      <td>
-        <button
-          type="button"
-          class="playlist-track-remove-button"
-          data-no-play
-          data-remove-playlist-track
-          data-track-id="${escapeHTML(track.id)}"
-          aria-label="플레이리스트에서 제거"
-          title="제거"
-        >
-          ${trashIcon()}
-        </button>
-      </td>
-    </tr>
   `;
 }
 
@@ -238,21 +131,11 @@ function renderPlaylistDetail(playlistName) {
       <p class="playlist-page__desc">${tracks.length}곡</p>
     </div>
 
-    <table class="song-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Release Date</th>
-          <th>Duration</th>
-          <th>Remove</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        ${tracks.map(createPlaylistTrackRow).join("")}
-      </tbody>
-    </table>
+    ${renderSongTable(tracks, {
+      actionType: "playlist-remove",
+      actionHeader: "Remove",
+      emptyMessage: "아직 추가된 곡이 없습니다.",
+    })}
   `;
 }
 
@@ -263,6 +146,9 @@ function bindPlaylistTrackRemoveEvents() {
   const content = document.querySelector("#playlistPageContent");
 
   if (!content) return;
+
+  if (content.dataset.removeEventBound === "true") return;
+  content.dataset.removeEventBound = "true";
 
   content.addEventListener("click", async (event) => {
     const removeButton = event.target.closest("[data-remove-playlist-track]");
