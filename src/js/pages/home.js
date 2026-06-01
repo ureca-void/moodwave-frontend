@@ -1,5 +1,8 @@
 import { ICON_PATH } from "../data.js";
 
+const URECA_PICK_LIMIT = 6;
+const HOME_SECTION_LIMIT = 5;
+
 // =========================
 // 홈 데이터 요청 함수
 // =========================
@@ -87,22 +90,13 @@ function createMidMixCard(item) {
 // =========================
 function renderMidMixes(data) {
   const midMixesElement = document.querySelector("#midMixes");
-  const rowSize = 3;
-  let html = "";
 
   if (!midMixesElement) return;
 
-  for (let i = 0; i < data.length; i += rowSize) {
-    const rowItems = data.slice(i, i + rowSize);
-
-    html += `
-      <div class="mid-mixes__row">
-        ${rowItems.map(createMidMixCard).join("")}
-      </div>
-    `;
-  }
-
-  midMixesElement.innerHTML = html;
+  midMixesElement.innerHTML = data
+    .slice(0, URECA_PICK_LIMIT)
+    .map(createMidMixCard)
+    .join("");
 }
 
 // =========================
@@ -185,23 +179,8 @@ function createMidMixSkeleton() {
 // =========================
 // Mid Mix 스켈레톤 렌더링 함수
 // =========================
-function renderMidMixSkeleton(count = 6) {
-  const rowSize = 3;
-  let html = "";
-
-  for (let i = 0; i < count; i += rowSize) {
-    const rowItems = Array.from({
-      length: Math.min(rowSize, count - i),
-    });
-
-    html += `
-      <div class="mid-mixes__row">
-        ${rowItems.map(createMidMixSkeleton).join("")}
-      </div>
-    `;
-  }
-
-  return html;
+function renderMidMixSkeleton(count = URECA_PICK_LIMIT) {
+  return Array.from({ length: count }).map(createMidMixSkeleton).join("");
 }
 
 // =========================
@@ -226,7 +205,7 @@ function createGridSkeleton() {
 // =========================
 // Grid Card 스켈레톤 렌더링 함수
 // =========================
-function renderGridSkeleton(count = 5) {
+function renderGridSkeleton(count = HOME_SECTION_LIMIT) {
   return Array.from({ length: count }).map(createGridSkeleton).join("");
 }
 
@@ -239,15 +218,15 @@ function renderHomeSkeleton() {
   const latestGrid = document.querySelector("#latestGrid");
 
   if (midMixesElement) {
-    midMixesElement.innerHTML = renderMidMixSkeleton(6);
+    midMixesElement.innerHTML = renderMidMixSkeleton(URECA_PICK_LIMIT);
   }
 
   if (popularGrid) {
-    popularGrid.innerHTML = renderGridSkeleton(5);
+    popularGrid.innerHTML = renderGridSkeleton(HOME_SECTION_LIMIT);
   }
 
   if (latestGrid) {
-    latestGrid.innerHTML = renderGridSkeleton(5);
+    latestGrid.innerHTML = renderGridSkeleton(HOME_SECTION_LIMIT);
   }
 }
 
@@ -281,8 +260,14 @@ export async function initHome() {
     console.log("백엔드 홈 데이터:", homeData);
 
     renderMidMixes(homeData.midMixes || []);
-    renderGrid("#popularGrid", homeData.popular || []);
-    renderGrid("#latestGrid", homeData.latest || []);
+    renderGrid(
+      "#popularGrid",
+      (homeData.popular || []).slice(0, HOME_SECTION_LIMIT),
+    );
+    renderGrid(
+      "#latestGrid",
+      (homeData.latest || []).slice(0, HOME_SECTION_LIMIT),
+    );
   } catch (error) {
     console.error(error);
   }

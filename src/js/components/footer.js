@@ -33,6 +33,7 @@ let isPlaying = false;
 let hasStartedPlayback = false;
 let isTrackCardEventBound = false;
 let isPlayerPopoverEventBound = false;
+let currentTrackId = null;
 
 let isShuffleOn = false;
 let repeatMode = "off";
@@ -43,11 +44,10 @@ let currentDuration = 0;
 let currentPosition = 0;
 let lastProgressUpdatedAt = 0;
 let progressTimer = null;
-
 // =========================
 // Spotify Access Token 가져오기
 // =========================
-async function getSpotifyAccessToken() {
+export async function getSpotifyAccessToken() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/spotify/access-token`, {
       method: "GET",
@@ -1069,6 +1069,8 @@ function createSpotifyPlayer() {
   spotifyPlayer.addListener("player_state_changed", (state) => {
     if (!state) return;
 
+    currentTrackId = state.track_window.current_track.id;
+
     isPlaying = !state.paused;
     updatePlayButtonIcon();
 
@@ -1209,12 +1211,13 @@ export function renderFooter() {
       </div>
 
       <button
+        id="likeButton"
         class="player__icon player__icon--like"
         type="button"
         aria-label="좋아요"
       >
         <img
-          src="/assets/icon/Heart_Fill_XS.svg"
+          src="/assets/icon/Heart_XS.svg"
           width="28"
           height="28"
           alt=""
@@ -1343,6 +1346,36 @@ function initFooterEvents() {
   const volumeBar = document.querySelector("#volumeBar");
   const fullscreenButton = document.querySelector("#fullscreenButton");
   const progressTrack = document.querySelector("#progressTrack");
+  const likeButton = document.querySelector("#likeButton");
+
+  if (likeButton) {
+    likeButton.addEventListener("click", async () => {
+      if (!currentTrackId) {
+        alert("재생 중인 곡이 없습니다.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/like`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ musicId: currentTrackId }),
+          credentials: "include", // 세션 유지를 위해 필수
+        });
+
+        if (response.ok) {
+          alert("좋아요가 반영되었습니다.");
+          // 필요시 버튼 아이콘을 Heart_Fill에서 Heart_Outline 등으로 교체하는 로직 추가
+        } else {
+          alert("좋아요 처리에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("좋아요 통신 에러:", error);
+      }
+    });
+  }
 
   if (shuffleButton) {
     shuffleButton.addEventListener("click", toggleShuffle);

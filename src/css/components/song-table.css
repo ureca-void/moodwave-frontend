@@ -274,3 +274,292 @@
 .add-playlist-modal__cancel:hover {
   background: #444;
 }
+
+/* =========================
+   Song Table Page 반응형
+========================= */
+
+/* 중간 화면: 사이드바 때문에 메인 영역이 좁아지는 구간 */
+@media (max-width: 1180px) {
+  .song-table {
+    table-layout: fixed;
+  }
+
+  /* 발매일 컬럼 숨김 */
+  .song-table th:nth-child(3),
+  .song-table td:nth-child(3) {
+    display: none;
+  }
+
+  /* 번호 컬럼 */
+  .song-table th:nth-child(1),
+  .song-table td:nth-child(1) {
+    width: 44px;
+  }
+
+  /* 제목 컬럼 */
+  .song-table th:nth-child(2),
+  .song-table td:nth-child(2) {
+    width: auto;
+  }
+
+  /* 재생시간 컬럼 */
+  .song-table th:nth-child(4),
+  .song-table td:nth-child(4) {
+    width: 76px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* 추가 버튼 컬럼 */
+  .song-table th:last-child,
+  .song-table td:last-child {
+    width: 54px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .song-info__title,
+  .song-info__artist {
+    max-width: 100%;
+  }
+}
+
+/* 태블릿 */
+@media (max-width: 768px) {
+  .song-table-page {
+    padding-bottom: 140px;
+  }
+
+  .song-table-page__header {
+    margin-bottom: 24px;
+  }
+
+  .song-table-page__title {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+
+  .song-table-page__desc {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .song-table {
+    margin-top: 16px;
+  }
+
+  .song-table th,
+  .song-table td {
+    padding: 14px 10px;
+  }
+
+  .song-table th {
+    font-size: 13px;
+  }
+
+  .song-table td {
+    font-size: 13px;
+  }
+
+  .song-table th:nth-child(1),
+  .song-table td:nth-child(1) {
+    width: 38px;
+  }
+
+  .song-table th:last-child,
+  .song-table td:last-child {
+    width: 48px;
+    text-align: center;
+  }
+
+  .song-info {
+    gap: 12px;
+  }
+
+  .song-info__cover {
+    width: 44px;
+    height: 44px;
+  }
+
+  .song-info__title {
+    font-size: 14px;
+  }
+
+  .song-info__artist {
+    font-size: 12px;
+  }
+
+  .song-action {
+    width: 32px;
+    height: 32px;
+  }
+
+  .song-action img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* 모바일: 540px 이하에서 재생시간도 숨김 */
+@media (max-width: 540px) {
+  .song-table-page {
+    padding-bottom: 150px;
+  }
+
+  .song-table-page__title {
+    font-size: 28px;
+  }
+
+  .song-table-page__desc {
+    font-size: 13px;
+  }
+
+  /* 재생시간 컬럼 숨김 */
+  .song-table th:nth-child(4),
+  .song-table td:nth-child(4) {
+    display: none;
+  }
+
+  .song-table th,
+  .song-table td {
+    padding: 14px 8px;
+  }
+
+  /* 번호 컬럼 */
+  .song-table th:nth-child(1),
+  .song-table td:nth-child(1) {
+    width: 30px;
+    padding-left: 0;
+    padding-right: 6px;
+  }
+
+  /* 제목 컬럼 */
+  .song-table th:nth-child(2),
+  .song-table td:nth-child(2) {
+    width: auto;
+  }
+
+  /* 추가 버튼 컬럼 */
+  .song-table th:last-child,
+  .song-table td:last-child {
+    width: 42px;
+    padding-left: 6px;
+    padding-right: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .song-info {
+    gap: 10px;
+  }
+
+  .song-info__cover {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+  }
+
+  .song-info__text {
+    min-width: 0;
+  }
+
+  .song-info__title {
+    font-size: 14px;
+  }
+
+  .song-info__artist {
+    font-size: 12px;
+  }
+
+  .song-action {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+
+  .song-action img {
+    width: 21px;
+    height: 21px;
+  }
+}
+
+/* 작은 모바일 */
+@media (max-width: 420px) {
+  .song-table-page__title {
+    font-size: 26px;
+  }
+
+  .song-table th,
+  .song-table td {
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+
+  .song-table th:nth-child(1),
+  .song-table td:nth-child(1) {
+    width: 26px;
+    font-size: 12px;
+  }
+
+  .song-table th:last-child,
+  .song-table td:last-child {
+    width: 38px;
+  }
+
+  .song-info__cover {
+    width: 38px;
+    height: 38px;
+  }
+
+  .song-info__title {
+    font-size: 13px;
+  }
+
+  .song-info__artist {
+    font-size: 11px;
+  }
+
+  .song-action {
+    width: 30px;
+    height: 30px;
+  }
+
+  .song-action img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* =========================
+   Playlist 추가 모달 반응형
+========================= */
+@media (max-width: 480px) {
+  .add-playlist-modal__content {
+    width: calc(100% - 32px);
+    max-height: 80vh;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .add-playlist-modal__title {
+    font-size: 18px;
+  }
+
+  .add-playlist-modal__track {
+    font-size: 13px;
+  }
+
+  .add-playlist-modal__list {
+    max-height: 300px;
+  }
+
+  .add-playlist-modal__item {
+    padding: 11px;
+    font-size: 14px;
+  }
+
+  .add-playlist-modal__cancel {
+    padding: 11px 14px;
+  }
+}

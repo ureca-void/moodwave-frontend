@@ -14,6 +14,12 @@ let isSongTableEventBound = false;
 let activeObserver = null;
 
 // =========================
+// 아이콘 경로
+// =========================
+const PLAYLIST_ICON_PATH = "/assets/icon/+Library_S.svg";
+const HEART_ICON_PATH = "/assets/icon/Heart_Fill_XS.svg";
+
+// =========================
 // 재생시간 포맷 함수
 // =========================
 function formatDuration(durationMs) {
@@ -48,16 +54,32 @@ function escapeHTML(value = "") {
 // =========================
 function normalizeTrack(item) {
   const title = item.title || item.name || "-";
-  const artist = item.artist || item.artistName || item.description || "-";
-  const cover = item.cover || item.imageUrl || item.albumCover || "";
+
+  const artist =
+    item.artist ||
+    item.artistName ||
+    item.description ||
+    item.artists?.map((artist) => artist.name).join(", ") ||
+    "-";
+
+  const cover =
+    item.cover ||
+    item.imageUrl ||
+    item.albumCover ||
+    item.album?.images?.[0]?.url ||
+    "";
+
   const durationMs = item.durationMs || item.duration_ms || 0;
+
+  const releaseDate =
+    item.releaseDate || item.release_date || item.album?.release_date || "-";
 
   return {
     id: item.id || item.trackId || item.spotifyId || `${title}-${artist}`,
     uri: item.uri || "",
     title,
     artist,
-    releaseDate: item.releaseDate || "-",
+    releaseDate,
     durationMs,
     cover,
   };
@@ -77,9 +99,54 @@ async function getTracks(apiUrl, page, limit) {
 }
 
 // =========================
+// 액션 버튼 생성 함수
+// =========================
+function createActionButton(track, actionType) {
+  if (actionType === "like-remove") {
+    return `
+      <button
+        type="button"
+        class="playlist-track-remove-button"
+        data-no-play
+        data-track-id="${escapeHTML(track.id)}"
+        aria-label="좋아요 삭제"
+        title="삭제"
+      >
+        <img
+          src="${HEART_ICON_PATH}"
+          width="24"
+          height="24"
+          alt=""
+        />
+      </button>
+    `;
+  }
+
+  return `
+    <button
+      type="button"
+      class="song-action song-action--playlist"
+      data-no-play
+      data-add-song-playlist
+      data-track="${escapeHTML(JSON.stringify(track))}"
+      aria-label="플레이리스트 추가"
+    >
+      <img
+        src="${PLAYLIST_ICON_PATH}"
+        width="24"
+        height="24"
+        alt=""
+      />
+    </button>
+  `;
+}
+
+// =========================
 // 테이블 row 생성 함수
 // =========================
-function createSongRow(item, index) {
+function createSongRow(item, index, options = {}) {
+  const { actionType = "playlist" } = options;
+
   const rowNumber = index + 1;
   const track = normalizeTrack(item);
 
@@ -114,23 +181,49 @@ function createSongRow(item, index) {
       <td>${formatDuration(track.durationMs)}</td>
 
       <td>
-        <button
-          type="button"
-          class="song-action song-action--playlist"
-          data-no-play
-          data-add-song-playlist
-          data-track="${escapeHTML(JSON.stringify(track))}"
-          aria-label="플레이리스트 추가"
-        >
-          <img
-            src="/assets/icon/+Library_S.svg"
-            width="24"
-            height="24"
-            alt=""
-          />
-        </button>
+        ${createActionButton(track, actionType)}
       </td>
     </tr>
+  `;
+}
+
+// =========================
+// 일반 곡 테이블 렌더링 함수
+// 좋아요 페이지처럼 이미 데이터가 있는 경우 사용
+// =========================
+export function renderSongTable(tracks, options = {}) {
+  const {
+    actionType = "playlist",
+    actionHeader = "Add",
+    emptyMessage = "곡이 없습니다.",
+  } = options;
+
+  if (!tracks || tracks.length === 0) {
+    return `<p>${escapeHTML(emptyMessage)}</p>`;
+  }
+
+  return `
+    <table class="song-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Release Date</th>
+          <th>Duration</th>
+          <th>${escapeHTML(actionHeader)}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        ${tracks
+          .map((track, index) =>
+            createSongRow(track, index, {
+              actionType,
+            }),
+          )
+          .join("")}
+      </tbody>
+    </table>
   `;
 }
 

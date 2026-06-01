@@ -28,6 +28,44 @@
   cursor: pointer;
 }
 
+/* 햄버거 버튼 */
+.header__hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.header__hamburger-btn span {
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: #fff;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.header__hamburger-btn.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header__hamburger-btn.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.header__hamburger-btn.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* 검색창 */
 .header__search {
   display: flex;
@@ -190,7 +228,7 @@
   position: absolute;
   top: 48px;
   right: 0;
-  z-index: 100;
+  z-index: 1100;
   min-width: 120px;
   padding: 6px;
   border-radius: 8px;
@@ -216,4 +254,261 @@
 
 .header__logout-btn:hover {
   background: #3e3e3e;
+}
+
+/* =========================
+   Sidebar Overlay
+========================= */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgb(0 0 0 / 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.is-sidebar-open {
+  overflow: hidden;
+}
+
+/* =========================
+   Header Responsive
+========================= */
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+  .header {
+    position: relative;
+    justify-content: center;
+    height: 72px;
+    gap: 16px;
+    padding: 0 24px;
+  }
+
+  .header__hamburger-btn {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 24px;
+    transform: translateY(-50%);
+  }
+
+  .header__nav-btn {
+    display: none;
+  }
+
+  .header__search {
+    flex: none;
+    width: min(420px, calc(100vw - 300px));
+    max-width: 420px;
+    height: 48px;
+    margin: 0 auto;
+  }
+
+  .header__search-input {
+    font-size: 16px;
+  }
+
+  .header__auth {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+    flex-shrink: 0;
+  }
+
+  .header__spacer {
+    display: none;
+  }
+
+  .header__user-name {
+    font-size: 16px;
+  }
+
+  .spotify-connect-btn {
+    height: 38px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 280px;
+    max-width: 80vw;
+    height: 100dvh;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .header {
+    height: 72px;
+    padding: 0 16px;
+  }
+
+  .header__hamburger-btn {
+    left: 16px;
+  }
+
+  .header__auth {
+    right: 16px;
+  }
+
+  .header__search {
+    width: min(320px, calc(100vw - 210px));
+    min-width: 0;
+    max-width: none;
+    height: 44px;
+    gap: 10px;
+    padding: 0 14px;
+  }
+
+  .header__search-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__search-input {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .header__user-name {
+    display: none;
+  }
+
+  .header__profile {
+    gap: 6px;
+    padding-right: 6px;
+  }
+
+  .spotify-connect-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .spotify-connect-btn strong {
+    display: none;
+  }
+
+  .spotify-connect-btn__logo {
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+    object-position: left center;
+  }
+
+  .header__dropdown {
+    top: 48px;
+    right: 0;
+  }
+}
+
+/* 좁은 모바일: 검색창 / 프로필 겹침 방지 */
+@media (max-width: 560px) {
+  .header {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) max-content;
+    align-items: center;
+    height: 64px;
+    column-gap: 10px;
+    padding: 0 14px;
+  }
+
+  .header__hamburger-btn {
+    position: static;
+    grid-column: 1;
+    justify-self: start;
+    width: 36px;
+    height: 36px;
+    transform: none;
+  }
+
+  .header__search {
+    grid-column: 2;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    height: 42px;
+    margin: 0;
+    padding: 0 12px;
+  }
+
+  .header__auth {
+    position: static;
+    grid-column: 3;
+    justify-self: end;
+    min-width: 0;
+    transform: none;
+  }
+
+  .header__search-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header__search-input {
+    font-size: 14px;
+  }
+
+  .header__search-input::placeholder {
+    font-size: 14px;
+  }
+}
+
+/* 작은 모바일 */
+@media (max-width: 480px) {
+  .header {
+    grid-template-columns: 36px minmax(0, 1fr) max-content;
+    column-gap: 8px;
+    padding: 0 12px;
+  }
+
+  .header__search {
+    height: 40px;
+  }
+}
+
+/* 아주 좁은 화면 */
+@media (max-width: 360px) {
+  .header {
+    grid-template-columns: 34px minmax(0, 1fr) max-content;
+    column-gap: 6px;
+    padding: 0 10px;
+  }
+
+  .header__hamburger-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .header__search {
+    height: 38px;
+    padding: 0 10px;
+  }
+
+  .header__search-icon {
+    width: 20px;
+    height: 20px;
+  }
 }

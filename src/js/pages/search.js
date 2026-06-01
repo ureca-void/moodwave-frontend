@@ -6,6 +6,23 @@ import { ICON_PATH } from "../data.js";
 const API = "http://127.0.0.1:8080/api/home";
 
 // =========================
+// HTML 특수문자 변환 함수
+// =========================
+function escapeHTML(value = "") {
+  return String(value).replace(/[&<>"']/g, (char) => {
+    const escapeMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+
+    return escapeMap[char];
+  });
+}
+
+// =========================
 // 검색어 가져오기
 // =========================
 function getSearchKeyword() {
@@ -29,7 +46,7 @@ export function renderSearch() {
 
       ${
         keyword
-          ? `<p class="search-page__keyword">"${keyword}" 검색 결과</p>`
+          ? `<p class="search-page__keyword">"${escapeHTML(keyword)}" 검색 결과</p>`
           : `<p class="search-page__keyword">검색어를 입력해주세요.</p>`
       }
 
@@ -59,13 +76,27 @@ async function fetchSearchTracks(keyword) {
 // 검색 결과 카드 생성 함수
 // =========================
 function createSearchCard(item) {
+  const id = item.id || "";
+  const uri = item.uri || (id ? `spotify:track:${id}` : "");
+  const title = item.title || "Unknown Title";
+  const artist = item.artist || item.description || "Unknown Artist";
+  const cover = item.cover || "/assets/icon/logo.svg";
+
   return `
-    <article class="music-card">
+    <article
+      class="music-card"
+      data-play-track
+      data-id="${escapeHTML(id)}"
+      data-uri="${escapeHTML(uri)}"
+      data-title="${escapeHTML(title)}"
+      data-artist="${escapeHTML(artist)}"
+      data-cover="${escapeHTML(cover)}"
+    >
       <div class="music-card__image-wrap">
         <img 
           class="music-card__image" 
-          src="${item.cover}" 
-          alt="${item.title}" 
+          src="${escapeHTML(cover)}" 
+          alt="${escapeHTML(title)}" 
         />
 
         <button class="music-card__play" type="button" aria-label="재생">
@@ -78,8 +109,8 @@ function createSearchCard(item) {
         </button>
       </div>
 
-      <h3 class="music-card__title">${item.title}</h3>
-      <p class="music-card__description">${item.description}</p>
+      <h3 class="music-card__title">${escapeHTML(title)}</h3>
+      <p class="music-card__description">${escapeHTML(artist)}</p>
     </article>
   `;
 }
@@ -122,6 +153,9 @@ export async function initSearch() {
 
   try {
     const tracks = await fetchSearchTracks(keyword);
+
+    console.log("검색 결과:", tracks);
+
     renderSearchResult(tracks);
   } catch (error) {
     console.error("검색 데이터 조회 실패:", error);

@@ -338,3 +338,130 @@
   color: #fff;
   font-weight: 700;
 }
+
+/* =========================
+   Sidebar Responsive
+========================= */
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+  .sidebar__header {
+    padding: 0 22px;
+  }
+
+  .sidebar__brand {
+    height: 64px;
+    margin-bottom: 18px;
+  }
+
+  .sidebar__brand-link {
+    gap: 10px;
+  }
+
+  .sidebar__brand-link img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sidebar__brand-link span {
+    font-size: 16px;
+  }
+
+  .sidebar__nav-primary,
+  .sidebar__nav-secondary {
+    gap: 18px;
+  }
+
+  .sidebar__nav-secondary {
+    margin-top: 40px;
+  }
+
+  .sidebar__nav-item {
+    gap: 14px;
+  }
+
+  .sidebar__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .sidebar__label {
+    font-size: 16px;
+    line-height: 21px;
+  }
+
+  .sidebar__divider {
+    margin: 22px 22px 0;
+  }
+
+  .sidebar__playlist-list {
+    gap: 18px;
+    padding: 22px 22px 36px;
+  }
+
+  .playlist-more-menu {
+    width: 240px;
+  }
+
+  .playlist-more-menu__item {
+    font-size: 15px;
+  }
+}
+
+/* =========================
+   Mobile Sidebar Drawer
+========================= */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 280px;
+    max-width: 80vw;
+    height: 100dvh;
+    overflow: hidden;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: flex;
+  }
+}
+
+/* =========================
+   Playlist Modal Responsive
+========================= */
+
+@media (max-width: 480px) {
+  .playlist-modal__content {
+    width: calc(100% - 32px);
+    max-width: 320px;
+    padding: 20px;
+  }
+
+  .playlist-modal__title {
+    font-size: 18px;
+  }
+
+  .playlist-modal__buttons {
+    flex-direction: column-reverse;
+  }
+
+  .playlist-modal__button {
+    width: 100%;
+  }
+
+  .playlist-more-menu {
+    width: min(270px, calc(100vw - 24px));
+  }
+}

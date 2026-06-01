@@ -18,6 +18,19 @@ const SPOTIFY_LOGO_URL =
 // =========================
 export function renderHeader() {
   return `
+    <!-- 모바일 / 태블릿 햄버거 버튼 -->
+    <button
+      id="mobileMenuBtn"
+      class="header__hamburger-btn"
+      type="button"
+      aria-label="사이드바 열기"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
     <!-- 메뉴 버튼 -->
     <button
       id="backBtn"
@@ -281,6 +294,59 @@ function initHistoryButtons() {
 }
 
 // =========================
+// 모바일 / 태블릿 사이드바 토글 함수
+// =========================
+function initMobileSidebar() {
+  const mobileMenuBtn = document.querySelector("#mobileMenuBtn");
+  const sidebar = document.querySelector(".sidebar");
+
+  if (!mobileMenuBtn || !sidebar) return;
+
+  let sidebarOverlay = document.querySelector(".sidebar-overlay");
+
+  if (!sidebarOverlay) {
+    sidebarOverlay = document.createElement("div");
+    sidebarOverlay.className = "sidebar-overlay";
+    document.body.appendChild(sidebarOverlay);
+  }
+
+  const openSidebar = () => {
+    sidebar.classList.add("is-open");
+    sidebarOverlay.classList.add("is-open");
+    document.body.classList.add("is-sidebar-open");
+    mobileMenuBtn.classList.add("is-open");
+    mobileMenuBtn.setAttribute("aria-expanded", "true");
+    mobileMenuBtn.setAttribute("aria-label", "사이드바 닫기");
+  };
+
+  const closeSidebar = () => {
+    sidebar.classList.remove("is-open");
+    sidebarOverlay.classList.remove("is-open");
+    document.body.classList.remove("is-sidebar-open");
+    mobileMenuBtn.classList.remove("is-open");
+    mobileMenuBtn.setAttribute("aria-expanded", "false");
+    mobileMenuBtn.setAttribute("aria-label", "사이드바 열기");
+  };
+
+  const toggleSidebar = () => {
+    if (sidebar.classList.contains("is-open")) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  };
+
+  mobileMenuBtn.addEventListener("click", toggleSidebar);
+  sidebarOverlay.addEventListener("click", closeSidebar);
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1024) {
+      closeSidebar();
+    }
+  });
+}
+
+// =========================
 // 헤더 초기 실행 함수
 // =========================
 export function initHeader() {
@@ -298,4 +364,5 @@ export function initHeader() {
 
   initSearchForm();
   initHistoryButtons();
+  initMobileSidebar();
 }

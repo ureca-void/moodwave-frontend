@@ -22,6 +22,11 @@ export const navItems = [
     icon: "status.svg",
     href: "/pages/chart.html",
   },
+  {
+    label: "Emotion",
+    icon: "Library_Fill_S.svg",
+    href: "#/emotion",
+  },
 ];
 
 // =========================
@@ -35,6 +40,7 @@ export const playlistMenuItems = [
   {
     label: "Liked Songs",
     icon: "Liked Songs_S.svg",
+    href: "#/liked",
   },
 ];
 

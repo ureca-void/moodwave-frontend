@@ -8,7 +8,7 @@
   gap: 20px;
   width: 100%;
   min-width: 0;
-  height: 112px;
+  height: 100%;
   padding: 0 18px;
   overflow: hidden;
   background: #181818;
@@ -421,4 +421,325 @@
 
 .player__icon:disabled:hover {
   transform: none;
+}
+
+/* =========================
+   Player Responsive
+========================= */
+
+/* 중간 화면: 전체 간격 먼저 줄이기 */
+@media (max-width: 1280px) {
+  .player {
+    gap: 14px;
+    padding: 0 14px;
+  }
+
+  .player__track {
+    flex: 0 1 250px;
+    gap: 12px;
+  }
+
+  .player__title {
+    font-size: 16px;
+    line-height: 21px;
+  }
+
+  .player__artist {
+    font-size: 14px;
+    line-height: 19px;
+  }
+
+  .player__controls {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .player__buttons {
+    gap: 16px;
+  }
+
+  .player__progress {
+    width: min(420px, 100%);
+  }
+
+  .player__extras {
+    flex: 0 1 180px;
+  }
+
+  .player__extras-tools {
+    gap: 14px;
+  }
+
+  .player__volume {
+    width: 80px;
+  }
+}
+
+/* 좁은 데스크탑 / 태블릿: 컨트롤 중앙 정렬 + 오른쪽 도구 숨김 + 하트 오른쪽 이동 */
+@media (max-width: 1100px) {
+  .player {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+  }
+
+  .player__track {
+    grid-column: 1;
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .player__controls {
+    grid-column: 2;
+    justify-self: center;
+    flex: none;
+    width: min(360px, 100%);
+    min-width: 0;
+  }
+
+  .player__extras {
+    display: none;
+  }
+
+  .player__progress {
+    width: 100%;
+  }
+
+  .player__icon--like {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+}
+
+/* 900px 이하: 기존처럼 버튼 아래에 게이지바 유지 */
+@media (max-width: 900px) {
+  .player {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    height: 96px;
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .player__track {
+    grid-column: 1;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .player__cover {
+    width: 48px;
+    height: 48px;
+  }
+
+  .player__meta {
+    min-width: 0;
+  }
+
+  .player__title {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .player__artist {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .player__controls {
+    grid-column: 2;
+    justify-self: center;
+    width: min(260px, 100%);
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .player__buttons {
+    gap: 10px;
+  }
+
+  .player__progress {
+    position: static;
+    display: flex;
+    width: 100%;
+    height: 20px;
+    gap: 8px;
+    transform: none;
+  }
+
+  .player__time {
+    display: block;
+    width: 28px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .player__bar {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .player__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .player__icon--play {
+    width: 42px;
+    height: 42px;
+  }
+
+  .player__icon--like {
+    top: 50%;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
+}
+
+/* 모바일: 크기만 축소, 게이지바 위치는 그대로 유지 */
+@media (max-width: 640px) {
+  .player {
+    height: 88px;
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .player__cover {
+    width: 44px;
+    height: 44px;
+  }
+
+  .player__track {
+    gap: 10px;
+  }
+
+  .player__title {
+    font-size: 14px;
+    line-height: 19px;
+  }
+
+  .player__artist {
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .player__controls {
+    width: min(240px, 100%);
+    gap: 7px;
+  }
+
+  .player__buttons {
+    gap: 8px;
+  }
+
+  .player__progress {
+    width: 100%;
+    gap: 7px;
+  }
+
+  .player__time {
+    width: 26px;
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .player__icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .player__icon--play {
+    width: 38px;
+    height: 38px;
+  }
+
+  .player__icon--like {
+    right: 12px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* 아주 좁은 화면: 핵심 컨트롤 버튼은 모두 유지하고 오른쪽 하트도 유지 */
+@media (max-width: 420px) {
+  .player {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 0 42px 0 10px;
+  }
+
+  .player__track {
+    grid-column: 1;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .player__cover {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player__title {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .player__artist {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .player__controls {
+    grid-column: 2;
+    justify-self: end;
+    width: 178px;
+    gap: 6px;
+  }
+
+  .player__buttons {
+    justify-content: flex-end;
+    gap: 5px;
+  }
+
+  .player__icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .player__icon--play {
+    width: 34px;
+    height: 34px;
+  }
+
+  .player__progress {
+    width: 100%;
+    gap: 5px;
+  }
+
+  .player__time {
+    width: 23px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .player__icon--like {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    margin-left: 0;
+    transform: translateY(-50%);
+  }
 }

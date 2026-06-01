@@ -152,3 +152,51 @@
   height: 22px;
   pointer-events: none;
 }
+
+/* =========================
+   Playlist 상세: 540px 이하에서 발매일 / 재생시간 숨김
+========================= */
+@media (max-width: 540px) {
+  /* 발매일 컬럼 숨김 */
+  .playlist-page table th:nth-child(3),
+  .playlist-page table td:nth-child(3),
+  /* 재생시간 컬럼 숨김 */
+  .playlist-page table th:nth-child(4),
+  .playlist-page table td:nth-child(4) {
+    display: none;
+  }
+
+  /* 번호 컬럼 */
+  .playlist-page table th:nth-child(1),
+  .playlist-page table td:nth-child(1) {
+    width: 32px;
+    padding-left: 0;
+    padding-right: 8px;
+  }
+
+  /* 제목 컬럼 */
+  .playlist-page table th:nth-child(2),
+  .playlist-page table td:nth-child(2) {
+    width: auto;
+  }
+
+  /* 제거 컬럼 */
+  .playlist-page table th:nth-child(5),
+  .playlist-page table td:nth-child(5) {
+    width: 42px;
+    padding-left: 8px;
+    padding-right: 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .playlist-track-remove-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .playlist-track-remove-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}

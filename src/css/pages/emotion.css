@@ -1,0 +1,382 @@
+.emotion-page {
+  width: 100%;
+  min-height: 100%;
+  padding: 32px;
+  color: #fff;
+}
+
+.emotion-page__header {
+  margin-bottom: 28px;
+}
+
+.emotion-page__eyebrow {
+  margin-bottom: 8px;
+  color: #1ed760;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.emotion-page__title {
+  margin-bottom: 12px;
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.emotion-page__desc {
+  max-width: 640px;
+  color: #b3b3b3;
+  line-height: 1.6;
+}
+
+/* =========================
+   Emotion Input Box
+========================= */
+
+.emotion-box {
+  position: relative;
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+
+.emotion-box__textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 18px;
+  padding-bottom: 78px;
+  border: 1px solid #333;
+  border-radius: 16px;
+  background: #181818;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+}
+
+.emotion-box__textarea::placeholder {
+  color: #777;
+}
+
+.emotion-box__textarea:focus {
+  border-color: #1ed760;
+}
+
+.emotion-box__button {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 999px;
+  background: #1ed760;
+  color: #000;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.emotion-box__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   Emotion Result
+========================= */
+
+.emotion-result {
+  margin-bottom: 28px;
+}
+
+.emotion-result__card {
+  max-width: 720px;
+  padding: 22px;
+  border: 1px solid #2a2a2a;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #242424, #121212);
+}
+
+.emotion-result__label {
+  margin-bottom: 4px;
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+.emotion-result__mood {
+  margin-bottom: 12px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.emotion-result__reason {
+  color: #d6d6d6;
+  line-height: 1.6;
+}
+
+.emotion-result__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.emotion-result__keywords span {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #2a2a2a;
+  color: #1ed760;
+  font-size: 13px;
+}
+
+.emotion-result__loading,
+.emotion-track-grid__empty {
+  color: #b3b3b3;
+}
+
+.emotion-result__error {
+  color: #ff6b6b;
+}
+
+/* =========================
+   Emotion Track Grid
+========================= */
+
+.emotion-track-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.emotion-track-card {
+  overflow: hidden;
+  border-radius: 16px;
+  background: #181818;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.emotion-track-card:hover {
+  transform: translateY(-4px);
+  background: #202020;
+}
+
+.emotion-track-card__image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.emotion-track-card__body {
+  padding: 14px;
+}
+
+.emotion-track-card__title {
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.emotion-track-card__artist {
+  color: #b3b3b3;
+  font-size: 13px;
+}
+
+/* =========================
+   Footer Space Fix
+========================= */
+
+.emotion-page::after {
+  content: "";
+  display: block;
+  height: 180px;
+}
+
+/* =========================
+   Emotion Responsive
+========================= */
+
+@media (max-width: 1200px) {
+  .emotion-track-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .emotion-page {
+    padding: 28px 24px;
+  }
+
+  .emotion-page__title {
+    font-size: 32px;
+  }
+
+  .emotion-box,
+  .emotion-result__card {
+    max-width: 100%;
+  }
+
+  .emotion-track-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emotion-page {
+    padding: 24px 20px;
+  }
+
+  .emotion-page__header {
+    margin-bottom: 24px;
+  }
+
+  .emotion-page__eyebrow {
+    font-size: 13px;
+  }
+
+  .emotion-page__title {
+    font-size: 28px;
+    line-height: 1.25;
+  }
+
+  .emotion-page__desc {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .emotion-box {
+    margin-bottom: 24px;
+  }
+
+  .emotion-box__textarea {
+    min-height: 170px;
+    padding: 16px;
+    padding-bottom: 74px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  .emotion-box__button {
+    right: 16px;
+    bottom: 16px;
+    padding: 13px 20px;
+  }
+
+  .emotion-result__card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .emotion-result__mood {
+    font-size: 24px;
+  }
+
+  .emotion-result__reason {
+    font-size: 14px;
+  }
+
+  .emotion-track-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .emotion-track-card__body {
+    padding: 12px;
+  }
+
+  .emotion-track-card__title {
+    font-size: 14px;
+  }
+
+  .emotion-track-card__artist {
+    font-size: 12px;
+  }
+
+  .emotion-page::after {
+    height: 160px;
+  }
+}
+
+@media (max-width: 520px) {
+  .emotion-page {
+    padding: 20px 16px;
+  }
+
+  .emotion-page__title {
+    font-size: 24px;
+  }
+
+  .emotion-page__desc {
+    font-size: 13px;
+  }
+
+  .emotion-box__textarea {
+    min-height: 160px;
+    padding-bottom: 70px;
+    font-size: 14px;
+  }
+
+  .emotion-box__button {
+    right: 14px;
+    bottom: 14px;
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .emotion-result__card {
+    padding: 18px;
+  }
+
+  .emotion-result__mood {
+    font-size: 22px;
+  }
+
+  .emotion-result__keywords {
+    gap: 6px;
+  }
+
+  .emotion-result__keywords span {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .emotion-track-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .emotion-page::after {
+    height: 150px;
+  }
+}
+
+@media (max-width: 390px) {
+  .emotion-page {
+    padding: 18px 14px;
+  }
+
+  .emotion-page__title {
+    font-size: 22px;
+  }
+
+  .emotion-box__button {
+    left: 14px;
+    right: 14px;
+    width: auto;
+  }
+
+  .emotion-track-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .emotion-track-card__title,
+  .emotion-track-card__artist {
+    word-break: keep-all;
+  }
+
+  .emotion-page::after {
+    height: 140px;
+  }
+}

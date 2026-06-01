@@ -12,7 +12,118 @@
 
   width: 100%;
   min-width: 0;
-  height: 100vh;
+  height: 100dvh;
   background: #121212;
   overflow: hidden;
+}
+
+/* 각 영역 기본 설정 */
+.sidebar {
+  grid-area: sidebar;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.header {
+  grid-area: header;
+  min-width: 0;
+}
+
+.main {
+  grid-area: main;
+  min-width: 0;
+  overflow-y: auto;
+
+  /* 마지막 카드가 footer에 붙지 않도록 아래 여백 추가 */
+  padding-bottom: 140px;
+}
+
+.footer {
+  grid-area: footer;
+  min-width: 0;
+}
+
+/* =========================
+   태블릿 / 모바일 공통
+   1024px 이하부터 사이드바 공간 제거
+========================= */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 72px minmax(0, 1fr) 100px;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .main {
+    grid-area: main;
+    padding-bottom: 128px;
+  }
+
+  .footer {
+    grid-area: footer;
+  }
+
+  /*
+    사이드바는 grid 영역에서 빼고,
+    header.css의 position: fixed + transform으로 제어
+  */
+  .sidebar {
+    grid-area: unset;
+    display: block;
+  }
+}
+
+/* =========================
+   모바일
+========================= */
+@media (max-width: 768px) {
+  .container {
+    grid-template-rows: 72px minmax(0, 1fr) 96px;
+  }
+
+  .main {
+    padding-bottom: 124px;
+  }
+
+  /*
+    여기서 sidebar display: none 하면 안 됨.
+    햄버거 메뉴로 열어야 해서 block 유지.
+  */
+  .sidebar {
+    display: block;
+  }
+}
+
+/* =========================
+   좁은 모바일
+   header.css의 560px 이하 header 높이와 맞춤
+========================= */
+@media (max-width: 560px) {
+  .container {
+    grid-template-rows: 64px minmax(0, 1fr) 96px;
+  }
+
+  .main {
+    padding-bottom: 124px;
+  }
+}
+
+/* =========================
+   작은 모바일
+========================= */
+@media (max-width: 480px) {
+  .container {
+    grid-template-rows: 64px minmax(0, 1fr) 88px;
+  }
+
+  .main {
+    padding-bottom: 116px;
+  }
 }

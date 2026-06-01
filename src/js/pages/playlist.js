@@ -242,10 +242,10 @@ function renderPlaylistDetail(playlistName) {
       <thead>
         <tr>
           <th>#</th>
-          <th>제목</th>
-          <th>발매일</th>
-          <th>재생시간</th>
-          <th>제거</th>
+          <th>Title</th>
+          <th>Release Date</th>
+          <th>Duration</th>
+          <th>Remove</th>
         </tr>
       </thead>
 
