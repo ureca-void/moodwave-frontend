@@ -1,4 +1,4 @@
-import { getSpotifyAccessToken, isLiked } from "../components/footer.js";
+import { isLiked } from "../components/footer.js";
 import { renderSongTable } from "../components/songTable.js";
 
 const API_BASE_URL = "http://127.0.0.1:8080";
@@ -35,11 +35,13 @@ async function loadLikedTracks() {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("좋아요 목록 요청 실패 응답:", response.status, errorText);
       throw new Error("좋아요 목록 요청 실패");
     }
 
     const tracks = await response.json();
-    console.log(tracks);
+    console.log("좋아요 목록:", tracks);
 
     if (!tracks || tracks.length === 0) {
       container.innerHTML = "<p>좋아요한 곡이 없습니다.</p>";
@@ -61,17 +63,27 @@ async function loadLikedTracks() {
 // 좋아요 취소
 // =========================
 async function removeLike(musicId) {
-  console.log("musicId:", musicId);
-  const response = await fetch(`${API_BASE_URL}/api/like/${musicId}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
+  console.log("삭제할 musicId:", musicId);
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/like/${encodeURIComponent(musicId)}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
+    const errorText = await response.text();
+    console.error("좋아요 삭제 실패 응답:", response.status, errorText);
     throw new Error("좋아요 삭제 실패");
-  } else {
-    isLiked();
   }
+
+  // 푸터 하트 상태 갱신용
+  isLiked();
+
+  // 다른 페이지/컴포넌트에도 좋아요 변경 알림
+  window.dispatchEvent(new Event("likeChanged"));
 }
 
 // =========================
@@ -94,15 +106,19 @@ export function initLikedPage() {
 
     const musicId = removeBtn.dataset.trackId;
 
-    if (!musicId) return;
+    if (!musicId) {
+      console.error("musicId가 없습니다.");
+      return;
+    }
 
     try {
       await removeLike(musicId);
-      loadLikedTracks();
+      await loadLikedTracks();
     } catch (err) {
       console.error("좋아요 삭제 실패:", err);
       alert("좋아요 삭제에 실패했습니다.");
     }
   });
+
   window.addEventListener("likeChanged", loadLikedTracks);
 }

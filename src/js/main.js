@@ -10,6 +10,7 @@ import { renderPopularPage, initPopularPage } from "./pages/popular.js";
 import { renderEmotion, initEmotion } from "./pages/emotion.js";
 import { renderLikedPage, initLikedPage } from "./pages/liked.js";
 import { renderWeatherPage, initWeatherPage } from "./pages/weather.js";
+import { renderChartPage, initChartPage } from "./pages/chart.js";
 import {
   renderWeatherPlaylistPage,
   initWeatherPlaylistPage,
@@ -59,6 +60,13 @@ const routes = [
     init: initLikedPage,
   },
   {
+    path: "#/chart",
+    protected: true,
+    render: renderChartPage,
+    init: initChartPage,
+    pageClass: "chart-main",
+  },
+  {
     path: "#/weather-playlist",
     protected: true,
     render: renderWeatherPlaylistPage,
@@ -84,7 +92,7 @@ function findRoute(hash) {
 // =========================
 // 페이지 렌더링 함수
 // =========================
-function renderPage(main, route) {
+async function renderPage(main, route) {
   main.className = "main";
 
   if (route.pageClass) {
@@ -92,7 +100,10 @@ function renderPage(main, route) {
   }
 
   main.innerHTML = route.render();
-  route.init();
+
+  if (route.init) {
+    await route.init();
+  }
 }
 
 // =========================
@@ -117,11 +128,11 @@ async function router() {
   }
 
   if (route) {
-    renderPage(main, route);
+    await renderPage(main, route);
     return;
   }
 
-  renderPage(main, {
+  await renderPage(main, {
     render: renderHome,
     init: initHome,
   });

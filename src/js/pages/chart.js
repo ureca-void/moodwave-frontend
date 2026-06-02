@@ -1,91 +1,209 @@
-import { renderCommonLayout } from "../layout/commonLayout.js";
-// import { dummyData } from "../../../assets/js/data/mockData.js";
+import { renderSongTable, initSongTable } from "../components/songTable.js";
+// 더미데이터 연동 로직 삭제
+// import { weatherTracks, playlistMap } from "../data.js";
 
-renderCommonLayout();
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const response = await fetch("http://localhost:8080/api/music");
-  const result = await response.json();
-
-  const data = Array.isArray(result)
-    ? result
-    : result.allSongs || result.data || [];
-  const chartData = data;
-  // 장르 차트용 매핑 
-  const genreMap = {
-  "D.O.": "K-Pop",
-  "CORTIS": "Electronic",
-  "Playboi Carti": "Hip-Hop",
+// =========================
+// 아티스트별 장르 매핑
+// Spotify API 응답에 genre가 없어서 프론트에서 수동 보정
+// =========================
+const artistGenreMap = {
+  "D.O.": "K-pop",
+  "CORTIS": "K-pop",
+  "NCT WISH": "K-pop",
   "The Weeknd": "Pop",
-  "NCT WISH": "K-Pop",
-  "DaBaby": "Hip-Hop",
-  "HANRORO": "K-Indie",
-  "Omega Sapien": "Hip-Hop",
+  "HANRORO": "Indie",
+  "Playboi Carti": "Hip-hop",
+  "DaBaby": "Hip-hop",
   "Yerin Baek": "R&B",
-  "NAYEON": "K-Pop",
-  "Hearts2Hearts": "K-Pop",
-  "ILLIT": "K-Pop",
-  "B小町": "J-Pop",
+  "Omega Sapien": "Hip-hop",
+  "NAYEON": "K-pop",
+  "Hearts2Hearts": "K-pop",
+  "ILLIT": "K-pop",
+  "B小町": "J-pop",
+  "Pop Smoke": "Hip-hop",
   "Ariana Grande": "Pop",
-  "K/DA": "Game Music",
-  "DJ Khaled": "Hip-Hop",
-    "OsamaSon": "Hip-Hop",
-  "AKMU": "K-Pop",
-  "BTS": "K-Pop",
-  "NOWIMYOUNG": "K-Hip-Hop",
-  "Gen Hoshino": "J-Pop",
-  "Pop Smoke": "Hip-Hop",
+  "DJ Khaled": "Hip-hop",
+  "AKMU": "K-pop",
+  "BTS": "K-pop",
+  "OsamaSon": "Hip-hop",
+  "Gen Hoshino": "J-pop",
+  "NOWIMYOUNG": "Hip-hop",
+  "K/DA": "K-pop",
   "MIKA": "Pop",
-  "BewhY": "K-Hip-Hop",
-  "N'John": "R&B",
-  "Kenshi Yonezu": "J-Pop",
-  "BLASÉ": "K-Hip-Hop",
-  "NMIXX": "K-Pop",
-  "Jin": "K-Pop",
-  "KiiiKiii": "K-Pop",
-  "HAON": "K-Hip-Hop",
-  "LamazeP": "Vocaloid",
-  "STAYC": "K-Pop",
-  "YENA": "K-Pop",
-  "Epik High": "K-Hip-Hop",
-  "Dragon Pony": "K-Rock",
-  "Riversmelt": "Indie",
-  "kinoshita": "Vocaloid"
+  "BewhY": "Hip-hop",
+  "Kenshi Yonezu": "J-pop",
+  "N'John": "Hip-hop",
+  "NMIXX": "K-pop",
+  "BLASÉ": "Hip-hop",
+  "Jin": "K-pop",
+  "KiiiKiii": "K-pop",
+  "HAON": "Hip-hop",
+  "LamazeP": "J-pop",
+  "STAYC": "K-pop",
+  "YENA": "K-pop",
+  "Epik High": "Hip-hop",
+  "Polo G": "Hip-hop",
+  "Dragon Pony": "K-rock",
+  "kinoshita": "J-pop",
 };
 
+// =========================
+// 차트 페이지 HTML 렌더링
+// =========================
+export function renderChartPage() {
+  return `
+    <section class="chart-page">
+      <div class="chart-page__header">
+        <h2 class="chart-page__title">내 음악 취향 통계</h2>
+        <p class="chart-page__desc">
+          내가 들은 음악 데이터를 기반으로 장르와 날씨 취향을 확인할 수 있어요.
+        </p>
+      </div>
 
-  const normalizeText = (value, fallback) =>
-    typeof value === "string" && value.trim() ? value : fallback;
+      <div class="dashboard">
+        <div class="chart-box">
+          <h3>장르별 재생 비율</h3>
 
-  const getValue = (item) => {
-  const raw = Number(item?.playCount ?? item?.popularity ?? 0);
-  return Number.isFinite(raw) ? raw : 0;
-};
-  
+          <div class="chart-container">
+            <canvas id="genreChart"></canvas>
+          </div>
+        </div>
 
-  // genre가 Unknown이면 artist 이름을 기준으로 genreMap에서 장르를 찾아 반환
-// genreMap에도 없으면 Etc로 분류해서 차트가 Unknown으로만 나오지 않게 처리
-const resolveGenre = (item) => {
-  const apiGenre = normalizeText(item?.genre, "");
+        <div class="chart-box">
+          <h3>가장 많이 감상한 날씨 🎧</h3>
 
-  if (apiGenre && apiGenre !== "Unknown") {
-    return apiGenre;
+          <div class="chart-container weather-container">
+            <canvas id="weatherChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <section class="song-table-page chart-recommend-section">
+        <div class="song-table-page__header">
+          <h2 class="song-table-page__title">날씨 기반 추천곡</h2>
+          <p class="song-table-page__desc">
+            가장 많이 감상한 날씨와 어울리는 곡을 추천해드려요.
+          </p>
+        </div>
+
+        <div id="chartSongTable"></div>
+      </section>
+    </section>
+  `;
+}
+
+// =========================
+// 차트 페이지 초기화
+// data.js 더미 데이터 사용 버전
+// =========================
+export async function initChartPage() {
+  const songTableContainer = document.querySelector("#chartSongTable");
+
+// 더미데이터 호출 로직 삭제 
+// const data = getDummyChartData();
+
+// api 연동 코드 추가
+const response = await fetch("http://localhost:8080/api/music");
+if (!response.ok) {
+  throw new Error("음악 데이터 조회 실패");
+}
+
+// genre 없을 때 artistGenreMap에서 찾는 렌더링 로직 추가
+const apiData = await response.json();
+
+const data = apiData.map((song) => ({
+  ...song,
+  genre: song.genre || artistGenreMap[song.artist] || "Etc",
+}));
+
+  const topGenres = getTopDataByField(data, "genre");
+  const topWeather = getTopDataByField(data, "weather");
+
+  const mostListenedWeather = topWeather[0]?.[0];
+
+  const recommendedSongs = data
+    .filter(
+      (song) => normalizeText(song?.weather, "Unknown") === mostListenedWeather,
+    )
+    .slice(0, 5)
+    .map(normalizeSongData);
+
+  renderGenreChart(topGenres);
+  renderWeatherChart(topWeather);
+
+  if (songTableContainer) {
+    songTableContainer.innerHTML = renderSongTable(recommendedSongs, {
+      actionType: "playlist",
+      actionHeader: "Add",
+      emptyMessage: "추천할 곡이 없습니다.",
+    });
   }
 
-  const artist = normalizeText(item?.artist ?? item?.description, "");
-  return genreMap[artist] || "Etc";
-};
+  initSongTable();
+}
 
- const getTop5ByField = (dataArray, field) => {
+// =========================
+// data.js의 weatherTracks를 차트용 데이터로 변환
+// =========================
+// function getDummyChartData() {
+//   return Object.entries(weatherTracks).flatMap(([weatherKey, tracks]) => {
+//     const playlist = playlistMap[weatherKey];
+
+//     return tracks.map((track) => ({
+//       id: `${weatherKey}-${track.id}`,
+//       title: track.title,
+//       artist: track.artist,
+//       weather: playlist?.weather || weatherKey,
+//       genre: getPrimaryGenre(playlist?.genre),
+//       releaseDate: playlist?.weather || weatherKey,
+//       durationMs: convertDurationToMs(track.duration),
+//       cover: playlist?.image || "",
+//       imageUrl: playlist?.image || "",
+//       albumImage: playlist?.image || "",
+//     }));
+//   });
+// }
+
+// =========================
+// 장르 문자열에서 첫 번째 장르만 사용
+// 예: "Lo-fi • Jazz • Acoustic" → "Lo-fi"
+// =========================
+// function getPrimaryGenre(genreText) {
+//   if (!genreText || typeof genreText !== "string") {
+//     return "Etc";
+//   }
+
+//   return genreText.split("•")[0].trim() || "Etc";
+// }
+
+// =========================
+// "4:12" 형식의 duration을 ms로 변환
+// =========================
+// function convertDurationToMs(duration) {
+//   if (!duration || typeof duration !== "string") {
+//     return 0;
+//   }
+
+//   const [minutes, seconds] = duration.split(":").map(Number);
+
+//   if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+//     return 0;
+//   }
+
+//   return (minutes * 60 + seconds) * 1000;
+// }
+
+// =========================
+// 공통 유틸 함수
+// =========================
+function normalizeText(value, fallback = "") {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
+function getTopDataByField(dataArray, field) {
   const stats = dataArray.reduce((acc, item) => {
-    // genre 차트일 때는 API genre 대신 resolveGenre()로 보정된 장르 사용
-    // weather 차트일 때는 기존처럼 API에서 받은 weather 값 그대로 사용
-    const label =
-      field === "genre"
-        ? resolveGenre(item)
-        : normalizeText(item?.[field], "Unknown");
+    const label = normalizeText(item?.[field], "Unknown");
 
-    // popularity 합산이 아니라 카테고리별 곡 개수를 세기 위해 +1
     acc[label] = (acc[label] || 0) + 1;
     return acc;
   }, {});
@@ -93,47 +211,51 @@ const resolveGenre = (item) => {
   return Object.entries(stats)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6);
-};
+}
 
-  const top5Genres = getTop5ByField(chartData, "genre");
-  const top5Weather = getTop5ByField(chartData, "weather");
+// =========================
+// songTable.js에 맞게 데이터 정리
+// =========================
+function normalizeSongData(song) {
+  const artist = normalizeText(song?.artist, "Unknown Artist");
+  const cover = song?.cover || song?.imageUrl || song?.albumImage || "";
 
-  // topWeather의 곡 5개 추천하는 로직 추가
-  const topWeather = top5Weather[0]?.[0];
+  return {
+    id: song?.id,
+    musicId: song?.id,
+    trackId: song?.id,
+    spotifyId: song?.id,
 
-const recommendedSongs = data
-  .filter((song) => normalizeText(song?.weather, "Unknown") === topWeather)
-  .sort((a, b) => getValue(b) - getValue(a))
-  .slice(0, 5);
+    title: normalizeText(song?.title, "Unknown Title"),
+    artist,
+    artistName: artist,
+    description: artist,
 
-const tbody = document.querySelector(".song-table tbody");
+    cover,
+    imageUrl: cover,
+    albumCover: cover,
+    albumImage: cover,
 
-  if (tbody) {
-    tbody.innerHTML = recommendedSongs
-      .map(
-        (song, index) => `
-          <tr class="song-row">
-            <td>${index + 1}</td>
-            <td>${normalizeText(song?.title, "Unknown Title")}</td>
-            <td>${normalizeText(song?.description ?? song?.artist, "Unknown Artist")}</td>
-            <td>
-  ${Math.floor((song?.durationMs || 0) / 60000)} : ${String(Math.floor(((song?.durationMs || 0) % 60000) / 1000)).padStart(2, "0")}
-</td>
-          </tr>
-        `
-      )
-      .join("");
-  }
+    releaseDate: normalizeText(song?.weather, "-"),
+    weather: normalizeText(song?.weather, "-"),
+    genre: normalizeText(song?.genre, "Etc"),
 
-  const genreCanvas = document.getElementById("genreChart");
-  const weatherCanvas = document.getElementById("weatherChart");
+    durationMs: song?.durationMs ?? 0,
+    uri: song?.uri || `spotify:track:${song?.id}`,
+  };
+}
 
-  if (!genreCanvas || !weatherCanvas || typeof Chart === "undefined") {
+// =========================
+// 장르 차트 렌더링
+// =========================
+function renderGenreChart(topGenres) {
+  const genreCanvas = document.querySelector("#genreChart");
+
+  if (!genreCanvas || typeof Chart === "undefined") {
     return;
   }
 
   const genreCtx = genreCanvas.getContext("2d");
-  const weatherCtx = weatherCanvas.getContext("2d");
 
   const centerTextPlugin = {
     id: "centerText",
@@ -167,11 +289,18 @@ const tbody = document.querySelector(".song-table tbody");
   new Chart(genreCtx, {
     type: "doughnut",
     data: {
-      labels: top5Genres.map(([label]) => label),
+      labels: topGenres.map(([label]) => label),
       datasets: [
         {
-          data: top5Genres.map(([, value]) => value),
-          backgroundColor: ["#00d4ff", "#0000ff", "#ffffff", "#ff9100", "#00e676"],
+          data: topGenres.map(([, value]) => value),
+          backgroundColor: [
+            "#00d4ff",
+            "#0000ff",
+            "#ffffff",
+            "#ff9100",
+            "#00e676",
+            "#b388ff",
+          ],
           borderWidth: 0,
         },
       ],
@@ -185,15 +314,35 @@ const tbody = document.querySelector(".song-table tbody");
     },
     plugins: [centerTextPlugin],
   });
+}
+
+// =========================
+// 날씨 차트 렌더링
+// =========================
+function renderWeatherChart(topWeather) {
+  const weatherCanvas = document.querySelector("#weatherChart");
+
+  if (!weatherCanvas || typeof Chart === "undefined") {
+    return;
+  }
+
+  const weatherCtx = weatherCanvas.getContext("2d");
 
   new Chart(weatherCtx, {
     type: "bar",
     data: {
-      labels: top5Weather.map(([label]) => label),
+      labels: topWeather.map(([label]) => label),
       datasets: [
         {
-          data: top5Weather.map(([, value]) => value),
-          backgroundColor: ["#FFD700", "#B0C4DE", "#A9A9A9", "#4682B4", "#2F4F4F"],
+          data: topWeather.map(([, value]) => value),
+          backgroundColor: [
+            "#FFD700",
+            "#B0C4DE",
+            "#A9A9A9",
+            "#4682B4",
+            "#2F4F4F",
+            "#8f8f8f",
+          ],
           borderRadius: 10,
           barThickness: 10,
         },
@@ -201,11 +350,20 @@ const tbody = document.querySelector(".song-table tbody");
     },
     options: {
       indexAxis: "y",
-      plugins: { legend: { display: false } },
+      plugins: {
+        legend: { display: false },
+      },
       scales: {
-        x: { display: false },
-        y: { grid: { display: false }, ticks: { color: "#ffffff" } },
+        x: {
+          display: false,
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            color: "#ffffff",
+          },
+        },
       },
     },
   });
-});
+}

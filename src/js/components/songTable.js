@@ -1,10 +1,10 @@
-import { ICON_PATH, navItems, playlistMenuItems } from "../data.js";
-import { isLoggedIn, requireLogin } from "../utils/auth.js";
 import {
-  deletePlaylistTracks,
-  renamePlaylistTracks,
+  addTrackToPlaylist,
+  loadPlaylistNames,
 } from "../utils/playlistStorage.js";
 import { escapeHTML } from "../utils/escapeHTML.js";
+import { renderLoading, setLoading } from "./loading.js";
+import { initTopButton } from "./topButton.js";
 
 let currentPage = 0;
 const DEFAULT_LIMIT = 10;
@@ -110,7 +110,7 @@ function normalizeTrack(item) {
     item.releaseDate ||
     item.release_date ||
     item.album?.release_date ||
-    item.savedAt || //좋아요 테이블 용
+    item.savedAt ||
     "-";
 
   const id =
@@ -119,6 +119,7 @@ function normalizeTrack(item) {
     item.trackId ||
     item.spotifyId ||
     `${title}-${artist}`;
+
   const uri = item.uri || (id ? `spotify:track:${id}` : "");
 
   return {
@@ -478,7 +479,7 @@ async function renderMoreSongs({
   try {
     const tracks = await getTracks(apiUrl, currentPage, limit);
 
-    if (tracks.length === 0) {
+    if (!tracks || tracks.length === 0) {
       hasMore = false;
       observerTarget?.remove();
       return;
@@ -540,7 +541,7 @@ export function renderSongTablePage({
         <tbody id="${escapeHTML(tableBodyId)}"></tbody>
       </table>
 
-      ${renderLoading(loadingId)}
+      ${renderLoading(loadingId, "음악을 불러오는 중...")}
 
       <div id="${escapeHTML(observerId)}" class="song-table-page__observer"></div>
     </section>

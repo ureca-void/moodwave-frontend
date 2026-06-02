@@ -1,22 +1,18 @@
-import {
-  loadPlaylistNames,
-  loadPlaylistTrackMap,
-  removeTrackFromPlaylist,
-} from "../utils/playlistStorage.js";
+import { loadPlaylistNames, loadPlaylistTrackMap, removeTrackFromPlaylist } from '../utils/playlistStorage.js';
 
-import { showConfirm } from "../utils/confirm.js";
-import { escapeHTML } from "../utils/escapeHTML.js";
-import { renderSongTable } from "../components/songTable.js";
+import { showConfirm } from '../utils/confirm.js';
+import { escapeHTML } from '../utils/escapeHTML.js';
+import { renderSongTable } from '../components/songTable.js';
 
 // =========================
 // 현재 hash에서 플레이리스트 이름 가져오기
 // =========================
 function getPlaylistNameFromHash() {
-  const hash = window.location.hash || "";
-  const queryString = hash.split("?")[1] || "";
+  const hash = window.location.hash || '';
+  const queryString = hash.split('?')[1] || '';
   const params = new URLSearchParams(queryString);
 
-  return params.get("name") || "";
+  return params.get('name') || '';
 }
 
 // =========================
@@ -77,18 +73,16 @@ export function renderPlaylistPage() {
 // 전체 플레이리스트 목록 렌더링 함수
 // =========================
 function renderPlaylistOverview() {
-  const content = document.querySelector("#playlistPageContent");
+  const content = document.querySelector('#playlistPageContent');
   const playlistNames = loadPlaylistNames();
 
   if (!content) return;
 
   const playlistRows =
-    playlistNames.length === 0
-      ? createEmptyPlaylistRow()
-      : playlistNames.map(createPlaylistRow).join("");
+    playlistNames.length === 0 ? createEmptyPlaylistRow() : playlistNames.map(createPlaylistRow).join('');
 
   content.innerHTML = `
-    ${renderPageHeader("Your Playlists", "생성한 플레이리스트를 확인해보세요.")}
+    ${renderPageHeader('Your Playlists', '생성한 플레이리스트를 확인해보세요.')}
 
     <table class="song-table">
       <thead>
@@ -108,7 +102,7 @@ function renderPlaylistOverview() {
 // 플레이리스트 상세 렌더링 함수
 // =========================
 function renderPlaylistDetail(playlistName) {
-  const content = document.querySelector("#playlistPageContent");
+  const content = document.querySelector('#playlistPageContent');
 
   if (!content) return;
 
@@ -119,16 +113,15 @@ function renderPlaylistDetail(playlistName) {
 
   const playlistTrackMap = loadPlaylistTrackMap();
   const tracks = playlistTrackMap[playlistName] || [];
-  const description =
-    tracks.length > 0 ? `${tracks.length}곡` : "아직 추가된 곡이 없습니다.";
+  const description = tracks.length > 0 ? `${tracks.length}곡` : '아직 추가된 곡이 없습니다.';
 
   content.innerHTML = `
     ${renderPageHeader(playlistName, description)}
 
     ${renderSongTable(tracks, {
-      actionType: "playlist-remove",
-      actionHeader: "Remove",
-      emptyMessage: "아직 추가된 곡이 없습니다.",
+      actionType: 'playlist-remove',
+      actionHeader: 'Remove',
+      emptyMessage: '아직 추가된 곡이 없습니다.',
     })}
   `;
 }
@@ -137,16 +130,16 @@ function renderPlaylistDetail(playlistName) {
 // 플레이리스트 곡 제거 이벤트 등록 함수
 // =========================
 function bindPlaylistTrackRemoveEvents() {
-  const content = document.querySelector("#playlistPageContent");
+  const content = document.querySelector('#playlistPageContent');
 
   if (!content) return;
 
-  if (content.dataset.removeEventBound === "true") return;
+  if (content.dataset.removeEventBound === 'true') return;
 
-  content.dataset.removeEventBound = "true";
+  content.dataset.removeEventBound = 'true';
 
-  content.addEventListener("click", async (event) => {
-    const removeButton = event.target.closest("[data-remove-playlist-track]");
+  content.addEventListener('click', async (event) => {
+    const removeButton = event.target.closest('[data-remove-playlist-track]');
 
     if (!removeButton) return;
 
@@ -156,14 +149,11 @@ function bindPlaylistTrackRemoveEvents() {
     const playlistName = getPlaylistNameFromHash();
     const trackId = removeButton.dataset.trackId;
 
-    const isConfirmed = await showConfirm(
-      "이 곡을 플레이리스트에서 제거하시겠습니까?",
-      {
-        title: "곡 제거",
-        cancelText: "취소",
-        confirmText: "제거",
-      },
-    );
+    const isConfirmed = await showConfirm('이 곡을 플레이리스트에서 제거하시겠습니까?', {
+      title: '곡 제거',
+      cancelText: '취소',
+      confirmText: '제거',
+    });
 
     if (!isConfirmed) return;
 

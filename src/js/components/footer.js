@@ -1,3 +1,10 @@
+import {
+  LIKE_API_URL,
+  IS_LIKE_API_URL,
+  HOME_SEARCH_API_URL,
+  SPOTIFY_ACCESS_TOKEN_API_URL,
+} from "../config/api.js";
+
 // =========================
 // 초기 푸터 상태
 // =========================
@@ -9,11 +16,6 @@ const EMPTY_TRACK = {
   duration: "0:00",
   progress: "0%",
 };
-
-// =========================
-// API 주소
-// =========================
-const API_BASE_URL = "http://127.0.0.1:8080";
 
 // =========================
 // 테스트 재생 목록
@@ -45,15 +47,23 @@ let currentDuration = 0;
 let currentPosition = 0;
 let lastProgressUpdatedAt = 0;
 let progressTimer = null;
+
 // =========================
 // Spotify Access Token 가져오기
 // =========================
 export async function getSpotifyAccessToken() {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/spotify/access-token`, {
+    const response = await fetch(SPOTIFY_ACCESS_TOKEN_API_URL, {
       method: "GET",
       credentials: "include",
     });
+
+    // 로그인 안 된 상태는 에러가 아니라 null 처리
+    if (response.status === 401) {
+      console.warn("Spotify 로그인이 필요합니다.");
+      spotifyAccessToken = null;
+      return null;
+    }
 
     if (!response.ok) {
       throw new Error("Spotify access token 요청 실패");
@@ -64,11 +74,15 @@ export async function getSpotifyAccessToken() {
     spotifyAccessToken = data.accessToken;
 
     console.log("Spotify access token 받아오기 성공");
-    console.log("토큰 길이:", spotifyAccessToken.length);
+
+    if (spotifyAccessToken) {
+      console.log("토큰 길이:", spotifyAccessToken.length);
+    }
 
     return spotifyAccessToken;
   } catch (error) {
     console.error("Spotify access token 받아오기 실패:", error);
+    spotifyAccessToken = null;
     return null;
   }
 }
@@ -102,6 +116,10 @@ function loadSpotifySDK() {
 // =========================
 async function spotifyRequest(url, options = {}) {
   const token = spotifyAccessToken || (await getSpotifyAccessToken());
+
+  if (!token) {
+    throw new Error("Spotify access token이 없습니다.");
+  }
 
   return fetch(url, {
     ...options,
@@ -255,13 +273,10 @@ async function searchTrackFromBackend(track) {
   }
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/api/home/search?keyword=${encodeURIComponent(keyword)}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(HOME_SEARCH_API_URL(keyword), {
+      method: "GET",
+      credentials: "include",
+    });
 
     if (!response.ok) {
       throw new Error("Spotify 검색 요청 실패");
@@ -1084,9 +1099,7 @@ function createSpotifyPlayer() {
     isPlaying = !state.paused;
     updatePlayButtonIcon();
 
-    const currentSpotifyTrack = state.track_window.current_track;
-
-    updateCurrentTrackUI(currentSpotifyTrack);
+    updateCurrentTrackUI(currentTrack);
     updateProgressUI(state.position, state.duration);
 
     setTimeout(() => {
@@ -1345,21 +1358,35 @@ export function renderFooter() {
   `;
 }
 
+// =========================
+// 현재 곡 좋아요 여부 확인
+// =========================
 export async function isLiked() {
   const likeButton = document.querySelector("#likeButton img");
-  if (!currentTrackId) return;
 
-  const res = await fetch(`${API_BASE_URL}/api/islike`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ musicId: currentTrackId }),
-    credentials: "include",
-  });
-  const data = await res.json();
-  if (data.result === "ok") {
-    likeButton.src = "/assets/icon/Heart_Fill_XS.svg";
-  } else {
-    likeButton.src = "/assets/icon/Heart_XS.svg";
+  if (!likeButton || !currentTrackId) return;
+
+  try {
+    const res = await fetch(IS_LIKE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ musicId: currentTrackId }),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      throw new Error("좋아요 여부 확인 실패");
+    }
+
+    const data = await res.json();
+
+    if (data.result === "ok") {
+      likeButton.src = "/assets/icon/Heart_Fill_XS.svg";
+    } else {
+      likeButton.src = "/assets/icon/Heart_XS.svg";
+    }
+  } catch (error) {
+    console.error("좋아요 여부 확인 실패:", error);
   }
 }
 
@@ -1388,18 +1415,17 @@ function initFooterEvents() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/like`, {
+        const response = await fetch(LIKE_API_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(currentTrackInfo),
-          credentials: "include", // 세션 유지를 위해 필수
+          credentials: "include",
         });
 
         if (response.ok) {
           alert("좋아요가 반영되었습니다.");
-          // 필요시 버튼 아이콘을 Heart_Fill에서 Heart_Outline 등으로 교체하는 로직 추가
           isLiked();
           window.dispatchEvent(new Event("likeChanged"));
         } else {

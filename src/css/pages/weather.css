@@ -7,6 +7,7 @@ weather.css .weather-main {
   overflow-x: hidden;
   overflow-y: auto;
   background: linear-gradient(180deg, #3333a3 0%, #121212 33%);
+  width: 100%;
 }
 
 /* 현재 날씨 인포 */
@@ -323,4 +324,49 @@ weather.css .weather-main {
     height: 40px;
     margin-bottom: 30px;
   }
+}
+
+/* 스켈레톤 */
+.playlist-tag-skeleton {
+  width: 140px;
+  height: 16px;
+  border-radius: 999px;
+}
+
+.playlist-title-skeleton {
+  width: 280px;
+  height: 48px;
+  border-radius: 999px;
+  margin-top: 12px;
+}
+
+.playlist-genre-skeleton {
+  width: 180px;
+  height: 18px;
+  border-radius: 999px;
+  margin-top: 12px;
+}
+
+.playlist-desc-skeleton {
+  width: 240px;
+  height: 16px;
+  border-radius: 999px;
+  margin-top: 12px;
+}
+
+.weather-card--skeleton {
+  pointer-events: none;
+}
+
+.weather-card-title-skeleton {
+  width: 100px;
+  height: 18px;
+  border-radius: 999px;
+}
+
+.weather-card-desc-skeleton {
+  width: 70%;
+  height: 14px;
+  border-radius: 999px;
+  margin-top: 8px;
 }

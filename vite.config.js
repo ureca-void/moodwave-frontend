@@ -1,18 +1,20 @@
 import { defineConfig } from "vite";
-import { resolve } from "path";
 
 export default defineConfig({
   publicDir: "public",
 
+  server: {
+    host: "127.0.0.1",
+    port: 5173,
+  },
+
+  preview: {
+    host: "127.0.0.1",
+    port: 4173,
+  },
+
   build: {
     outDir: "dist",
     emptyOutDir: true,
-
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, "index.html"),
-        weather: resolve(__dirname, "pages/weather.html"),
-      },
-    },
   },
 });

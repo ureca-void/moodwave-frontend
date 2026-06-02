@@ -1,7 +1,8 @@
 // =========================
 // API 기본 설정
 // =========================
-export const API_BASE_URL = "http://127.0.0.1:8080";
+export const API_BASE_URL =
+  "https://movewave-backend-production.up.railway.app";
 
 // =========================
 // 개별 API URL
@@ -17,6 +18,15 @@ export const SPOTIFY_LOGIN_API_URL = `${API_BASE_URL}/oauth2/authorization/spoti
 export const LOGOUT_API_URL = `${API_BASE_URL}/logout`;
 
 // =========================
+// Footer 관련 API URL
+// =========================
+export const SPOTIFY_ACCESS_TOKEN_API_URL = `${API_BASE_URL}/api/spotify/access-token`;
+export const IS_LIKE_API_URL = `${API_BASE_URL}/api/islike`;
+
+export const HOME_SEARCH_API_URL = (keyword) =>
+  `${API_BASE_URL}/api/home/search?keyword=${encodeURIComponent(keyword)}`;
+
+// =========================
 // API 엔드포인트 모음
 // =========================
 export const API_ENDPOINTS = {
@@ -29,4 +39,8 @@ export const API_ENDPOINTS = {
   user: USER_API_URL,
   spotifyLogin: SPOTIFY_LOGIN_API_URL,
   logout: LOGOUT_API_URL,
+
+  spotifyAccessToken: SPOTIFY_ACCESS_TOKEN_API_URL,
+  isLike: IS_LIKE_API_URL,
+  homeSearch: HOME_SEARCH_API_URL,
 };

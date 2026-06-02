@@ -72,6 +72,7 @@
   margin-top: 30px;
   overflow-x: auto;
   color: #dedede;
+  overflow: visible;
 }
 
 .playlist-actions {
@@ -419,6 +420,50 @@
 
 .add-playlist-modal__cancel:hover {
   background: #444;
+}
+
+/* =========================
+  weather playlist sticky
+==========================*/
+.playlist-sticky-header {
+  position: fixed;
+
+  top: 80px;
+  left: 310px;
+  right: 0;
+
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 24px;
+
+  background: #3333a3;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(-10px);
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s ease;
+
+  z-index: 9999;
+}
+
+.playlist-sticky-header.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.sticky-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
 }
 
 /* =========================
@@ -788,5 +833,188 @@
 
   .add-playlist-modal__cancel {
     padding: 11px 14px;
+  }
+}
+
+/* =========================
+   Chart Page
+========================= */
+.chart-main {
+  padding: 32px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: var(--text-primary);
+  background: linear-gradient(180deg, #3333a3 0%, #121212 33%);
+}
+
+.chart-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.chart-page__header {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.chart-page__title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.chart-page__desc {
+  margin-top: 8px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* =========================
+   Chart Dashboard
+========================= */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.chart-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 280px;
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chart-box h3 {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.chart-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
+
+.weather-container {
+  width: 320px;
+  height: 220px;
+}
+
+.chart-recommend-section {
+  margin-top: 8px;
+}
+
+/* =========================
+   Chart Page Responsive
+========================= */
+@media (max-width: 1024px) {
+  .chart-main {
+    padding: 28px 24px 140px;
+  }
+
+  .dashboard {
+    gap: 20px;
+  }
+
+  .chart-box {
+    min-height: 260px;
+    padding: 22px;
+  }
+
+  .chart-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .weather-container {
+    width: 280px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-main {
+    padding: 24px 20px 140px;
+  }
+
+  .chart-page__header {
+    margin-bottom: 24px;
+  }
+
+  .chart-page__title {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+
+  .chart-page__desc {
+    font-size: 14px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    margin-bottom: 36px;
+  }
+
+  .chart-box {
+    min-height: 240px;
+  }
+
+  .chart-box h3 {
+    font-size: 16px;
+  }
+
+  .chart-container {
+    width: 190px;
+    height: 190px;
+  }
+
+  .weather-container {
+    width: min(100%, 300px);
+    height: 200px;
+  }
+}
+
+@media (max-width: 540px) {
+  .chart-main {
+    padding: 20px 16px 150px;
+  }
+
+  .chart-page__title {
+    font-size: 28px;
+  }
+
+  .chart-page__desc {
+    font-size: 13px;
+  }
+
+  .dashboard {
+    gap: 18px;
+  }
+
+  .chart-box {
+    min-height: 220px;
+    padding: 18px;
+  }
+
+  .chart-container {
+    width: 170px;
+    height: 170px;
+  }
+
+  .weather-container {
+    width: 100%;
+    height: 190px;
   }
 }
