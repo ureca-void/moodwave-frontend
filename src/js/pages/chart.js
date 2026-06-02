@@ -1,5 +1,6 @@
 import { renderSongTable, initSongTable } from "../components/songTable.js";
-import { weatherTracks, playlistMap } from "../data.js";
+// 더미데이터 연동 로직 삭제
+// import { weatherTracks, playlistMap } from "../data.js";
 
 // =========================
 // 차트 페이지 HTML 렌더링
@@ -53,7 +54,16 @@ export function renderChartPage() {
 export async function initChartPage() {
   const songTableContainer = document.querySelector("#chartSongTable");
 
-  const data = getDummyChartData();
+// 더미데이터 호출 로직 삭제 
+// const data = getDummyChartData();
+
+// api 연동 코드 추가
+const response = await fetch("http://localhost:8080/api/music");
+if (!response.ok) {
+  throw new Error("음악 데이터 조회 실패");
+}
+
+const data = await response.json();
 
   const topGenres = getTopDataByField(data, "genre");
   const topWeather = getTopDataByField(data, "weather");
