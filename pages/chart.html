@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>내 음악 취향 통계</title>
+
+    <link rel="stylesheet" href="/src/css/setting/fonts.css" />
+    <link rel="stylesheet" href="/src/css/setting/vars.css" />
+    <link rel="stylesheet" href="/src/css/setting/reset.css" />
+    <link rel="stylesheet" href="/src/css/setting/common.css" />
+
+    <link rel="stylesheet" href="/src/css/layout.css" />
+
+    <link rel="stylesheet" href="/src/css/components/sidebar.css" />
+    <link rel="stylesheet" href="/src/css/components/header.css" />
+    <link rel="stylesheet" href="/src/css/components/footer.css" />
+
+    <link rel="stylesheet" href="/src/css/pages/chart.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <aside id="sidebar" class="sidebar"></aside>
+
+      <header id="header" class="header"></header>
+
+      <main class="main chart-main">
+        <section class="chart-page">
+          <h2 class="chart-page__title">내 음악 취향 통계</h2>
+
+          <div class="dashboard">
+            <div class="chart-box">
+              <h3>장르별 재생 비율</h3>
+              <div class="chart-container">
+                <canvas id="genreChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-box">
+              <h3>가장 많이 감상한 날씨 🎧</h3>
+              <div class="chart-container weather-container">
+                <canvas id="weatherChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <table class="song-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>앨범</th>
+                <th>재생시간</th>
+              </tr>
+            </thead>
+
+            <!-- API 데이터로 차트 렌더링하는 함수 -->
+            <tbody id="songTableBody"></tbody>
+          </table>
+        </section>
+      </main>
+
+      <footer id="footer" class="player"></footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="/src/js/pages/chart.js"></script>
+  </body>
+</html>

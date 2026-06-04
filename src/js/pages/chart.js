@@ -1,5 +1,51 @@
 import { renderSongTable, initSongTable } from "../components/songTable.js";
-import { weatherTracks, playlistMap } from "../data.js";
+// 더미데이터 연동 로직 삭제
+// import { weatherTracks, playlistMap } from "../data.js";
+
+// =========================
+// 아티스트별 장르 매핑
+// Spotify API 응답에 genre가 없어서 프론트에서 수동 보정
+// =========================
+const artistGenreMap = {
+  "D.O.": "K-pop",
+  "CORTIS": "K-pop",
+  "NCT WISH": "K-pop",
+  "The Weeknd": "Pop",
+  "HANRORO": "Indie",
+  "Playboi Carti": "Hip-hop",
+  "DaBaby": "Hip-hop",
+  "Yerin Baek": "R&B",
+  "Omega Sapien": "Hip-hop",
+  "NAYEON": "K-pop",
+  "Hearts2Hearts": "K-pop",
+  "ILLIT": "K-pop",
+  "B小町": "J-pop",
+  "Pop Smoke": "Hip-hop",
+  "Ariana Grande": "Pop",
+  "DJ Khaled": "Hip-hop",
+  "AKMU": "K-pop",
+  "BTS": "K-pop",
+  "OsamaSon": "Hip-hop",
+  "Gen Hoshino": "J-pop",
+  "NOWIMYOUNG": "Hip-hop",
+  "K/DA": "K-pop",
+  "MIKA": "Pop",
+  "BewhY": "Hip-hop",
+  "Kenshi Yonezu": "J-pop",
+  "N'John": "Hip-hop",
+  "NMIXX": "K-pop",
+  "BLASÉ": "Hip-hop",
+  "Jin": "K-pop",
+  "KiiiKiii": "K-pop",
+  "HAON": "Hip-hop",
+  "LamazeP": "J-pop",
+  "STAYC": "K-pop",
+  "YENA": "K-pop",
+  "Epik High": "Hip-hop",
+  "Polo G": "Hip-hop",
+  "Dragon Pony": "K-rock",
+  "kinoshita": "J-pop",
+};
 
 // =========================
 // 차트 페이지 HTML 렌더링
@@ -53,7 +99,22 @@ export function renderChartPage() {
 export async function initChartPage() {
   const songTableContainer = document.querySelector("#chartSongTable");
 
-  const data = getDummyChartData();
+// 더미데이터 호출 로직 삭제 
+// const data = getDummyChartData();
+
+// api 연동 코드 추가
+const response = await fetch("http://localhost:8080/api/music");
+if (!response.ok) {
+  throw new Error("음악 데이터 조회 실패");
+}
+
+// genre 없을 때 artistGenreMap에서 찾는 렌더링 로직 추가
+const apiData = await response.json();
+
+const data = apiData.map((song) => ({
+  ...song,
+  genre: song.genre || artistGenreMap[song.artist] || "Etc",
+}));
 
   const topGenres = getTopDataByField(data, "genre");
   const topWeather = getTopDataByField(data, "weather");
@@ -79,58 +140,58 @@ export async function initChartPage() {
   }
 
   initSongTable();
-}
+} 
 
 // =========================
 // data.js의 weatherTracks를 차트용 데이터로 변환
 // =========================
-function getDummyChartData() {
-  return Object.entries(weatherTracks).flatMap(([weatherKey, tracks]) => {
-    const playlist = playlistMap[weatherKey];
+// function getDummyChartData() {
+//   return Object.entries(weatherTracks).flatMap(([weatherKey, tracks]) => {
+//     const playlist = playlistMap[weatherKey];
 
-    return tracks.map((track) => ({
-      id: `${weatherKey}-${track.id}`,
-      title: track.title,
-      artist: track.artist,
-      weather: playlist?.weather || weatherKey,
-      genre: getPrimaryGenre(playlist?.genre),
-      releaseDate: playlist?.weather || weatherKey,
-      durationMs: convertDurationToMs(track.duration),
-      cover: playlist?.image || "",
-      imageUrl: playlist?.image || "",
-      albumImage: playlist?.image || "",
-    }));
-  });
-}
+//     return tracks.map((track) => ({
+//       id: `${weatherKey}-${track.id}`,
+//       title: track.title,
+//       artist: track.artist,
+//       weather: playlist?.weather || weatherKey,
+//       genre: getPrimaryGenre(playlist?.genre),
+//       releaseDate: playlist?.weather || weatherKey,
+//       durationMs: convertDurationToMs(track.duration),
+//       cover: playlist?.image || "",
+//       imageUrl: playlist?.image || "",
+//       albumImage: playlist?.image || "",
+//     }));
+//   });
+// }
 
 // =========================
 // 장르 문자열에서 첫 번째 장르만 사용
 // 예: "Lo-fi • Jazz • Acoustic" → "Lo-fi"
 // =========================
-function getPrimaryGenre(genreText) {
-  if (!genreText || typeof genreText !== "string") {
-    return "Etc";
-  }
+// function getPrimaryGenre(genreText) {
+//   if (!genreText || typeof genreText !== "string") {
+//     return "Etc";
+//   }
 
-  return genreText.split("•")[0].trim() || "Etc";
-}
+//   return genreText.split("•")[0].trim() || "Etc";
+// }
 
 // =========================
 // "4:12" 형식의 duration을 ms로 변환
 // =========================
-function convertDurationToMs(duration) {
-  if (!duration || typeof duration !== "string") {
-    return 0;
-  }
+// function convertDurationToMs(duration) {
+//   if (!duration || typeof duration !== "string") {
+//     return 0;
+//   }
 
-  const [minutes, seconds] = duration.split(":").map(Number);
+//   const [minutes, seconds] = duration.split(":").map(Number);
 
-  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
-    return 0;
-  }
+//   if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+//     return 0;
+//   }
 
-  return (minutes * 60 + seconds) * 1000;
-}
+//   return (minutes * 60 + seconds) * 1000;
+// }
 
 // =========================
 // 공통 유틸 함수
@@ -201,7 +262,6 @@ function renderGenreChart(topGenres) {
     afterDraw: (chart) => {
       const datasetData = chart.data.datasets[0].data;
       const total = datasetData.reduce((a, b) => a + b, 0);
-
       if (!total) return;
 
       const { ctx, chartArea } = chart;
@@ -222,7 +282,6 @@ function renderGenreChart(topGenres) {
 
       ctx.font = "16px sans-serif";
       ctx.fillText(`${percentage}%`, width / 2 + left, height / 2 + top + 15);
-
       ctx.restore();
     },
   };
@@ -308,3 +367,6 @@ function renderWeatherChart(topWeather) {
     },
   });
 }
+
+
+
