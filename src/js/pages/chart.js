@@ -140,7 +140,7 @@ const data = apiData.map((song) => ({
   }
 
   initSongTable();
-}
+} 
 
 // =========================
 // data.js의 weatherTracks를 차트용 데이터로 변환
@@ -367,3 +367,6 @@ function renderWeatherChart(topWeather) {
     },
   });
 }
+
+
+
