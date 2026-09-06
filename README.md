@@ -1,8 +1,6 @@
-# MOOD WAVE
-
 [![CI](https://github.com/ureca-void/moodwave-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/ureca-void/moodwave-frontend/actions/workflows/ci.yml)
 
-음악 스트리밍 개인화 추천 웹 서비스
+# MOOD WAVE [개인화 음악 추천 스트리밍 플랫폼]
 
 ---
 
@@ -120,6 +118,12 @@ AI 감정 분석, 날씨 기반 추천, 음악 취향 분석 기능을 제공하
     </td>
   </tr>
 </table>
+
+---
+
+## 시연 영상
+
+[![시연 영상](https://img.youtube.com/vi/KzjJEWp_JRg/maxresdefault.jpg)](https://youtu.be/KzjJEWp_JRg)
 
 ---
 
